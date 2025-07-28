@@ -1,8 +1,9 @@
 import express from 'express';
+import { connectBank, getTransactions } from '../controllers/nordigenController.js';
+
 const router = express.Router();
 
-import { connectBank } from '../controllers/nordigenController.js';
-
 router.get('/connect-bank', connectBank);
+router.get('/transactions/:requisitionId', getTransactions); // 👈 new route
 
 export default router;
