@@ -1,4 +1,4 @@
-// server/routes/auth.js
+// server/routes/auth
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
