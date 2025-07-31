@@ -1,7 +1,8 @@
 // server/controllers/nordigenController.js
 import axios from "axios";
 import Transaction from "../models/transaction.js";
-import { categorizeWithGemini } from "../services/geminiService.js"; // AI categorizer
+// Updated import: now importing from openrouterService.js and using categorizeWithOpenRouter
+import { categorizeWithOpenRouter } from "../services/openrouterService.js"; // AI categorizer
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -85,7 +86,8 @@ export const getTransactions = async (req, res) => {
       await Promise.all(
         bookedTransactions.map(async (tx) => {
           const name = tx.remittanceInformationUnstructured || tx.creditorName || "Unknown";
-          const category = await categorizeWithGemini(name); // AI magic 🧠
+          // Updated function call: now using categorizeWithOpenRouter
+          const category = await categorizeWithOpenRouter(name); // AI magic 🧠
 
           return {
             userId: req.userId,
