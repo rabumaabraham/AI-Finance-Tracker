@@ -6150,7 +6150,7 @@
           </a>
         </li>
         <li>
-          <a href="login.html">
+          <a href="javascript:void(0)" onclick="handleLogout()">
             <i class="lni lni-exit"></i>
             Logout
           </a>
@@ -7063,6 +7063,7 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
     
     <script>
       // Mobile Sidebar Functions
@@ -8183,6 +8184,20 @@
         // Here you would typically open a modal or navigate to detailed view
         // For now, just show a notification
       }
+      
+      // Authentication Functions
+      function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+          authService.logout();
+        }
+      }
+      
+      // Check authentication on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        if (!authService.isAuthenticated()) {
+          window.location.href = 'login.html';
+        }
+      });
       
       // Plan Selection Functions
       function selectPlan(planType) {

@@ -1322,7 +1322,16 @@
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/wow.min.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
   <script>
+    // Check if user is already logged in and redirect to dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      if (authService.isAuthenticated()) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+    
+    // ==== for menu scroll
     // ==== for menu scroll
     const pageLink = document.querySelectorAll(".ud-menu-scroll");
 

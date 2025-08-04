@@ -403,14 +403,50 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
     
     <script>
-      function handleLogin(event) {
+      async function handleLogin(event) {
         event.preventDefault();
-        // In a real app, you would validate credentials here
-        // For demo purposes, redirect to dashboard
-        window.location.href = 'dashboard.html';
+        
+        const form = event.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = authService.showLoading(submitButton);
+        
+        try {
+          const formData = new FormData(form);
+          const email = formData.get('email');
+          const password = formData.get('password');
+          
+          // Basic validation
+          if (!email || !password) {
+            throw new Error('Please fill in all fields');
+          }
+          
+          // Call login API
+          await authService.login({ email, password });
+          
+          // Show success message
+          authService.showNotification('Login successful! Redirecting to dashboard...', 'success');
+          
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+          
+        } catch (error) {
+          authService.showNotification(error.message, 'error');
+        } finally {
+          authService.hideLoading(submitButton, originalText);
+        }
       }
+      
+      // Check if user is already logged in
+      document.addEventListener('DOMContentLoaded', function() {
+        if (authService.isAuthenticated()) {
+          window.location.href = 'dashboard.html';
+        }
+      });
     </script>
   </body>
 </html>

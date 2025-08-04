@@ -103,7 +103,7 @@
               <div class="ud-login-logo">
                 <img src="assets/images/logo/logo-2.svg" alt="logo" />
               </div>
-              <form class="ud-login-form">
+              <form class="ud-login-form" onsubmit="handleSignup(event)">
                 <div class="ud-form-group">
                   <input
                     type="text"
@@ -294,5 +294,64 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+    
+    <script>
+      async function handleSignup(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = authService.showLoading(submitButton);
+        
+        try {
+          const formData = new FormData(form);
+          const fullname = formData.get('fullname');
+          const email = formData.get('email');
+          const password = formData.get('password');
+          const confirmPassword = formData.get('confirm_password');
+          
+          // Basic validation
+          if (!fullname || !email || !password || !confirmPassword) {
+            throw new Error('Please fill in all fields');
+          }
+          
+          if (password !== confirmPassword) {
+            throw new Error('Passwords do not match');
+          }
+          
+          if (password.length < 6) {
+            throw new Error('Password must be at least 6 characters long');
+          }
+          
+          // Call signup API
+          await authService.signup({ 
+            name: fullname, 
+            email, 
+            password 
+          });
+          
+          // Show success message
+          authService.showNotification('Account created successfully! Redirecting to dashboard...', 'success');
+          
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+          
+        } catch (error) {
+          authService.showNotification(error.message, 'error');
+        } finally {
+          authService.hideLoading(submitButton, originalText);
+        }
+      }
+      
+      // Check if user is already logged in
+      document.addEventListener('DOMContentLoaded', function() {
+        if (authService.isAuthenticated()) {
+          window.location.href = 'dashboard.html';
+        }
+      });
+    </script>
   </body>
 </html> 
