@@ -44,8 +44,8 @@ class AuthService {
                 throw new Error(data.message || data.errors?.[0]?.msg || 'Signup failed');
             }
 
-            // Store token
-            this.setToken(data.token);
+            // Don't store token after signup - user must login manually
+            // this.setToken(data.token); // Removed this line
             return data;
         } catch (error) {
             if (error.name === 'TypeError' && error.message.includes('fetch')) {

@@ -28,8 +28,8 @@ router.post('/signup',
       user = new User({ name, email, password: hashedPassword });
       await user.save();
 
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      res.json({ token });
+      // Don't return token on signup - user must login separately
+      res.json({ message: 'User registered successfully' });
     } catch (err) {
       res.status(500).json({ message: 'Server error' });
     }

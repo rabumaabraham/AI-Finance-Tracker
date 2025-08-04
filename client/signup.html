@@ -331,13 +331,13 @@
             password 
           });
           
-          // Show success message
-          authService.showNotification('Account created successfully! Redirecting to dashboard...', 'success');
-          
-          // Redirect to dashboard after a short delay
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 1500);
+                     // Show success message
+           authService.showNotification('Account created successfully! Please login to continue.', 'success');
+           
+           // Redirect to login page after a short delay
+           setTimeout(() => {
+             window.location.href = 'login.html';
+           }, 1500);
           
         } catch (error) {
           authService.showNotification(error.message, 'error');
@@ -346,12 +346,12 @@
         }
       }
       
-      // Check if user is already logged in
-      document.addEventListener('DOMContentLoaded', function() {
-        if (authService.isAuthenticated()) {
-          window.location.href = 'dashboard.html';
-        }
-      });
+      // Clear any existing tokens to ensure fresh signup process
+      // This prevents automatic redirects to dashboard from other pages
+      authService.removeToken();
+      
+      // Note: Removed automatic redirect to dashboard to allow users to sign up even when logged in
+      // Users can manually navigate to dashboard if they want to skip signup
     </script>
   </body>
 </html> 
