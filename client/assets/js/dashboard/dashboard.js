@@ -21,7 +21,10 @@ class DashboardManager {
         
         // Close sidebar when clicking on a menu item on mobile
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
+                // Prevent default to avoid any conflicts
+                e.preventDefault();
+                
                 if (window.innerWidth <= 768) {
                     this.closeSidebar();
                 }
@@ -66,7 +69,12 @@ function showSection(sectionName) {
     document.querySelectorAll('.sidebar-menu a').forEach(link => {
         link.classList.remove('active');
     });
-    event.target.classList.add('active');
+    
+    // Find and activate the correct menu item
+    const activeLink = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
 
     // Initialize section-specific functionality
     initializeSection(sectionName);

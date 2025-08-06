@@ -9,6 +9,9 @@
   --transition: all 0.3s ease;
   --sidebar-width: 280px;
   --header-height: 70px;
+  --success: #28a745;
+  --warning: #ffc107;
+  --danger: #dc3545;
 }
 
 /* Reset & Base */
@@ -276,6 +279,189 @@ body {
   font-size: 1.1rem;
 }
 
+/* Bank Accounts Section */
+.bank-connect-content {
+  text-align: center;
+}
+
+.btn-connect-bank {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: var(--white);
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-connect-bank:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(48, 86, 211, 0.3);
+}
+
+.bank-count {
+  background: var(--light);
+  color: var(--dark);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.banks-list {
+  min-height: 200px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+  margin: 0 0 0.5rem;
+  color: var(--dark);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.bank-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+}
+
+.bank-item:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(48, 86, 211, 0.1);
+}
+
+.bank-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.bank-icon i {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.bank-info {
+  flex: 1;
+}
+
+.bank-name {
+  font-weight: 600;
+  color: var(--dark);
+  margin: 0 0 0.25rem;
+}
+
+.bank-status {
+  font-size: 0.9rem;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bank-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-remove-bank {
+  background: none;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.btn-remove-bank:hover {
+  background: var(--danger);
+  color: var(--white);
+}
+
+/* Status Grid */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: var(--light);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.status-item:hover {
+  background: #f0f0f0;
+}
+
+.status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.status-icon.secure {
+  background: linear-gradient(135deg, var(--success), #20c997);
+}
+
+.status-icon.sync {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.status-icon i {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.status-info h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.status-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .hamburger {
@@ -318,6 +504,23 @@ body {
   .sidebar-header {
     padding: 1.5rem 1rem 1rem;
   }
+  
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bank-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .bank-icon {
+    margin: 0 0 1rem 0;
+  }
+  
+  .bank-actions {
+    margin-top: 1rem;
+  }
 }
 
 /* Overlay */
@@ -341,5 +544,7 @@ body {
 
 /* Utility Classes */
 .text-center { text-align: center; }
+.mb-3 { margin-bottom: 1rem; }
 .mb-4 { margin-bottom: 1.5rem; }
 .h2 { font-size: 1.5rem; font-weight: 600; }
+.text-muted { color: #666; }

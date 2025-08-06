@@ -153,14 +153,65 @@
         <div id="banks" class="dashboard-section">
             <div class="page-header">
                 <h1>Bank Accounts</h1>
-                <p>Connect and manage your bank accounts</p>
+                <p>Connect and manage your bank accounts securely</p>
             </div>
+
+            <!-- Add Bank Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Connect New Bank</h3>
+                    <i class="lni lni-plus"></i>
+                </div>
+                <div class="bank-connect-content">
+                    <p class="text-muted mb-3">Securely connect your bank account to automatically sync transactions and balances.</p>
+                    <button class="btn btn-primary btn-connect-bank" onclick="connectBank()">
+                        <i class="lni lni-credit-cards"></i>
+                        Connect Bank Account
+                    </button>
+                </div>
+            </div>
+
+            <!-- Connected Banks -->
             <div class="dashboard-card">
                 <div class="card-header">
                     <h3>Connected Banks</h3>
-                    <i class="lni lni-bank"></i>
+                    <span class="bank-count">0 accounts</span>
                 </div>
-                <p>This section will be loaded by bankManager.js</p>
+                <div id="connected-banks-list" class="banks-list">
+                    <div class="empty-state">
+                        <i class="lni lni-credit-cards"></i>
+                        <h4>No banks connected</h4>
+                        <p>Connect your first bank account to get started</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank Status -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Connection Status</h3>
+                    <i class="lni lni-shield"></i>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-icon secure">
+                            <i class="lni lni-shield"></i>
+                        </div>
+                        <div class="status-info">
+                            <h4>Secure Connection</h4>
+                            <p>Bank-level encryption protects your data</p>
+                        </div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon sync">
+                            <i class="lni lni-sync"></i>
+                        </div>
+                        <div class="status-info">
+                            <h4>Auto Sync</h4>
+                            <p>Transactions update automatically</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
