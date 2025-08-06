@@ -548,3 +548,136 @@ body {
 .mb-4 { margin-bottom: 1.5rem; }
 .h2 { font-size: 1.5rem; font-weight: 600; }
 .text-muted { color: #666; }
+
+/* Analytics Section */
+.analytics-controls {
+    padding: 1rem 0;
+}
+
+.analytics-controls label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.analytics-controls .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+    transition: var(--transition);
+}
+
+.analytics-controls .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(48, 86, 211, 0.25);
+}
+
+.categories-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: var(--transition);
+}
+
+.category-item:hover {
+    background-color: var(--light);
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-rank {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.category-info {
+    flex: 1;
+}
+
+.category-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.category-info p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.category-icon {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.transactions-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: var(--transition);
+}
+
+.transaction-item:hover {
+    background-color: var(--light);
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.transaction-meta {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.transaction-amount {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.transaction-amount.positive {
+    color: var(--success);
+}
+
+.transaction-amount.negative {
+    color: var(--danger);
+}
+
+.text-success {
+    color: var(--success) !important;
+}
+
+.text-danger {
+    color: var(--danger) !important;
+}

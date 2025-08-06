@@ -29,14 +29,39 @@ class BankManager {
 
     async loadConnectedBanks() {
         try {
-            // In a real app, you'd fetch from your backend
-            // For now, we'll use localStorage to simulate
-            const savedBanks = localStorage.getItem('connectedBanks');
-            this.connectedBanks = savedBanks ? JSON.parse(savedBanks) : [];
+            const token = authService.getToken();
+            if (!token) {
+                console.log('⚠️ No auth token, skipping bank load');
+                this.connectedBanks = [];
+                this.updateBankList();
+                this.updateBankCount();
+                return;
+            }
+
+            console.log('🏦 Loading connected banks from database...');
+            const response = await fetch(`${this.baseURL}/connected-banks`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                this.connectedBanks = await response.json();
+                console.log('🏦 Connected banks loaded from database:', this.connectedBanks);
+            } else {
+                console.error('❌ Error loading banks:', response.status);
+                this.connectedBanks = [];
+            }
+            
             this.updateBankList();
             this.updateBankCount();
         } catch (error) {
             console.error('Error loading banks:', error);
+            this.connectedBanks = [];
+            this.updateBankList();
+            this.updateBankCount();
             showNotification('Failed to load bank accounts', 'error');
         }
     }
@@ -159,14 +184,38 @@ class BankManager {
         }
 
         try {
-            // Remove from local storage (in real app, call backend API)
-            this.connectedBanks = this.connectedBanks.filter(bank => bank.id !== bankId);
-            localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
-            
-            this.updateBankList();
-            this.updateBankCount();
-            
-            showNotification('Bank account removed successfully', 'success');
+            const token = authService.getToken();
+            if (!token) {
+                showNotification('Authentication required', 'error');
+                return;
+            }
+
+            console.log('🗑️ Removing bank account:', bankId);
+            const response = await fetch(`${this.baseURL}/remove/${bankId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Remove from local list and reload from database
+                await this.loadConnectedBanks();
+                
+                // Immediately clear analytics display
+                if (window.analyticsManager) {
+                    window.analyticsManager.analyticsData = null;
+                    window.analyticsManager.updateAnalyticsDisplay();
+                    await window.analyticsManager.loadConnectedBanks();
+                    await window.analyticsManager.loadAnalytics();
+                }
+                
+                showNotification('Bank account removed successfully', 'success');
+            } else {
+                console.error('❌ Error removing bank:', response.status);
+                showNotification('Failed to remove bank account', 'error');
+            }
             
         } catch (error) {
             console.error('Error removing bank:', error);
@@ -174,23 +223,7 @@ class BankManager {
         }
     }
 
-    // Simulate adding a bank (for demo purposes)
-    addDemoBank() {
-        const demoBank = {
-            id: Date.now().toString(),
-            name: 'Demo Bank',
-            lastSync: new Date().toLocaleDateString(),
-            status: 'connected'
-        };
-        
-        this.connectedBanks.push(demoBank);
-        localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
-        
-        this.updateBankList();
-        this.updateBankCount();
-        
-        showNotification('Demo bank added successfully', 'success');
-    }
+    // Demo bank function removed - real bank connections only
 
 
 
@@ -332,10 +365,8 @@ class BankManager {
                     requisitionId: requisitionId
                 };
                 
-                this.connectedBanks.push(bank);
-                localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
-                this.updateBankList();
-                this.updateBankCount();
+                // Reload banks from database instead of using localStorage
+                await this.loadConnectedBanks();
                 return;
             }
 
@@ -369,11 +400,8 @@ class BankManager {
                 requisitionId: requisitionId
             };
             
-            this.connectedBanks.push(bank);
-            localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
-            
-            this.updateBankList();
-            this.updateBankCount();
+                         // Reload banks from database instead of using localStorage
+             await this.loadConnectedBanks();
             
         } catch (error) {
             console.error('❌ Error adding connected bank:', error);
@@ -386,10 +414,8 @@ class BankManager {
                 requisitionId: requisitionId
             };
             
-            this.connectedBanks.push(bank);
-            localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
-            this.updateBankList();
-            this.updateBankCount();
+            // Reload banks from database instead of using localStorage
+            await this.loadConnectedBanks();
         }
     }
 }

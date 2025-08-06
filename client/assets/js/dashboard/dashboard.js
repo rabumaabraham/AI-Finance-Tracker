@@ -131,8 +131,8 @@ async function initializeSection(sectionName) {
             }
             break;
         case 'analytics':
-            if (typeof AnalyticsManager !== 'undefined') {
-                AnalyticsManager.init();
+            if (typeof initializeAnalytics === 'function') {
+                initializeAnalytics();
             }
             break;
         case 'budget':

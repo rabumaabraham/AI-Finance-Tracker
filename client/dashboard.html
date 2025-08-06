@@ -168,10 +168,6 @@
                         <i class="lni lni-credit-cards"></i>
                         Connect Bank Account
                     </button>
-                    <button class="btn btn-secondary btn-check-status mt-2" onclick="checkConnectionStatus()" style="margin-left: 10px;">
-                        <i class="lni lni-checkmark-circle"></i>
-                        Check Status
-                    </button>
                 </div>
             </div>
 
@@ -225,12 +221,112 @@
                 <h1>Analytics</h1>
                 <p>View detailed spending analytics and insights</p>
             </div>
+            
+            <!-- Analytics Controls -->
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>Spending Analytics</h3>
-                    <i class="lni lni-stats-up"></i>
+                    <h3>Analytics Controls</h3>
+                    <i class="lni lni-cog"></i>
                 </div>
-                <p>This section will be loaded by analytics.js</p>
+                <div class="analytics-controls">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="bankFilter">Bank Filter:</label>
+                            <select id="bankFilter" class="form-select" onchange="changeBankFilter()">
+                                <option value="all">All Connected Banks</option>
+                                <!-- Bank options will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="periodFilter">Time Period:</label>
+                            <select id="periodFilter" class="form-select" onchange="changePeriodFilter()">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="refreshAnalytics()">
+                                <i class="lni lni-reload"></i>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="dashboard-card text-center">
+                        <div class="card-header">
+                            <h3>Total Income</h3>
+                            <i class="lni lni-arrow-up"></i>
+                        </div>
+                        <div class="balance-amount h2 text-success" id="totalIncome">€0.00</div>
+                        <p>From all accounts</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="dashboard-card text-center">
+                        <div class="card-header">
+                            <h3>Total Expenses</h3>
+                            <i class="lni lni-arrow-down"></i>
+                        </div>
+                        <div class="balance-amount h2 text-danger" id="totalExpenses">€0.00</div>
+                        <p>From all accounts</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="dashboard-card text-center">
+                        <div class="card-header">
+                            <h3>Net Amount</h3>
+                            <i class="lni lni-wallet"></i>
+                        </div>
+                        <div class="balance-amount h2" id="netAmount">€0.00</div>
+                        <p>Income - Expenses</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="dashboard-card text-center">
+                        <div class="card-header">
+                            <h3>Transactions</h3>
+                            <i class="lni lni-credit-cards"></i>
+                        </div>
+                        <div class="balance-amount h2" id="transactionCount">0</div>
+                        <p>Total transactions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Categories -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Top Spending Categories</h3>
+                    <i class="lni lni-pie-chart"></i>
+                </div>
+                <div id="topCategories" class="categories-list">
+                    <div class="empty-state">
+                        <i class="lni lni-pie-chart"></i>
+                        <h4>No data available</h4>
+                        <p>Connect your bank accounts to see spending categories</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Transactions</h3>
+                    <i class="lni lni-list"></i>
+                </div>
+                <div id="recentTransactions" class="transactions-list">
+                    <div class="empty-state">
+                        <i class="lni lni-list"></i>
+                        <h4>No transactions found</h4>
+                        <p>Connect your bank accounts to see recent transactions</p>
+                    </div>
+                </div>
             </div>
         </div>
 
