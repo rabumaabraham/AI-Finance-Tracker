@@ -253,7 +253,8 @@ class BankManager {
             const cleanUrl = window.location.origin + window.location.pathname;
             window.history.replaceState({}, document.title, cleanUrl);
             
-            // Switch to Bank Accounts section
+            // Ensure we're on the banks section (should already be there from dashboard manager)
+            console.log('🔄 Ensuring banks section is active...');
             if (typeof showSection === 'function') {
                 showSection('banks');
             }
@@ -398,6 +399,49 @@ function connectBank() {
     if (window.bankManager) {
         window.bankManager.connectBank();
     }
+}
+
+// Global function to switch to banks section (can be called from anywhere)
+function switchToBanksSection() {
+    console.log('🔄 Global function: Switching to Bank Accounts section...');
+    
+    // Method 1: Try showSection function
+    if (typeof showSection === 'function') {
+        console.log('✅ Using showSection function');
+        showSection('banks');
+        return true;
+    }
+    
+    // Method 2: Direct DOM manipulation
+    console.log('⚠️ showSection not available, using direct DOM manipulation');
+    const banksSection = document.getElementById('banks');
+    const overviewSection = document.getElementById('overview');
+    
+    if (banksSection && overviewSection) {
+        // Hide overview
+        overviewSection.style.display = 'none';
+        overviewSection.classList.remove('active');
+        
+        // Show banks section
+        banksSection.style.display = 'block';
+        banksSection.classList.add('active');
+        
+        // Update menu
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        const banksLink = document.querySelector('[onclick="showSection(\'banks\')"]');
+        if (banksLink) {
+            banksLink.classList.add('active');
+        }
+        
+        console.log('✅ Successfully switched to Bank Accounts section');
+        return true;
+    }
+    
+    console.log('❌ Failed to switch sections - elements not found');
+    return false;
 }
 
 function checkConnectionStatus() {

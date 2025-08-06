@@ -8,6 +8,7 @@ class DashboardManager {
     init() {
         this.bindEvents();
         this.checkAuthentication();
+        this.handleInitialSection();
         this.loadOverviewData();
     }
 
@@ -37,6 +38,33 @@ class DashboardManager {
         }
     }
 
+    handleInitialSection() {
+        // Check if we're returning from bank connection
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const ref = urlParams.get('ref');
+        const code = urlParams.get('code');
+        const requisition = urlParams.get('requisition');
+        
+        if (status === 'success' || ref || code || requisition) {
+            // Show banks section immediately for bank connection
+            console.log('🔄 Bank connection detected, showing banks section...');
+            showSection('banks');
+            return;
+        }
+        
+        // Check if we have a stored section preference
+        const lastSection = sessionStorage.getItem('lastDashboardSection');
+        if (lastSection && lastSection !== 'overview') {
+            console.log('🔄 Restoring last section:', lastSection);
+            showSection(lastSection);
+        } else {
+            // Default to overview only on fresh login
+            console.log('🔄 Showing default overview section');
+            showSection('overview');
+        }
+    }
+
     loadOverviewData() {
         this.updateOverviewCards();
     }
@@ -49,6 +77,9 @@ class DashboardManager {
 
 // Show dashboard section
 async function showSection(sectionName) {
+    // Store the section preference
+    sessionStorage.setItem('lastDashboardSection', sectionName);
+    
     // Hide all sections
     document.querySelectorAll('.dashboard-section').forEach(section => {
         section.style.display = 'none';
