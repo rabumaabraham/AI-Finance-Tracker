@@ -14,9 +14,18 @@ class DashboardManager {
     bindEvents() {
         // Handle window resize for mobile sidebar
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 991) {
+            if (window.innerWidth > 768) {
                 this.closeSidebar();
             }
+        });
+        
+        // Close sidebar when clicking on a menu item on mobile
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    this.closeSidebar();
+                }
+            });
         });
     }
 
@@ -63,7 +72,7 @@ function showSection(sectionName) {
     initializeSection(sectionName);
 
     // Close sidebar on mobile
-    if (window.innerWidth <= 991) {
+    if (window.innerWidth <= 768) {
         closeSidebar();
     }
 }
@@ -111,18 +120,28 @@ function initializeSection(sectionName) {
 // Sidebar Functions
 function toggleSidebar() {
     const sidebar = document.querySelector('.dashboard-sidebar');
-    const toggle = document.querySelector('.sidebar-toggle');
+    const hamburger = document.querySelector('.hamburger');
+    const overlay = document.querySelector('.sidebar-overlay');
     
-    sidebar.classList.toggle('show');
-    toggle.classList.toggle('active');
+    sidebar.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    overlay.classList.toggle('active');
+    
+    // Prevent body scroll when sidebar is open on mobile
+    if (window.innerWidth <= 768) {
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    }
 }
 
 function closeSidebar() {
     const sidebar = document.querySelector('.dashboard-sidebar');
-    const toggle = document.querySelector('.sidebar-toggle');
+    const hamburger = document.querySelector('.hamburger');
+    const overlay = document.querySelector('.sidebar-overlay');
     
-    sidebar.classList.remove('show');
-    toggle.classList.remove('active');
+    sidebar.classList.remove('active');
+    hamburger.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 // Logout Function
