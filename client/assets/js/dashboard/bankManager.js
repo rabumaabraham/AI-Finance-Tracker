@@ -12,11 +12,12 @@ class BankManager {
     }
 
     // Static method for initialization (called by dashboard manager)
-    static init() {
+    static async init() {
         if (!window.bankManager) {
             window.bankManager = new BankManager();
         }
-        window.bankManager.loadConnectedBanks();
+        await window.bankManager.loadConnectedBanks();
+        await window.bankManager.checkBankConnectionStatus();
     }
 
     bindEvents() {
@@ -85,9 +86,8 @@ class BankManager {
 
     async connectBank() {
         try {
-            showNotification('Connecting to bank...', 'info');
+            showNotification('Connecting to GoCardless...', 'info');
             
-            // Call Nordigen API to get connection link
             const response = await fetch(`${this.baseURL}/connect-bank`, {
                 method: 'GET',
                 headers: {
@@ -102,13 +102,11 @@ class BankManager {
 
             const data = await response.json();
             
-            // Store requisition ID for later use
+            // Store requisition ID for status checking
             localStorage.setItem('currentRequisitionId', data.requisitionId);
             
-            // Redirect to Nordigen for bank authentication
-            window.open(data.link, '_blank');
-            
-            showNotification('Bank connection initiated. Please complete authentication in the new window.', 'success');
+            // Redirect to GoCardless sandbox
+            window.location.href = data.link;
             
         } catch (error) {
             console.error('Error connecting bank:', error);
@@ -118,29 +116,40 @@ class BankManager {
 
     async fetchTransactions(requisitionId) {
         try {
+            const token = authService.getToken();
+            console.log('🔑 Fetching transactions with token:', token ? 'Present' : 'Missing');
+            
+            if (!token) {
+                console.log('⚠️ No auth token, skipping transaction fetch');
+                return;
+            }
+
             const response = await fetch(`${this.baseURL}/transactions/${requisitionId}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${authService.getToken()}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
+            console.log('💳 Transaction fetch response status:', response.status);
+
             if (!response.ok) {
-                throw new Error('Failed to fetch transactions');
+                console.log('⚠️ Transaction fetch failed, but continuing...');
+                return;
             }
 
             const transactions = await response.json();
+            console.log('💳 Successfully fetched transactions:', transactions.length);
             showNotification(`Successfully fetched ${transactions.length} transactions`, 'success');
             
-            // Update overview with new data
-            if (window.dashboardManager) {
+            if (window.dashboardManager && window.dashboardManager.updateOverviewData) {
                 window.dashboardManager.updateOverviewData();
             }
             
         } catch (error) {
-            console.error('Error fetching transactions:', error);
-            showNotification('Failed to fetch transactions', 'error');
+            console.error('❌ Error fetching transactions:', error);
+            console.log('⚠️ Transaction fetch failed, but continuing...');
         }
     }
 
@@ -183,16 +192,203 @@ class BankManager {
         showNotification('Demo bank added successfully', 'success');
     }
 
-    // Check if user returned from Nordigen authentication
-    checkBankConnectionStatus() {
+
+
+    // Check if user returned from GoCardless authentication
+    async checkBankConnectionStatus() {
         const requisitionId = localStorage.getItem('currentRequisitionId');
+        
         if (requisitionId) {
-            // In a real app, you'd check the requisition status with Nordigen
-            // For demo purposes, we'll simulate a successful connection
-            setTimeout(() => {
-                this.addDemoBank();
-                localStorage.removeItem('currentRequisitionId');
-            }, 2000);
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const status = urlParams.get('status');
+                const ref = urlParams.get('ref');
+                const code = urlParams.get('code');
+                const requisition = urlParams.get('requisition');
+                
+                console.log('🔍 URL parameters:', { status, ref, code, requisition });
+                console.log('🆔 Stored requisitionId:', requisitionId);
+                
+                // Check if we've already processed this connection
+                const processedKey = `processed_${requisitionId}`;
+                if (sessionStorage.getItem(processedKey)) {
+                    console.log('⚠️ Connection already processed, skipping:', requisitionId);
+                    return;
+                }
+                
+                // Handle GoCardless redirect parameters
+                if (ref || code || requisition || status === 'success' || status === 'completed') {
+                    // Mark as processed to prevent duplicates
+                    sessionStorage.setItem(processedKey, 'true');
+                    // Use the stored requisitionId, not the URL parameters
+                    await this.handleSuccessfulConnection(requisitionId);
+                    return;
+                } else if (status === 'error' || status === 'failed') {
+                    this.handleFailedConnection();
+                } else {
+                    await this.checkRequisitionStatus(requisitionId);
+                }
+                
+            } catch (error) {
+                console.error('Error checking connection status:', error);
+                showNotification('Error checking connection status', 'error');
+            }
+        }
+    }
+
+    async handleSuccessfulConnection(requisitionId) {
+        console.log('🎉 Processing successful bank connection:', requisitionId);
+        showNotification('Bank connection successful!', 'success');
+        
+        try {
+            console.log('📝 Adding bank to connected list...');
+            await this.addConnectedBank(requisitionId);
+            
+            console.log('💳 Fetching transactions...');
+            await this.fetchTransactions(requisitionId);
+            
+            localStorage.removeItem('currentRequisitionId');
+            
+            // Clean URL
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+            
+            // Switch to Bank Accounts section
+            if (typeof showSection === 'function') {
+                showSection('banks');
+            }
+            
+            console.log('✅ Bank connection process completed');
+            showNotification('Bank account connected successfully!', 'success');
+        } catch (error) {
+            console.error('❌ Error in handleSuccessfulConnection:', error);
+            showNotification('Error processing bank connection', 'error');
+        }
+    }
+
+    handleFailedConnection() {
+        showNotification('Bank connection failed. Please try again.', 'error');
+        localStorage.removeItem('currentRequisitionId');
+    }
+
+    // Check requisition status with backend
+    async checkRequisitionStatus(requisitionId) {
+        try {
+            const token = authService.getToken();
+            if (!token) {
+                console.log('No auth token, skipping status check');
+                return;
+            }
+
+            const response = await fetch(`${this.baseURL}/status/${requisitionId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Status check response:', data);
+                
+                if (data.status === 'SUCCEEDED') {
+                    await this.handleSuccessfulConnection(requisitionId);
+                } else if (data.status === 'FAILED') {
+                    this.handleFailedConnection();
+                } else {
+                    console.log('Status still pending, checking again in 2 seconds...');
+                    setTimeout(() => this.checkRequisitionStatus(requisitionId), 2000);
+                }
+            } else {
+                console.log('Status check failed:', response.status);
+            }
+        } catch (error) {
+            console.error('Error checking requisition status:', error);
+        }
+    }
+
+    // Add connected bank to the list
+    async addConnectedBank(requisitionId) {
+        try {
+            // Check if bank already exists to prevent duplicates
+            const existingBank = this.connectedBanks.find(bank => bank.id === requisitionId);
+            if (existingBank) {
+                console.log('⚠️ Bank already exists, skipping duplicate:', requisitionId);
+                return;
+            }
+
+            const token = authService.getToken();
+            console.log('🔑 Auth token:', token ? 'Present' : 'Missing');
+            
+            if (!token) {
+                console.log('⚠️ No auth token, using fallback bank data');
+                const bank = {
+                    id: requisitionId,
+                    name: 'Connected Bank',
+                    lastSync: new Date().toLocaleDateString(),
+                    status: 'connected',
+                    requisitionId: requisitionId
+                };
+                
+                this.connectedBanks.push(bank);
+                localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
+                this.updateBankList();
+                this.updateBankCount();
+                return;
+            }
+
+            const response = await fetch(`${this.baseURL}/details/${requisitionId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('📊 Bank details response status:', response.status);
+
+            let bankData;
+            if (response.ok) {
+                bankData = await response.json();
+                console.log('📊 Bank details received:', bankData);
+            } else {
+                console.log('⚠️ Bank details failed, using fallback');
+                bankData = {
+                    name: 'Connected Bank',
+                    lastSync: new Date().toLocaleDateString()
+                };
+            }
+
+            const bank = {
+                id: requisitionId,
+                name: bankData.name || 'Connected Bank',
+                lastSync: bankData.lastSync || new Date().toLocaleDateString(),
+                status: 'connected',
+                requisitionId: requisitionId
+            };
+            
+            this.connectedBanks.push(bank);
+            localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
+            
+            this.updateBankList();
+            this.updateBankCount();
+            
+        } catch (error) {
+            console.error('❌ Error adding connected bank:', error);
+            // Use fallback even if there's an error
+            const bank = {
+                id: requisitionId,
+                name: 'Connected Bank',
+                lastSync: new Date().toLocaleDateString(),
+                status: 'connected',
+                requisitionId: requisitionId
+            };
+            
+            this.connectedBanks.push(bank);
+            localStorage.setItem('connectedBanks', JSON.stringify(this.connectedBanks));
+            this.updateBankList();
+            this.updateBankCount();
         }
     }
 }
@@ -204,14 +400,24 @@ function connectBank() {
     }
 }
 
+function checkConnectionStatus() {
+    if (window.bankManager) {
+        const requisitionId = localStorage.getItem('currentRequisitionId');
+        if (requisitionId) {
+            window.bankManager.checkRequisitionStatus(requisitionId);
+        } else {
+            showNotification('No pending bank connection found', 'info');
+        }
+    }
+}
+
 // Initialize Bank Manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     if (document.getElementById('banks')) {
-        // Only create instance if it doesn't exist
         if (!window.bankManager) {
             window.bankManager = new BankManager();
         }
-        // Check for pending bank connections
-        window.bankManager.checkBankConnectionStatus();
+        
+        await window.bankManager.checkBankConnectionStatus();
     }
 });

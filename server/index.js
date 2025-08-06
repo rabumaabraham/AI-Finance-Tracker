@@ -1,27 +1,33 @@
-// server/index.js
+// Main Server Entry Point
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
 import nordigenRoutes from './routes/nordigenRoutes.js';
-import authRoutes from './routes/auth.js'; // 👈 new import
+import authRoutes from './routes/auth.js';
 
 dotenv.config();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Health check
 app.get("/", (req, res) => res.send("Server running"));
 
+// API Routes
 app.use('/api/bank', nordigenRoutes);
-app.use('/api/auth', authRoutes); // 👈 new line
+app.use('/api/auth', authRoutes);
 
+// Database connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
+// Start server
 app.listen(5000, () => console.log("Server on port 5000"));
 
 
