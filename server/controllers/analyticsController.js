@@ -7,22 +7,25 @@ export const getCombinedAnalytics = async (req, res) => {
   try {
     const { period = 'month' } = req.query;
     
-    // Get date range
+    // Get date range - Professional rolling time periods
     const now = new Date();
     let startDate;
     
     switch(period) {
       case 'week':
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Last 7 days
         break;
       case 'month':
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Last 30 days
+        break;
+      case 'quarter':
+        startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000); // Last 90 days
         break;
       case 'year':
-        startDate = new Date(now.getFullYear(), 0, 1);
+        startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000); // Last 365 days
         break;
       default:
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Default to 30 days
     }
 
     // Get all transactions for user in date range with bank info
@@ -119,22 +122,25 @@ export const getBankAnalytics = async (req, res) => {
       return res.status(404).json({ error: "Connected bank account not found." });
     }
 
-    // Get date range
+    // Get date range - Professional rolling time periods
     const now = new Date();
     let startDate;
     
     switch(period) {
       case 'week':
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Last 7 days
         break;
       case 'month':
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Last 30 days
+        break;
+      case 'quarter':
+        startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000); // Last 90 days
         break;
       case 'year':
-        startDate = new Date(now.getFullYear(), 0, 1);
+        startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000); // Last 365 days
         break;
       default:
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Default to 30 days
     }
 
     // Get transactions for specific bank
