@@ -333,15 +333,74 @@
         <!-- Budget Section -->
         <div id="budget" class="dashboard-section">
             <div class="page-header">
-                <h1>Budget Management</h1>
-                <p>Set and track your spending limits</p>
+                <h1>Spending Limits</h1>
+                <p>Set monthly spending limits and get notified when you reach them</p>
             </div>
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Budget Limits</h3>
-                    <i class="lni lni-wallet"></i>
+
+            <div class="budget-header">
+                <div class="budget-summary">
+                    <div class="summary-card">
+                        <span class="summary-label">Total Budget</span>
+                        <span class="summary-amount" id="totalBudget">€0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Spent This Month</span>
+                        <span class="summary-amount" id="totalSpent">€0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Remaining</span>
+                        <span class="summary-amount" id="totalRemaining">€0.00</span>
+                    </div>
                 </div>
-                <p>This section will be loaded by budgetManager.js</p>
+                <button class="btn-add-limit" onclick="budgetManager.showAddModal()">
+                    <i class="lni lni-plus"></i>
+                    Add Limit
+                </button>
+            </div>
+
+            <div class="budget-alerts" id="budgetAlerts"></div>
+
+            <div class="budget-categories" id="budgetGrid">
+                <div class="empty-state">
+                    <i class="lni lni-wallet"></i>
+                    <h4>No spending limits set</h4>
+                    <p>Set your first spending limit to start tracking</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Budget Modal -->
+        <div id="addBudgetModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Set Spending Limit</h3>
+                    <span class="close" onclick="budgetManager.closeModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="addBudgetForm">
+                        <div class="form-group">
+                            <label for="budgetCategory">Category</label>
+                            <select id="budgetCategory" required>
+                                <option value="">Choose category</option>
+                                <option value="Food">Food & Dining</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Bills">Bills & Utilities</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Health">Health & Medical</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budgetLimit">Monthly Limit (€)</label>
+                            <input type="number" id="budgetLimit" min="0" step="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="budgetManager.closeModal()">Cancel</button>
+                            <button type="submit" class="btn-save">Set Limit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -379,6 +438,7 @@
     <!-- ===== All JavaScript files ===== -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/auth.js"></script>
+    <script src="assets/js/notifications.js"></script>
     <!-- main js -->
     <script src="assets/js/dashboard/dashboard.js?v=1.3"></script>
     <!-- sections js-->

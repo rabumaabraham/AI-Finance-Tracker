@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import nordigenRoutes from './routes/nordigenRoutes.js';
 import authRoutes from './routes/auth.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import budgetRoutes from './routes/budgetRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.get("/test", (req, res) => {
 app.use('/api/bank', nordigenRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/budget', budgetRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)

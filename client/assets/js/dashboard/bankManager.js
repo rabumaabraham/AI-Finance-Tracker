@@ -142,39 +142,44 @@ class BankManager {
     async fetchTransactions(requisitionId) {
         try {
             const token = authService.getToken();
-            console.log('🔑 Fetching transactions with token:', token ? 'Present' : 'Missing');
-            
             if (!token) {
-                console.log('⚠️ No auth token, skipping transaction fetch');
+                showNotification('Please log in to fetch transactions', 'error');
                 return;
             }
 
+            showNotification('Fetching transactions...', 'info');
+            
             const response = await fetch(`${this.baseURL}/transactions/${requisitionId}`, {
-                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
-            console.log('💳 Transaction fetch response status:', response.status);
-
-            if (!response.ok) {
-                console.log('⚠️ Transaction fetch failed, but continuing...');
-                return;
-            }
-
-            const transactions = await response.json();
-            console.log('💳 Successfully fetched transactions:', transactions.length);
-            showNotification(`Successfully fetched ${transactions.length} transactions`, 'success');
-            
-            if (window.dashboardManager && window.dashboardManager.updateOverviewData) {
-                window.dashboardManager.updateOverviewData();
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Transactions fetched successfully:', result);
+                
+                showNotification(`Successfully imported ${result.transactionCount || 0} transactions!`, 'success');
+                
+                // Refresh analytics if available
+                if (window.analyticsManager) {
+                    await window.analyticsManager.loadAnalytics();
+                }
+                
+                // Refresh budgets if available
+                if (window.budgetManager) {
+                    await window.budgetManager.refreshBudgets();
+                }
+                
+            } else {
+                console.error('❌ Error fetching transactions:', response.status);
+                showNotification('Failed to fetch transactions', 'error');
             }
             
         } catch (error) {
-            console.error('❌ Error fetching transactions:', error);
-            console.log('⚠️ Transaction fetch failed, but continuing...');
+            console.error('Error fetching transactions:', error);
+            showNotification('Failed to fetch transactions', 'error');
         }
     }
 

@@ -136,8 +136,10 @@ async function initializeSection(sectionName) {
             }
             break;
         case 'budget':
-            if (typeof BudgetManager !== 'undefined') {
-                BudgetManager.init();
+            if (window.budgetManager) {
+                window.budgetManager.init();
+            } else if (window.initializeBudgetManager) {
+                window.initializeBudgetManager();
             }
             break;
         case 'ai-chat':
