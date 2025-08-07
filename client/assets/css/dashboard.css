@@ -627,6 +627,63 @@ body {
     font-size: 1.2rem;
 }
 
+/* Category-specific icon colors */
+.category-icon .lni-dinner {
+    color: #e74c3c; /* Red for food */
+}
+
+.category-icon .lni-car {
+    color: #3498db; /* Blue for transport */
+}
+
+.category-icon .lni-game {
+    color: #9b59b6; /* Purple for entertainment */
+}
+
+.category-icon .lni-files {
+    color: #f39c12; /* Orange for bills */
+}
+
+.category-icon .lni-wallet {
+    color: #27ae60; /* Green for salary/income */
+}
+
+.category-icon .lni-heart {
+    color: #e74c3c; /* Red for health/medical */
+}
+
+.category-icon .lni-shopping-basket {
+    color: #ff6b6b; /* Coral for shopping */
+}
+
+.category-icon .lni-bolt {
+    color: #f1c40f; /* Yellow for electricity/gas */
+}
+
+.category-icon .lni-drop {
+    color: #3498db; /* Blue for water */
+}
+
+.category-icon .lni-network {
+    color: #9b59b6; /* Purple for internet */
+}
+
+.category-icon .lni-phone {
+    color: #2ecc71; /* Green for phone */
+}
+
+.category-icon .lni-home {
+    color: #8e44ad; /* Purple for rent/mortgage */
+}
+
+.category-icon .lni-shield {
+    color: #34495e; /* Dark gray for insurance */
+}
+
+.category-icon .lni-credit-cards {
+    color: var(--primary); /* Default blue for other */
+}
+
 .transactions-list {
     max-height: 400px;
     overflow-y: auto;

@@ -206,7 +206,10 @@ class AnalyticsManager {
 
         const { topCategories } = this.analyticsData;
 
-        const categoriesHTML = topCategories.map((category, index) => `
+        // Sort categories by amount (highest to lowest) to ensure proper ranking
+        const sortedCategories = [...topCategories].sort((a, b) => b.amount - a.amount);
+
+        const categoriesHTML = sortedCategories.map((category, index) => `
             <div class="category-item">
                 <div class="category-rank">${index + 1}</div>
                 <div class="category-info">
@@ -214,12 +217,67 @@ class AnalyticsManager {
                     <p>€${category.amount.toFixed(2)}</p>
                 </div>
                 <div class="category-icon">
-                    <i class="lni lni-credit-cards"></i>
+                    <i class="${this.getCategoryIcon(category.category)}"></i>
                 </div>
             </div>
         `).join('');
 
         container.innerHTML = categoriesHTML;
+    }
+
+    /**
+     * Get category-specific icon
+     * @param {string} category - The category name
+     * @returns {string} - The icon class name
+     */
+    getCategoryIcon(category) {
+        const categoryLower = category.toLowerCase();
+        
+        const iconMap = {
+            'food': 'lni lni-dinner',
+            'transport': 'lni lni-car',
+            'transportation': 'lni lni-car',
+            'entertainment': 'lni lni-game',
+            'bills': 'lni lni-files',
+            'salary': 'lni lni-wallet',
+            'income': 'lni lni-wallet',
+            'health': 'lni lni-heart',
+            'healthcare': 'lni lni-heart',
+            'medical': 'lni lni-heart',
+            'shopping': 'lni lni-shopping-basket',
+            'retail': 'lni lni-shopping-basket',
+            'groceries': 'lni lni-dinner',
+            'dining': 'lni lni-dinner',
+            'restaurant': 'lni lni-dinner',
+            'travel': 'lni lni-car',
+            'utilities': 'lni lni-files',
+            'electricity': 'lni lni-bolt',
+            'water': 'lni lni-drop',
+            'gas': 'lni lni-bolt',
+            'internet': 'lni lni-network',
+            'phone': 'lni lni-phone',
+            'rent': 'lni lni-home',
+            'mortgage': 'lni lni-home',
+            'insurance': 'lni lni-shield',
+            'wages': 'lni lni-wallet',
+            'other': 'lni lni-credit-cards',
+            'uncategorized': 'lni lni-credit-cards'
+        };
+        
+        // Try exact match first
+        if (iconMap[categoryLower]) {
+            return iconMap[categoryLower];
+        }
+        
+        // Try partial match
+        for (const [key, icon] of Object.entries(iconMap)) {
+            if (categoryLower.includes(key) || key.includes(categoryLower)) {
+                return icon;
+            }
+        }
+        
+        // Default icon
+        return 'lni lni-credit-cards';
     }
 
     updateRecentTransactions() {
