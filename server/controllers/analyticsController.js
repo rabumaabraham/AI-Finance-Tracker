@@ -2,6 +2,39 @@
 import Transaction from "../models/transaction.js";
 import BankAccount from "../models/bankAccount.js";
 
+/**
+ * Robust normalization to remove various prefixes
+ * @param {string} category - The raw category from database
+ * @returns {string} - The normalized category name
+ */
+function normalizeCategory(category) {
+  if (!category) return "Uncategorized";
+  
+  let normalizedCategory = category;
+  
+  // Remove common prefixes
+  const prefixesToRemove = [
+    /^category:\s*/i,
+    /^type:\s*/i,
+    /^cat:\s*/i,
+    /^spending category:\s*/i,
+    /^transaction category:\s*/i,
+    /^the category is:\s*/i,
+    /^this is:\s*/i,
+    /^classified as:\s*/i,
+    /^categorized as:\s*/i
+  ];
+  
+  prefixesToRemove.forEach(prefix => {
+    normalizedCategory = normalizedCategory.replace(prefix, '');
+  });
+  
+  // Remove any remaining quotes, periods, or extra whitespace
+  normalizedCategory = normalizedCategory.replace(/['"]/g, '').replace(/\.$/, '').trim();
+  
+  return normalizedCategory || "Uncategorized";
+}
+
 // Get combined analytics from all banks
 export const getCombinedAnalytics = async (req, res) => {
   try {
@@ -64,10 +97,11 @@ export const getCombinedAnalytics = async (req, res) => {
       }
 
       // Category breakdown
-      if (!analytics.categoryBreakdown[tx.category]) {
-        analytics.categoryBreakdown[tx.category] = 0;
+      const normalizedCategory = normalizeCategory(tx.category);
+      if (!analytics.categoryBreakdown[normalizedCategory]) {
+        analytics.categoryBreakdown[normalizedCategory] = 0;
       }
-      analytics.categoryBreakdown[tx.category] += amount;
+      analytics.categoryBreakdown[normalizedCategory] += amount;
 
       // Bank breakdown
       const bankName = tx.bankAccountId?.bankName || 'Unknown Bank';
@@ -93,7 +127,7 @@ export const getCombinedAnalytics = async (req, res) => {
         id: tx._id,
         name: tx.name,
         amount: tx.amount,
-        category: tx.category,
+        category: normalizeCategory(tx.category),
         date: tx.date,
         bankName: tx.bankAccountId?.bankName || 'Unknown Bank'
       }));
@@ -179,10 +213,12 @@ export const getBankAnalytics = async (req, res) => {
         analytics.totalExpenses += amount;
       }
 
-      if (!analytics.categoryBreakdown[tx.category]) {
-        analytics.categoryBreakdown[tx.category] = 0;
+      // Category breakdown
+      const normalizedCategory = normalizeCategory(tx.category);
+      if (!analytics.categoryBreakdown[normalizedCategory]) {
+        analytics.categoryBreakdown[normalizedCategory] = 0;
       }
-      analytics.categoryBreakdown[tx.category] += amount;
+      analytics.categoryBreakdown[normalizedCategory] += amount;
     });
 
     analytics.netAmount = analytics.totalIncome - analytics.totalExpenses;
@@ -199,7 +235,7 @@ export const getBankAnalytics = async (req, res) => {
         id: tx._id,
         name: tx.name,
         amount: tx.amount,
-        category: tx.category,
+        category: normalizeCategory(tx.category),
         date: tx.date
       }));
 

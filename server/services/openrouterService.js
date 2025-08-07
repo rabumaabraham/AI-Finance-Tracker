@@ -25,20 +25,44 @@ export async function categorizeWithOpenRouter(transactionName) {
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant that categorizes bank transactions.",
+          content: "You are a helpful assistant that categorizes bank transactions. Return ONLY the category name without any prefixes, labels, or additional text. Examples: 'Food', 'Transport', 'Entertainment', 'Bills', 'Salary', 'Health', 'Shopping', 'Other'. Do not include 'Category:', 'Type:', or any other prefixes.",
         },
         {
           role: "user",
-          content: `Categorize this bank transaction: "${transactionName}". Return only the most suitable category such as Food, Transport, Entertainment, Bills, Salary, Health, or Other.`,
+          content: `Categorize this bank transaction: "${transactionName}". Return only the category name (Food, Transport, Entertainment, Bills, Salary, Health, Shopping, or Other) without any prefixes or labels.`,
         },
       ],
-      max_tokens: 20, // Limit response length for category
-      temperature: 0.2, // Keep it low for consistent categorization
+      max_tokens: 10, // Limit response length for category
+      temperature: 0.1, // Keep it very low for consistent categorization
     });
 
     // Extract the category from the response
     const category = completion.choices[0].message.content.trim();
-    return category || "Uncategorized";
+    
+    // Robust normalization to remove various prefixes
+    let normalizedCategory = category;
+    
+    // Remove common prefixes
+    const prefixesToRemove = [
+      /^category:\s*/i,
+      /^type:\s*/i,
+      /^cat:\s*/i,
+      /^spending category:\s*/i,
+      /^transaction category:\s*/i,
+      /^the category is:\s*/i,
+      /^this is:\s*/i,
+      /^classified as:\s*/i,
+      /^categorized as:\s*/i
+    ];
+    
+    prefixesToRemove.forEach(prefix => {
+      normalizedCategory = normalizedCategory.replace(prefix, '');
+    });
+    
+    // Remove any remaining quotes, periods, or extra whitespace
+    normalizedCategory = normalizedCategory.replace(/['"]/g, '').replace(/\.$/, '').trim();
+    
+    return normalizedCategory || "Uncategorized";
   } catch (err) {
     console.error("❌ OpenRouter categorization failed:", err.message);
     // Log more details if available in error object
