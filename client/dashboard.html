@@ -435,12 +435,72 @@
                 <h1>AI Assistant</h1>
                 <p>Chat with AI about your finances</p>
             </div>
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>AI Chat Interface</h3>
-                    <i class="lni lni-consulting"></i>
+            
+            <!-- AI Chat Interface -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="ai-avatar">
+                            <i class="lni lni-consulting"></i>
+                        </div>
+                        <div class="ai-info">
+                            <h3>Financial AI Assistant</h3>
+                            <span class="status online">Online</span>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="btn-clear-chat" onclick="aiChatManager.clearChat()" title="Clear chat">
+                            <i class="lni lni-trash-can"></i>
+                        </button>
+                    </div>
                 </div>
-                <p>This section will be loaded by aiChat.js</p>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <div class="message-avatar">
+                            <i class="lni lni-consulting"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                Hello! I'm your AI financial assistant. I can help you with:
+                                <ul>
+                                    <li>Analyzing your spending patterns</li>
+                                    <li>Providing budgeting advice</li>
+                                    <li>Explaining your financial data</li>
+                                    <li>Answering questions about your accounts</li>
+                                </ul>
+                                How can I help you today?
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea 
+                            id="chatInput" 
+                            class="chat-input" 
+                            placeholder="Ask me about your finances..."
+                            rows="1"
+                            onkeydown="aiChatManager.handleKeyDown(event)"
+                        ></textarea>
+                        <button class="send-button" onclick="aiChatManager.sendMessage()" id="sendButton">
+                            <i class="lni lni-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="chat-suggestions">
+                        <button class="suggestion-btn" onclick="aiChatManager.sendSuggestion('How am I spending my money?')">
+                            How am I spending my money?
+                        </button>
+                        <button class="suggestion-btn" onclick="aiChatManager.sendSuggestion('What are my top expenses?')">
+                            What are my top expenses?
+                        </button>
+                        <button class="suggestion-btn" onclick="aiChatManager.sendSuggestion('Give me budgeting tips')">
+                            Give me budgeting tips
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 

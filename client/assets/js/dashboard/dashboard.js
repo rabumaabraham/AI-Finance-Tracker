@@ -16,7 +16,7 @@ class DashboardManager {
         // Handle window resize for mobile sidebar
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                this.closeSidebar();
+                closeSidebar();
             }
         });
         
@@ -143,8 +143,10 @@ async function initializeSection(sectionName) {
             }
             break;
         case 'ai-chat':
-            if (typeof AIChatManager !== 'undefined') {
-                AIChatManager.init();
+            if (window.aiChatManager) {
+                // AI Chat Manager is already initialized when the page loads
+                // No need to call init() again as it's called in the constructor
+                console.log('AI Chat section initialized');
             }
             break;
         case 'settings':
