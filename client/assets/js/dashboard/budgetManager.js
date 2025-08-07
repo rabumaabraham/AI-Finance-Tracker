@@ -163,7 +163,22 @@ class BudgetManager {
             'Bills': 'lni lni-files',
             'Shopping': 'lni lni-shopping-basket',
             'Health': 'lni lni-heart',
-            'Other': 'lni lni-credit-cards'
+            'Other': 'lni lni-credit-cards',
+            'Transportation': 'lni lni-car',
+            'Dining': 'lni lni-dinner',
+            'Utilities': 'lni lni-files',
+            'Medical': 'lni lni-heart',
+            'Groceries': 'lni lni-dinner',
+            'Restaurant': 'lni lni-dinner',
+            'Travel': 'lni lni-car',
+            'Insurance': 'lni lni-shield',
+            'Education': 'lni lni-graduation',
+            'Housing': 'lni lni-home',
+            'Personal Care': 'lni lni-heart',
+            'Gifts': 'lni lni-gift',
+            'Investments': 'lni lni-stats-up',
+            'Salary': 'lni lni-wallet',
+            'Income': 'lni lni-wallet'
         };
         return iconMap[category] || 'lni lni-credit-cards';
     }
