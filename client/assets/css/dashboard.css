@@ -1781,40 +1781,62 @@ body {
         text-align: center;
     }
     
-    /* Analytics Summary Cards - Horizontal Layout on Mobile */
+    /* Analytics Summary Cards - Compact Professional Layout on Mobile */
     .row .col-md-3.mb-4 {
         flex: 0 0 50% !important;
         max-width: 50% !important;
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.75rem !important;
     }
     
     .row .col-md-3.mb-4 .dashboard-card {
-        padding: 1rem;
-        min-height: 120px;
+        padding: 0.75rem;
+        min-height: 100px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--gray-200);
+        background: var(--white);
+    }
+    
+    .row .col-md-3.mb-4 .card-header {
+        padding: 0.5rem 0.75rem;
+        margin: -0.75rem -0.75rem 0.5rem -0.75rem;
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+        border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
     }
     
     .row .col-md-3.mb-4 .card-header h3 {
-        font-size: 0.85rem !important;
-        line-height: 1.1 !important;
-        margin-bottom: 0.5rem;
-    }
-    
-    .row .col-md-3.mb-4 .balance-amount {
-        font-size: 1.1rem !important;
-        margin-bottom: 0.25rem;
-    }
-    
-    .row .col-md-3.mb-4 p {
         font-size: 0.75rem !important;
-        line-height: 1.1 !important;
-        margin: 0;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
     }
     
     .row .col-md-3.mb-4 .card-header i {
-        font-size: 1rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        background: var(--gray-100);
+        padding: 0.25rem;
+        border-radius: var(--border-radius-sm);
+    }
+    
+    .row .col-md-3.mb-4 .balance-amount {
+        font-size: 1rem !important;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    
+    .row .col-md-3.mb-4 p {
+        font-size: 0.625rem !important;
+        line-height: 1.2 !important;
+        margin: 0;
+        color: var(--text-secondary);
+        font-weight: 500;
     }
 }
 
