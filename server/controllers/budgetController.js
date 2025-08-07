@@ -27,16 +27,16 @@ export const getBudgets = async (req, res) => {
       default: startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
+    // Get all transactions (not just expenses) to match analytics
     const transactions = await Transaction.find({
       userId: req.userId,
-      date: { $gte: startDate, $lte: now },
-      type: 'expense'
+      date: { $gte: startDate, $lte: now }
     });
 
     console.log('Found transactions:', transactions.length);
     console.log('Transaction categories:', [...new Set(transactions.map(tx => tx.category))]);
 
-    // Calculate spending per category (normalize categories)
+    // Calculate spending per category (normalize categories) - include all transactions
     const spendingByCategory = {};
     transactions.forEach(tx => {
       const category = (tx.category || 'Uncategorized').trim();
@@ -151,13 +151,13 @@ export const getBudgetAlerts = async (req, res) => {
       default: startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
+    // Get all transactions (not just expenses) to match analytics
     const transactions = await Transaction.find({
       userId: req.userId,
-      date: { $gte: startDate, $lte: now },
-      type: 'expense'
+      date: { $gte: startDate, $lte: now }
     });
 
-    // Calculate spending per category (normalize categories)
+    // Calculate spending per category (normalize categories) - include all transactions
     const spendingByCategory = {};
     transactions.forEach(tx => {
       const category = (tx.category || 'Uncategorized').trim();
