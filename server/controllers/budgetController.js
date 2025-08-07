@@ -1,5 +1,6 @@
 import Budget from '../models/budget.js';
 import Transaction from '../models/transaction.js';
+import { sendBudgetAlerts } from '../services/emailService.js';
 
 // Get all budgets for user
 export const getBudgets = async (req, res) => {
@@ -179,6 +180,18 @@ export const getBudgetAlerts = async (req, res) => {
       .sort((a, b) => b.percentage - a.percentage);
 
     console.log('Generated alerts:', alerts);
+    
+    // Send email notifications for alerts
+    if (alerts.length > 0) {
+      try {
+        const emailResults = await sendBudgetAlerts(alerts);
+        console.log(`📧 Email notification results:`, emailResults);
+      } catch (emailError) {
+        console.error('❌ Error sending email notifications:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
+    
     res.status(200).json({ alerts });
   } catch (error) {
     console.error('Error fetching budget alerts:', error);
