@@ -32,6 +32,13 @@ function normalizeCategory(category) {
   // Remove any remaining quotes, periods, or extra whitespace
   normalizedCategory = normalizedCategory.replace(/['"]/g, '').replace(/\.$/, '').trim();
   
+  // Special handling for transport categories to ensure consistency
+  if (normalizedCategory.toLowerCase().includes('transport') || 
+      normalizedCategory.toLowerCase().includes('travel') ||
+      normalizedCategory.toLowerCase().includes('transportation')) {
+    return "Transport";
+  }
+  
   return normalizedCategory || "Uncategorized";
 }
 
