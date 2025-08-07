@@ -215,48 +215,69 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Cards */
+/* Cards - Professional Banking App Style */
 .dashboard-card {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-  border: 1px solid rgba(0,0,0,0.05);
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.6;
 }
 
 .dashboard-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-color: rgba(48, 86, 211, 0.1);
 }
 
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .card-header h3 {
-  margin: 0;
-  color: var(--dark);
-  font-size: 1.1rem;
-  font-weight: 600;
+    margin: 0;
+    color: var(--dark);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
 }
 
 .card-header i {
-  font-size: 1.4rem;
-  color: var(--primary);
-  opacity: 0.8;
+    font-size: 1.5rem;
+    color: var(--primary);
+    opacity: 0.9;
+    background: rgba(48, 86, 211, 0.1);
+    padding: 0.75rem;
+    border-radius: 12px;
 }
 
 .balance-amount {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 1rem 0;
-  line-height: 1;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 1.5rem 0;
+    line-height: 1;
+    letter-spacing: -0.025em;
 }
 
 /* Page Headers */
@@ -279,248 +300,474 @@ body {
   font-size: 1.1rem;
 }
 
-/* Bank Accounts Section */
+/* Bank Accounts Section - Professional Banking App Style */
 .bank-connect-content {
-  text-align: center;
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .btn-connect-bank {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  color: var(--white);
-  font-weight: 600;
-  transition: var(--transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    border: none;
+    padding: 1.125rem 2.25rem;
+    border-radius: 12px;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 8px 24px rgba(48, 86, 211, 0.25);
+    letter-spacing: -0.025em;
 }
 
 .btn-connect-bank:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(48, 86, 211, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(48, 86, 211, 0.35);
 }
 
 .bank-count {
-  background: var(--light);
-  color: var(--dark);
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
+    background: rgba(48, 86, 211, 0.1);
+    color: var(--primary);
+    padding: 0.625rem 1.25rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 1px solid rgba(48, 86, 211, 0.2);
+    letter-spacing: -0.025em;
 }
 
 .banks-list {
-  min-height: 200px;
+    min-height: 200px;
 }
 
 .empty-state {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #666;
+    text-align: center;
+    padding: 3.5rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 2px dashed #e0e0e0;
+    color: #666;
 }
 
 .empty-state i {
-  font-size: 3rem;
-  color: #ccc;
-  margin-bottom: 1rem;
+    font-size: 3.5rem;
+    color: #ccc;
+    margin-bottom: 1.5rem;
+    display: block;
 }
 
 .empty-state h4 {
-  margin: 0 0 0.5rem;
-  color: var(--dark);
+    margin: 0 0 0.75rem;
+    color: var(--dark);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
 }
 
 .empty-state p {
-  margin: 0;
-  font-size: 0.95rem;
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
 }
 
 .bank-item {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  margin-bottom: 0.75rem;
-  transition: var(--transition);
+    display: flex;
+    align-items: center;
+    padding: 1.75rem;
+    background: white;
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    margin-bottom: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.bank-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.6;
+    transition: all 0.3s ease;
 }
 
 .bank-item:hover {
-  border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(48, 86, 211, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
 }
 
 .bank-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    box-shadow: 0 8px 24px rgba(48, 86, 211, 0.25);
 }
 
 .bank-icon i {
-  color: var(--white);
-  font-size: 1.5rem;
+    color: var(--white);
+    font-size: 1.75rem;
 }
 
 .bank-info {
-  flex: 1;
+    flex: 1;
 }
 
 .bank-name {
-  font-weight: 600;
-  color: var(--dark);
-  margin: 0 0 0.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
 }
 
 .bank-status {
-  font-size: 0.9rem;
-  color: var(--success);
-  display: flex;
-  align-items: center;
-  gap: 4px;
+    font-size: 0.95rem;
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
 }
 
 .bank-actions {
-  display: flex;
-  gap: 0.5rem;
+    display: flex;
+    gap: 1rem;
 }
 
 .btn-remove-bank {
-  background: none;
-  border: 1px solid var(--danger);
-  color: var(--danger);
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: var(--transition);
+    background: none;
+    border: 2px solid var(--danger);
+    color: var(--danger);
+    padding: 0.875rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    letter-spacing: -0.025em;
 }
 
 .btn-remove-bank:hover {
-  background: var(--danger);
-  color: var(--white);
+    background: var(--danger);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.3);
 }
 
-/* Status Grid */
+/* Sync Transactions Button */
+.btn-sync-transactions {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    border: none;
+    color: var(--white);
+    padding: 0.875rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 8px 24px rgba(48, 86, 211, 0.25);
+    letter-spacing: -0.025em;
+}
+
+.btn-sync-transactions:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(48, 86, 211, 0.35);
+}
+
+/* Status Grid - Professional Banking App Style */
 .status-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 2rem;
 }
 
 .status-item {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  background: var(--light);
-  border-radius: 8px;
-  transition: var(--transition);
+    display: flex;
+    align-items: center;
+    padding: 1.75rem;
+    background: white;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.status-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.6;
+    transition: all 0.3s ease;
 }
 
 .status-item:hover {
-  background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .status-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .status-icon.secure {
-  background: linear-gradient(135deg, var(--success), #20c997);
+    background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
 }
 
 .status-icon.sync {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
 }
 
 .status-icon i {
-  color: var(--white);
-  font-size: 1.5rem;
+    color: var(--white);
+    font-size: 1.75rem;
 }
 
 .status-info h4 {
-  margin: 0 0 0.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--dark);
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.025em;
 }
 
 .status-info p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+    line-height: 1.5;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  
-  .dashboard-header {
-    left: 0;
-    padding: 0 1rem;
-    z-index: 1002;
-  }
-  
-  .dashboard-sidebar {
-    transform: translateX(-100%);
-    z-index: 1001;
-    padding-top: var(--header-height);
-  }
-  
-  .dashboard-sidebar.active {
-    transform: translateX(0);
-  }
-  
-  .dashboard-main {
-    margin-left: 0;
-    padding: 1rem;
-  }
-  
-  .page-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .balance-amount {
-    font-size: 1.5rem;
-  }
-  
-  .dashboard-card {
-    padding: 1rem;
-  }
-  
-  .sidebar-header {
-    padding: 1.5rem 1rem 1rem;
-  }
-  
-  .status-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .bank-item {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .bank-icon {
-    margin: 0 0 1rem 0;
-  }
-  
-  .bank-actions {
-    margin-top: 1rem;
-  }
+    .hamburger {
+        display: flex;
+    }
+    
+    .dashboard-header {
+        left: 0;
+        padding: 0 1rem;
+        z-index: 1002;
+    }
+    
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+        z-index: 1001;
+        padding-top: var(--header-height);
+    }
+    
+    .dashboard-sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .dashboard-main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .balance-amount {
+        font-size: 1.5rem;
+    }
+    
+    .dashboard-card {
+        padding: 1rem;
+    }
+    
+    .sidebar-header {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .bank-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.25rem;
+    }
+    
+    .bank-icon {
+        margin: 0 0 1rem 0;
+        width: 48px;
+        height: 48px;
+    }
+    
+    .bank-actions {
+        margin-top: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .btn-remove-bank,
+    .btn-sync-transactions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .budget-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+        padding: 1.25rem;
+    }
+    
+    .budget-summary {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .budget-categories {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .analytics-controls {
+        padding: 1.5rem;
+    }
+    
+    .analytics-controls .row {
+        gap: 0.75rem;
+    }
+    
+    .analytics-controls .col-md-4 {
+        margin-bottom: 1rem;
+    }
+    
+    .analytics-controls .form-select,
+    .analytics-controls .btn {
+        min-height: 44px;
+        padding: 0.875rem 1rem;
+    }
+    
+    .category-item,
+    .transaction-item {
+        padding: 1rem 1.25rem;
+    }
+    
+    .category-rank {
+        width: 40px;
+        height: 40px;
+        margin-right: 1rem;
+        font-size: 1rem;
+    }
+    
+    .status-item {
+        padding: 1.25rem;
+    }
+    
+    .status-icon {
+        width: 48px;
+        height: 48px;
+        margin-right: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .limit-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .limit-status {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .bank-item {
+        padding: 1rem;
+    }
+    
+    .status-item {
+        padding: 1rem;
+    }
+    
+    .category-item,
+    .transaction-item {
+        padding: 1rem;
+    }
+    
+    .btn-connect-bank {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .analytics-controls {
+        padding: 1.25rem;
+    }
+    
+    .analytics-controls .row {
+        gap: 0.5rem;
+    }
+    
+    .analytics-controls .col-md-4 {
+        margin-bottom: 0.75rem;
+    }
+    
+    .analytics-controls .form-select,
+    .analytics-controls .btn {
+        min-height: 40px;
+        padding: 0.75rem 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    .analytics-controls label {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
 }
 
 /* Overlay */
@@ -549,44 +796,149 @@ body {
 .h2 { font-size: 1.5rem; font-weight: 600; }
 .text-muted { color: #666; }
 
-/* Analytics Section */
+/* Analytics Section - Professional Banking App Style */
 .analytics-controls {
-    padding: 1rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(48, 86, 211, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.analytics-controls::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.6;
+}
+
+.analytics-controls .row {
+    align-items: end;
+    gap: 1rem;
+}
+
+.analytics-controls .col-md-4 {
+    display: flex;
+    flex-direction: column;
 }
 
 .analytics-controls label {
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     display: block;
+    color: var(--dark);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
 }
 
 .analytics-controls .form-select {
-    border-radius: 8px;
+    border-radius: 10px;
     border: 2px solid #e9ecef;
-    padding: 0.75rem;
-    transition: var(--transition);
+    padding: 1rem 1.25rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    height: auto;
+    min-height: 48px;
 }
 
 .analytics-controls .form-select:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 0.2rem rgba(48, 86, 211, 0.25);
+    box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.1), 0 4px 12px rgba(48, 86, 211, 0.15);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.analytics-controls .form-select:hover {
+    border-color: rgba(48, 86, 211, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-controls .btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    border: none;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(48, 86, 211, 0.25);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.analytics-controls .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(48, 86, 211, 0.35);
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3a8a 100%);
+}
+
+.analytics-controls .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(48, 86, 211, 0.25);
+}
+
+.analytics-controls .btn i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.analytics-controls .btn:hover i {
+    transform: rotate(180deg);
 }
 
 .categories-list {
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
 }
 
 .category-item {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #e9ecef;
-    transition: var(--transition);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.category-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .category-item:hover {
-    background-color: var(--light);
+    background-color: rgba(48, 86, 211, 0.05);
+    transform: translateX(4px);
+}
+
+.category-item:hover::before {
+    opacity: 1;
 }
 
 .category-item:last-child {
@@ -594,16 +946,18 @@ body {
 }
 
 .category-rank {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
     color: var(--white);
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    margin-right: 1rem;
+    margin-right: 1.25rem;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(48, 86, 211, 0.2);
 }
 
 .category-info {
@@ -611,95 +965,70 @@ body {
 }
 
 .category-info h4 {
-    margin: 0;
-    font-size: 1.1rem;
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
+    color: var(--dark);
 }
 
 .category-info p {
     margin: 0;
-    color: #6c757d;
+    color: #666;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .category-icon {
     color: var(--primary);
-    font-size: 1.2rem;
-}
-
-/* Category-specific icon colors */
-.category-icon .lni-dinner {
-    color: #e74c3c; /* Red for food */
-}
-
-.category-icon .lni-car {
-    color: #3498db; /* Blue for transport */
-}
-
-.category-icon .lni-game {
-    color: #9b59b6; /* Purple for entertainment */
-}
-
-.category-icon .lni-files {
-    color: #f39c12; /* Orange for bills */
-}
-
-.category-icon .lni-wallet {
-    color: #27ae60; /* Green for salary/income */
-}
-
-.category-icon .lni-heart {
-    color: #e74c3c; /* Red for health/medical */
-}
-
-.category-icon .lni-shopping-basket {
-    color: #ff6b6b; /* Coral for shopping */
-}
-
-.category-icon .lni-bolt {
-    color: #f1c40f; /* Yellow for electricity/gas */
-}
-
-.category-icon .lni-drop {
-    color: #3498db; /* Blue for water */
-}
-
-.category-icon .lni-network {
-    color: #9b59b6; /* Purple for internet */
-}
-
-.category-icon .lni-phone {
-    color: #2ecc71; /* Green for phone */
-}
-
-.category-icon .lni-home {
-    color: #8e44ad; /* Purple for rent/mortgage */
-}
-
-.category-icon .lni-shield {
-    color: #34495e; /* Dark gray for insurance */
-}
-
-.category-icon .lni-credit-cards {
-    color: var(--primary); /* Default blue for other */
+    font-size: 1.25rem;
+    margin-left: 1rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(48, 86, 211, 0.1);
+    border-radius: 8px;
 }
 
 .transactions-list {
     max-height: 400px;
     overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
 }
 
 .transaction-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #e9ecef;
-    transition: var(--transition);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.transaction-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .transaction-item:hover {
-    background-color: var(--light);
+    background-color: rgba(48, 86, 211, 0.05);
+    transform: translateX(4px);
+}
+
+.transaction-item:hover::before {
+    opacity: 1;
 }
 
 .transaction-item:last-child {
@@ -707,20 +1036,23 @@ body {
 }
 
 .transaction-info h4 {
-    margin: 0;
+    margin: 0 0 0.25rem;
     font-size: 1rem;
     font-weight: 600;
+    color: var(--dark);
 }
 
 .transaction-meta {
     margin: 0;
-    color: #6c757d;
+    color: #666;
     font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .transaction-amount {
     font-weight: bold;
     font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .transaction-amount.positive {
@@ -832,7 +1164,7 @@ body {
     background: white;
     border-radius: 16px;
     padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     border: 1px solid #f0f0f0;
     transition: all 0.3s ease;
     position: relative;
@@ -845,22 +1177,25 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--primary));
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.6;
     transition: all 0.3s ease;
 }
 
 .limit-card.warning::before {
-    background: linear-gradient(90deg, #FF9800, #FFC107);
+    background: #FF9800;
+    opacity: 0.6;
 }
 
 .limit-card.over-limit::before {
-    background: linear-gradient(90deg, #F44336, #E91E63);
+    background: #F44336;
+    opacity: 0.6;
 }
 
 .limit-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .limit-header {
@@ -1378,3 +1713,5 @@ body {
 .limit-icon .lni-gift { color: var(--primary); }
 .limit-icon .lni-stats-up { color: var(--primary); }
 .limit-icon .lni-wallet { color: var(--primary); }
+
+/* All category icons now use the primary color for consistency */
