@@ -766,6 +766,13 @@ body {
         padding: 1rem;
     }
     
+    .transaction-amount {
+        font-size: 1rem;
+        min-width: 80px;
+        text-align: right;
+        align-self: flex-end;
+    }
+    
     .btn-connect-bank {
         padding: 0.875rem 1.5rem;
         font-size: 0.9rem;
@@ -956,6 +963,20 @@ body {
         flex: 0 0 auto;
         min-width: 140px;
     }
+    
+    /* Reduce text size for analytics summary cards on Windows view */
+    .card-header h3 {
+        font-size: 0.95rem !important; /* Slightly bigger font size to fit text on one line */
+        line-height: 1.2 !important; /* Slightly more line height */
+        white-space: nowrap !important; /* Prevent text wrapping */
+        overflow: hidden !important; /* Hide overflow */
+        text-overflow: ellipsis !important; /* Add ellipsis if needed */
+    }
+    
+    .dashboard-card p {
+        font-size: 0.85rem !important; /* Slightly bigger description text */
+        line-height: 1.2 !important; /* Slightly more line height */
+    }
 }
 
 .categories-list {
@@ -1110,6 +1131,9 @@ body {
     font-weight: bold;
     font-size: 1.1rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .transaction-amount.positive {
