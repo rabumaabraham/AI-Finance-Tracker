@@ -83,6 +83,12 @@ class BudgetManager {
         if (totalSpentEl) totalSpentEl.textContent = `€${totalSpent.toFixed(2)}`;
         if (totalRemainingEl) totalRemainingEl.textContent = `€${totalRemaining.toFixed(2)}`;
         
+        // Update budget count
+        const budgetCount = document.querySelector('.budget-count');
+        if (budgetCount) {
+            budgetCount.textContent = `${this.budgets.length} limit${this.budgets.length !== 1 ? 's' : ''} set`;
+        }
+        
         console.log('Summary updated:', { totalBudget, totalSpent, totalRemaining });
     }
 
@@ -98,6 +104,12 @@ class BudgetManager {
 
         console.log('Rendering budgets:', this.budgets.length);
 
+        // Update budget count
+        const budgetCount = document.querySelector('.budget-count');
+        if (budgetCount) {
+            budgetCount.textContent = `${this.budgets.length} limit${this.budgets.length !== 1 ? 's' : ''} set`;
+        }
+
         if (this.budgets.length === 0) {
             console.log('No budgets to render, showing empty state');
             container.innerHTML = `
@@ -107,6 +119,7 @@ class BudgetManager {
                     <p>Set your first spending limit to start tracking</p>
                 </div>
             `;
+            console.log('Empty state rendered');
             return;
         }
 
@@ -238,11 +251,15 @@ class BudgetManager {
     showAddModal() {
         console.log('Showing add modal');
         const modal = document.getElementById('addBudgetModal');
+        console.log('Modal element:', modal);
         if (modal) {
             modal.style.display = 'block';
-            console.log('Modal displayed');
+            console.log('Modal displayed with style:', modal.style.display);
+            // Also add a class to ensure visibility
+            modal.classList.add('show');
         } else {
             console.error('Add budget modal not found');
+            showNotification('Modal not found. Please refresh the page.', 'error');
         }
     }
 
@@ -252,6 +269,7 @@ class BudgetManager {
         const form = document.getElementById('addBudgetForm');
         if (modal) {
             modal.style.display = 'none';
+            modal.classList.remove('show');
         }
         if (form) {
             form.reset();
@@ -357,7 +375,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Also initialize when the budget section is shown
 window.initializeBudgetManager = () => {
+    console.log('initializeBudgetManager called');
     if (window.budgetManager && !window.budgetManager.isInitialized) {
+        console.log('Initializing budget manager from global function');
         window.budgetManager.init();
+    } else if (window.budgetManager && window.budgetManager.isInitialized) {
+        console.log('Budget manager already initialized, skipping...');
+    } else {
+        console.log('Budget manager not available yet');
+    }
+};
+
+// Global function to show add modal with safety check
+window.showBudgetModal = () => {
+    console.log('showBudgetModal called');
+    if (window.budgetManager) {
+        console.log('Budget manager available, showing modal');
+        window.budgetManager.showAddModal();
+    } else {
+        console.error('Budget manager not available');
+        showNotification('Budget system not ready. Please refresh the page.', 'error');
     }
 };

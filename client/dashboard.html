@@ -229,15 +229,15 @@
                     <i class="lni lni-cog"></i>
                 </div>
                 <div class="analytics-controls">
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="analytics-controls-row">
+                        <div class="control-group">
                             <label for="bankFilter">Bank Filter:</label>
                             <select id="bankFilter" class="form-select" onchange="changeBankFilter()">
                                 <option value="all">All Connected Banks</option>
                                 <!-- Bank options will be loaded dynamically -->
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="control-group">
                             <label for="periodFilter">Time Period:</label>
                             <select id="periodFilter" class="form-select" onchange="changePeriodFilter()">
                                 <option value="week">This Week</option>
@@ -245,7 +245,7 @@
                                 <option value="year">This Year</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="control-group">
                             <button class="btn btn-primary" onclick="refreshAnalytics()">
                                 <i class="lni lni-reload"></i>
                                 Refresh
@@ -352,19 +352,37 @@
                         <span class="summary-amount" id="totalRemaining">€0.00</span>
                     </div>
                 </div>
-                <button class="btn-add-limit" onclick="budgetManager.showAddModal()">
-                    <i class="lni lni-plus"></i>
-                    Add Limit
-                </button>
             </div>
 
             <div class="budget-alerts" id="budgetAlerts"></div>
 
-            <div class="budget-categories" id="budgetGrid">
-                <div class="empty-state">
-                    <i class="lni lni-wallet"></i>
-                    <h4>No spending limits set</h4>
-                    <p>Set your first spending limit to start tracking</p>
+            <!-- Add Budget Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Set New Spending Limit</h3>
+                    <i class="lni lni-plus"></i>
+                </div>
+                <div class="budget-add-content">
+                    <p class="text-muted mb-3">Set spending limits for different categories to track your expenses and get notified when you reach your limits.</p>
+                                                    <button class="btn btn-primary btn-add-limit" onclick="showBudgetModal()">
+                                    <i class="lni lni-plus"></i>
+                                    Add New Limit
+                                </button>
+                </div>
+            </div>
+
+            <!-- Budget Categories -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Your Spending Limits</h3>
+                    <span class="budget-count">0 limits set</span>
+                </div>
+                <div class="budget-categories" id="budgetGrid">
+                    <div class="empty-state">
+                        <i class="lni lni-wallet"></i>
+                        <h4>No spending limits set</h4>
+                        <p>Set your first spending limit to start tracking</p>
+                    </div>
                 </div>
             </div>
         </div>

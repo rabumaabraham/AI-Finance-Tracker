@@ -306,6 +306,15 @@ body {
     margin-bottom: 2rem;
 }
 
+.budget-add-content {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
 .btn-connect-bank {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
     border: none;
@@ -328,6 +337,17 @@ body {
 }
 
 .bank-count {
+    background: rgba(48, 86, 211, 0.1);
+    color: var(--primary);
+    padding: 0.625rem 1.25rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 1px solid rgba(48, 86, 211, 0.2);
+    letter-spacing: -0.025em;
+}
+
+.budget-count {
     background: rgba(48, 86, 211, 0.1);
     color: var(--primary);
     padding: 0.625rem 1.25rem;
@@ -644,9 +664,6 @@ body {
     }
     
     .budget-header {
-        flex-direction: column;
-        gap: 1.5rem;
-        text-align: center;
         padding: 1.25rem;
     }
     
@@ -669,16 +686,29 @@ body {
         flex-direction: column;
     }
     
+    .btn-add-limit-empty {
+        width: 100%;
+        justify-content: center;
+        padding: 1.25rem 2rem;
+    }
+    
+    .btn-add-limit {
+        width: 100%;
+        justify-content: center;
+        padding: 1.25rem 2rem;
+    }
+    
     .analytics-controls {
         padding: 1.5rem;
     }
     
-    .analytics-controls .row {
+    .analytics-controls-row {
         gap: 0.75rem;
     }
     
-    .analytics-controls .col-md-4 {
+    .control-group {
         margin-bottom: 1rem;
+        flex: 1 1 100%;
     }
     
     .analytics-controls .form-select,
@@ -741,16 +771,22 @@ body {
         font-size: 0.9rem;
     }
     
+    .btn-add-limit {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
     .analytics-controls {
         padding: 1.25rem;
     }
     
-    .analytics-controls .row {
+    .analytics-controls-row {
         gap: 0.5rem;
     }
     
-    .analytics-controls .col-md-4 {
+    .control-group {
         margin-bottom: 0.75rem;
+        flex: 1 1 100%;
     }
     
     .analytics-controls .form-select,
@@ -817,14 +853,18 @@ body {
     opacity: 0.6;
 }
 
-.analytics-controls .row {
+.analytics-controls-row {
+    display: flex;
     align-items: end;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
-.analytics-controls .col-md-4 {
+.control-group {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: 200px;
 }
 
 .analytics-controls label {
@@ -899,6 +939,23 @@ body {
 
 .analytics-controls .btn:hover i {
     transform: rotate(180deg);
+}
+
+/* Windows/Desktop view - ensure refresh button stays next to time period */
+@media (min-width: 992px) {
+    .analytics-controls-row {
+        flex-wrap: nowrap;
+    }
+    
+    .control-group {
+        flex: 1;
+        min-width: auto;
+    }
+    
+    .control-group:last-child {
+        flex: 0 0 auto;
+        min-width: 140px;
+    }
 }
 
 .categories-list {
@@ -1073,9 +1130,6 @@ body {
 
 /* Budget Section - Professional Banking App Style */
 .budget-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 2rem;
     padding: 1.5rem;
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
@@ -1124,27 +1178,26 @@ body {
 }
 
 .btn-add-limit {
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 0.875rem 1.5rem;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%) !important;
+    border: none !important;
+    padding: 1.125rem 2.25rem !important;
+    border-radius: 12px !important;
+    color: var(--white) !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    box-shadow: 0 8px 24px rgba(48, 86, 211, 0.25) !important;
+    letter-spacing: -0.025em !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
 }
 
 .btn-add-limit:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 36px rgba(48, 86, 211, 0.35) !important;
 }
 
 .btn-add-limit i {
@@ -1395,7 +1448,42 @@ body {
 .empty-state p {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    margin: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+/* Empty State Add Limit Button */
+.btn-add-limit-empty {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(48, 86, 211, 0.3);
+    margin-top: 1rem;
+}
+
+.btn-add-limit-empty:hover {
+    background: linear-gradient(135deg, #3a5f9e 0%, #3a5f9e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(48, 86, 211, 0.4);
+}
+
+.btn-add-limit-empty:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(48, 86, 211, 0.3);
+}
+
+.btn-add-limit-empty i {
+    font-size: 1.1rem;
 }
 
 /* Modal Styling */
@@ -1410,6 +1498,10 @@ body {
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     animation: fadeIn 0.2s ease;
+}
+
+.modal.show {
+    display: block;
 }
 
 .modal-content {
