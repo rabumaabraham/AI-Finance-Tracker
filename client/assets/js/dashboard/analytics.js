@@ -2,7 +2,10 @@
 class AnalyticsManager {
     constructor() {
         console.log('🔧 Creating AnalyticsManager instance...');
-        this.baseURL = 'http://localhost:5000/api/analytics';
+        //
+        // this.baseURL = 'http://localhost:5000/api/analytics';
+
+        this.baseURL = 'https://YOUR-API.onrender.com/api/analytics';
         this.currentBankFilter = 'all';
         this.currentPeriod = 'month';
         this.connectedBanks = [];

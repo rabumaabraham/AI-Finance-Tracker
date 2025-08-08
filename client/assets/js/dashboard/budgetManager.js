@@ -1,6 +1,8 @@
 class BudgetManager {
     constructor() {
-        this.baseURL = 'http://localhost:5000/api/budget';
+        // this.baseURL = 'http://localhost:5000/api/budget';
+
+        this.baseURL = 'https://YOUR-API.onrender.com/api/budget';
         this.budgets = [];
         this.isInitialized = false;
         console.log('BudgetManager constructor called');

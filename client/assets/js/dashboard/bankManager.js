@@ -2,7 +2,9 @@
 class BankManager {
     constructor() {
         this.connectedBanks = [];
-        this.baseURL = 'http://localhost:5000/api/bank';
+        // this.baseURL = 'http://localhost:5000/api/bank';
+
+        this.baseURL = 'https://YOUR-API.onrender.com/api/bank';
         this.init();
     }
 
