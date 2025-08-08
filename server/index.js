@@ -16,8 +16,10 @@ const app = express();
 
 // Middleware // app.use(cors());
 
+import cors from 'cors';
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://YOUR-VERCEL-APP.vercel.app'],
+  origin: ['http://localhost:3000', 'https://finance-tracker-six-iota.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
