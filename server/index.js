@@ -14,12 +14,14 @@ dotenv.config();
 
 const app = express();
 
-// Middleware // app.use(cors());
-
-import cors from 'cors';
+// CORS
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://finance-tracker-six-iota.vercel.app'
+];
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://finance-tracker-six-iota.vercel.app'],
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
