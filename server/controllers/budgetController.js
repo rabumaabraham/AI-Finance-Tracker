@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Budget from '../models/budget.js';
 import Transaction from '../models/transaction.js';
 import { sendBudgetAlerts } from '../services/emailService.js';
@@ -6,6 +7,18 @@ import { sendBudgetAlerts } from '../services/emailService.js';
 export const getBudgets = async (req, res) => {
   try {
     const { period = 'month' } = req.query;
+    
+    // First check if user has any connected bank accounts
+    const BankAccount = mongoose.model('BankAccount');
+    const connectedBanks = await BankAccount.find({ userId: req.userId });
+    
+    console.log('🏦 Connected banks for user:', connectedBanks.length);
+    
+    // If no banks connected, return empty budgets array
+    if (connectedBanks.length === 0) {
+      console.log('🏦 No banks connected, returning empty budgets array');
+      return res.status(200).json([]);
+    }
     
     const budgets = await Budget.find({ 
       userId: req.userId, 

@@ -261,10 +261,26 @@ export const removeBank = async (req, res) => {
       return res.status(500).json({ error: "Failed to remove bank account." });
     }
 
+    // Check if this was the last connected bank account
+    const remainingBanks = await BankAccount.find({ userId: req.userId });
+    console.log(`🏦 Remaining banks for user: ${remainingBanks.length}`);
+    
+    // If no banks left, clear all budgets
+    if (remainingBanks.length === 0) {
+      console.log('🗑️ No banks remaining, clearing all budgets...');
+      const Budget = mongoose.model('Budget');
+      const deletedBudgets = await Budget.updateMany(
+        { userId: req.userId },
+        { isActive: false }
+      );
+      console.log(`🗑️ Cleared ${deletedBudgets.modifiedCount} budgets`);
+    }
+
     console.log(`✅ Successfully removed bank account: ${deletedBank.bankName}`);
     res.status(200).json({ 
       message: "Bank account removed successfully.",
-      deletedTransactions: deletedTransactions.deletedCount
+      deletedTransactions: deletedTransactions.deletedCount,
+      remainingBanks: remainingBanks.length
     });
   } catch (err) {
     console.error("Error removing bank:", err.message);
