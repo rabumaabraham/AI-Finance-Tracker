@@ -5,7 +5,7 @@ class AnalyticsManager {
         //
         // this.baseURL = 'http://localhost:5000/api/analytics';
 
-        this.baseURL = 'https://https://finance-tracker-tlss.onrender.com/api/analytics';
+        this.baseURL = 'https://finance-tracker-tlss.onrender.com/api/analytics';
         this.currentBankFilter = 'all';
         this.currentPeriod = 'month';
         this.connectedBanks = [];
