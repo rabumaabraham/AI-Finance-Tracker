@@ -4,7 +4,7 @@ class BankManager {
         this.connectedBanks = [];
         // this.baseURL = 'http://localhost:5000/api/bank';
 
-        this.baseURL = 'https://YOUR-API.onrender.com/api/bank';
+        this.baseURL = 'https://https://finance-tracker-tlss.onrender.com/api/bank';
         this.init();
     }
 
