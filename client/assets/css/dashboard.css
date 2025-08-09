@@ -2375,10 +2375,11 @@ body {
 /* Responsive Design for Chat */
 @media (max-width: 768px) {
   .chat-container {
-    height: calc(100vh - 140px);
+    height: calc(100dvh - 140px);
     border-radius: 0;
-    margin: 0 -1rem;
-    width: calc(100% + 2rem);
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
   }
   
   .message {
@@ -2386,7 +2387,7 @@ body {
   }
   
   .chat-suggestions {
-    gap: 6px;
+    display: none !important; /* Hide recommendations on mobile */
   }
   
   .suggestion-btn {
@@ -2405,7 +2406,7 @@ body {
 
 @media (max-width: 480px) {
   .chat-container {
-    height: calc(100vh - 200px);
+    height: calc(100dvh - 200px);
     margin: 0;
     width: 100%;
     border-radius: 12px;
