@@ -2,9 +2,10 @@
 class BankManager {
     constructor() {
         this.connectedBanks = [];
-        // this.baseURL = 'http://localhost:5000/api/bank';
-
-        this.baseURL = 'https://finance-tracker-tlss.onrender.com/api/bank';
+        this.baseURL = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1'
+        ) ? 'http://localhost:5000/api/bank' : 'https://finance-tracker-tlss.onrender.com/api/bank';
         this.init();
     }
 

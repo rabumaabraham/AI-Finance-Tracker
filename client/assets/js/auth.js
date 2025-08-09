@@ -1,9 +1,10 @@
 // Authentication service for connecting frontend to backend
 class AuthService {
     constructor() {
-        // this.baseURL = 'http://localhost:5000/api/auth';
-
-        this.baseURL = 'https://finance-tracker-tlss.onrender.com/api/auth';
+        this.baseURL = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1'
+        ) ? 'http://localhost:5000/api/auth' : 'https://finance-tracker-tlss.onrender.com/api/auth';
         this.token = localStorage.getItem('token');
     }
 

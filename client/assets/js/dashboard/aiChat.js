@@ -3,6 +3,10 @@ class AIChatManager {
     constructor() {
         this.messages = [];
         this.isTyping = false;
+        this.apiBaseUrl = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1'
+        ) ? 'http://localhost:5000' : 'https://finance-tracker-tlss.onrender.com';
         this.init();
     }
 
@@ -51,7 +55,7 @@ class AIChatManager {
 
         try {
             // Send message to server
-            const response = await fetch('https://finance-tracker-tlss.onrender.com/api/ai-chat/send', {
+            const response = await fetch(`${this.apiBaseUrl}/api/ai-chat/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,7 +201,7 @@ class AIChatManager {
     // Load chat history (for future implementation)
     async loadChatHistory() {
         try {
-            const response = await fetch('https://finance-tracker-tlss.onrender.com/api/ai-chat/history', {
+            const response = await fetch(`${this.apiBaseUrl}/api/ai-chat/history`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

@@ -1,8 +1,10 @@
 class BudgetManager {
     constructor() {
-        // this.baseURL = 'http://localhost:5000/api/budget';
-
-        this.baseURL = 'https://finance-tracker-tlss.onrender.com/api/budget';
+        // Determine API base dynamically for local vs production
+        this.baseURL = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1'
+        ) ? 'http://localhost:5000/api/budget' : 'https://finance-tracker-tlss.onrender.com/api/budget';
         this.budgets = [];
         this.isInitialized = false;
         console.log('BudgetManager constructor called');

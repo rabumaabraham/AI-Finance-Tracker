@@ -3,9 +3,10 @@ class AnalyticsManager {
     constructor() {
         console.log('🔧 Creating AnalyticsManager instance...');
         //
-        // this.baseURL = 'http://localhost:5000/api/analytics';
-
-        this.baseURL = 'https://finance-tracker-tlss.onrender.com/api/analytics';
+        this.baseURL = (
+            location.hostname === 'localhost' ||
+            location.hostname === '127.0.0.1'
+        ) ? 'http://localhost:5000/api/analytics' : 'https://finance-tracker-tlss.onrender.com/api/analytics';
         this.currentBankFilter = 'all';
         this.currentPeriod = 'month';
         this.connectedBanks = [];
