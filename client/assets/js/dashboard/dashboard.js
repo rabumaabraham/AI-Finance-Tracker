@@ -217,8 +217,12 @@ function handleLogout() {
 
 // Show notification
 function showNotification(message, type = 'success') {
-    // Notifications disabled per requirements
-    return;
+    // Use global notifications utility
+    if (typeof window.__notify === 'function') {
+        window.__notify(message, type);
+        return;
+    }
+    // Fallback: silently ignore
 }
 
 // Initialize dashboard

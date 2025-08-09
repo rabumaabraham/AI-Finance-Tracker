@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Transaction from "../models/transaction.js";
 import BankAccount from "../models/bankAccount.js";
 import { categorizeWithOpenRouter } from "../services/openrouterService.js";
+import Subscription from "../models/subscription.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -27,6 +28,27 @@ const getAccessToken = async () => {
 export const connectBank = async (req, res) => {
   try {
     const token = await getAccessToken();
+
+    // Enforce subscription limit if user is authenticated
+    try {
+      const auth = req.headers.authorization || '';
+      if (auth.startsWith('Bearer ')) {
+        const sub = await Subscription.findOne({ userId: req.userId });
+        const plan = sub?.plan || 'free';
+        if (plan === 'free') {
+          const count = await BankAccount.countDocuments({ userId: req.userId, status: 'connected' });
+          if (count >= 1) {
+            return res.status(403).json({
+              error: 'LIMIT_REACHED',
+              message: 'Free plan allows only 1 bank connection. Upgrade to connect more banks.',
+              plan: 'free',
+              limit: 1,
+              current: count
+            });
+          }
+        }
+      }
+    } catch (_) {}
 
     // Determine frontend base URL for redirect (Vercel in prod, localhost in dev)
     const defaultFrontendBase = process.env.FRONTEND_URL || 'http://localhost:3000';

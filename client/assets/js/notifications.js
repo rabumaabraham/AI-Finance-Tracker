@@ -55,3 +55,5 @@ setInterval(checkBudgetAlerts, 30000);
 
 // Export for use in other files
 window.showNotification = showNotification;
+// Provide alias to avoid overrides elsewhere
+window.__notify = showNotification;

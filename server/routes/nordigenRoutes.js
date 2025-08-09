@@ -12,10 +12,9 @@ import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Public routes
-router.get('/connect-bank', connectBank);
+// Protected routes
+router.get('/connect-bank', verifyToken, connectBank);
 
-// Protected routes (require authentication)
 router.get('/transactions/:requisitionId', verifyToken, getTransactions);
 router.get('/details/:requisitionId', verifyToken, getBankDetails);
 router.get('/status/:requisitionId', verifyToken, getRequisitionStatus);

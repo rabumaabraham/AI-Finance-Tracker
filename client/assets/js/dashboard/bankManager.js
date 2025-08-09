@@ -114,7 +114,26 @@ class BankManager {
 
     async connectBank() {
         try {
-            showNotification('Connecting to GoCardless...', 'info');
+            (window.__notify || showNotification)('Connecting to GoCardless...', 'info');
+
+            // Check subscription limit before initiating connection
+            try {
+                const subBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                  ? 'http://localhost:5000/api/subscription'
+                  : 'https://finance-tracker-tlss.onrender.com/api/subscription';
+                const checkRes = await fetch(`${subBase}/can-connect`, {
+                    headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                });
+                if (checkRes.ok) {
+                    const data = await checkRes.json();
+                    if (!data.allowed) {
+                        const limitText = data.limit === Infinity ? 'unlimited' : data.limit;
+                        const message = `You’re on the ${data.plan === 'free' ? 'Free' : data.plan === 'pro_monthly' ? 'Unlimited Monthly' : 'Unlimited Yearly'} plan. It allows ${limitText} bank connection${limitText === 1 ? '' : 's'}. Upgrade to connect more banks.`;
+                        (window.__notify || showNotification)(message, 'error');
+                        return;
+                    }
+                }
+            } catch (_) { /* ignore check failure */ }
             
             const response = await fetch(`${this.baseURL}/connect-bank`, {
                 method: 'GET',
@@ -125,6 +144,19 @@ class BankManager {
             });
 
             if (!response.ok) {
+                // Try to extract reason
+                try {
+                    const err = await response.json();
+                    if (err && (err.error === 'LIMIT_REACHED' || err.message)) {
+                        const limitText = err.limit === Infinity ? 'unlimited' : err.limit;
+                        const planName = err.plan === 'free' ? 'Free' : err.plan === 'pro_monthly' ? 'Unlimited Monthly' : 'Unlimited Yearly';
+                        const msg = err.error === 'LIMIT_REACHED'
+                          ? `You’re on the ${planName} plan. It allows ${limitText} bank connection${limitText === 1 ? '' : 's'}. Upgrade to connect more banks.`
+                          : (err.message || 'Failed to connect bank');
+                        (window.__notify || showNotification)(msg, 'error');
+                        return;
+                    }
+                } catch (_) {}
                 throw new Error('Failed to connect bank');
             }
 

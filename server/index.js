@@ -10,6 +10,7 @@ import analyticsRoutes from './routes/analyticsRoutes.js';
 import budgetRoutes from './routes/budgetRoutes.js';
 import aiChatRoutes from './routes/aiChatRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import subscriptionRoutes from './routes/subscriptionRoutes.js';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/ai-chat', aiChatRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/subscription', subscriptionRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)

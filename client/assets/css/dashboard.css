@@ -448,6 +448,16 @@ body {
     line-height: 1.5;
 }
 
+/* Subscription pricing grid inside dashboard */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1rem; padding: 1rem 0; }
+.ud-single-pricing { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; position: relative; box-shadow: var(--shadow); }
+.ud-single-pricing .ud-popular-tag { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: #fff; font-size: 12px; padding: 6px 12px; border-radius: 999px; font-weight: 600; box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3); text-transform: uppercase; letter-spacing: 0.5px; z-index: 1; display: inline-block; }
+.ud-pricing-header h3 { margin: 0 0 .25rem; }
+.ud-pricing-header .price-display { font-size: 24px; font-weight: 700; }
+.ud-pricing-body ul { list-style: none; padding-left: 0; margin: .5rem 0 1rem; }
+.ud-pricing-body li { margin: .25rem 0; }
+.ud-pricing-footer { display: flex; justify-content: center; }
+
 .bank-item {
     display: flex;
     align-items: center;
@@ -657,6 +667,8 @@ body {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    /* Add space between 'Most Popular' badge and heading on mobile */
+    .ud-single-pricing.active .ud-pricing-header { margin-top: 14px; }
     /* Compact sidebar profile on mobile */
     .sidebar-header {
         padding: 0.75rem 0.75rem 0.5rem;
