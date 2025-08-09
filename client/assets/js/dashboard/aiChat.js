@@ -51,7 +51,7 @@ class AIChatManager {
 
         try {
             // Send message to server
-            const response = await fetch('http://localhost:5000/api/ai-chat/send', {
+            const response = await fetch('https://finance-tracker-tlss.onrender.com/api/ai-chat/send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,7 +197,7 @@ class AIChatManager {
     // Load chat history (for future implementation)
     async loadChatHistory() {
         try {
-            const response = await fetch('http://localhost:5000/api/ai-chat/history', {
+            const response = await fetch('https://finance-tracker-tlss.onrender.com/api/ai-chat/history', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
