@@ -1759,6 +1759,19 @@ body {
     margin-top: 2rem;
 }
 
+/* Inline error styles */
+.error-text {
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: none;
+}
+
+.form-control.input-error {
+  border-color: #e53e3e !important;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+}
+
 .btn-cancel,
 .btn-save {
     flex: 1;

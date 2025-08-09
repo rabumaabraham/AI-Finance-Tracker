@@ -512,10 +512,90 @@
             </div>
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>User Settings</h3>
-                    <i class="lni lni-cog"></i>
+                    <h3>Profile</h3>
+                    <i class="lni lni-user"></i>
                 </div>
-                <p>This section will be loaded by settings.js</p>
+                <div class="row g-3" style="padding: 0 1rem 1rem;">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Name</label>
+                        <input id="settingsName" type="text" class="form-control" placeholder="Your name" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Email</label>
+                        <input id="settingsEmail" type="email" class="form-control" placeholder="you@example.com" disabled />
+                    </div>
+                    <div class="col-12">
+                        <button id="btnSaveProfile" class="btn-add-limit" style="margin-top: 0.5rem;">
+                            <i class="lni lni-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Security</h3>
+                    <i class="lni lni-shield"></i>
+                </div>
+                <div style="padding: 0 1rem 1rem; display: grid; gap: 0.75rem;">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <p class="text-muted" style="margin-bottom: 0.5rem;">Send password reset code to your email</p>
+                            <button id="btnRequestReset" class="btn btn-secondary w-100">
+                                <i class="lni lni-key"></i> Send Reset Code
+                            </button>
+                            <div id="resetStatus" class="form-text" style="margin-top: 0.5rem;"></div>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <div class="row g-2">
+                                <div class="col-12 col-md-4">
+                                    <input id="settingsResetCode" type="text" class="form-control" placeholder="Enter code" />
+                                    <div id="resetCodeError" class="error-text"></div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <input id="settingsNewPassword" type="password" class="form-control" placeholder="New password" />
+                                    <div id="newPasswordError" class="error-text"></div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <input id="settingsConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                                    <div id="confirmPasswordError" class="error-text"></div>
+                                </div>
+                                <div class="col-12">
+                                    <button id="btnConfirmReset" class="btn-add-limit">
+                                        <i class="lni lni-checkmark"></i> Confirm Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Danger Zone</h3>
+                    <i class="lni lni-warning"></i>
+                </div>
+                <div style="padding: 0 1rem 1rem;">
+                    <p class="text-muted" style="margin-bottom: 0.75rem;">Request account deletion. A code will be sent to your registered email. Enter it below to confirm deletion.</p>
+                    <div class="row g-2">
+                        <div class="col-12 col-md-4">
+                            <button id="btnRequestDelete" class="btn btn-danger w-100">
+                                <i class="lni lni-trash-can"></i> Send Deletion Code
+                            </button>
+                            <div id="deleteStatus" class="form-text" style="margin-top: 0.5rem;"></div>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <input id="settingsDeleteCode" type="text" class="form-control" placeholder="Enter deletion code" />
+                            <div id="deleteCodeError" class="error-text"></div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <button id="btnConfirmDelete" class="btn btn-outline-danger w-100">
+                                <i class="lni lni-checkmark"></i> Confirm Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
