@@ -8,6 +8,7 @@ class DashboardManager {
     init() {
         this.bindEvents();
         this.checkAuthentication();
+        this.loadUserProfile();
         this.handleInitialSection();
         this.loadOverviewData();
     }
@@ -72,6 +73,30 @@ class DashboardManager {
     updateOverviewCards() {
         // Update overview cards with real data
         console.log('Loading overview data...');
+    }
+
+    async loadUserProfile() {
+        try {
+            const token = authService.getToken();
+            if (!token) return;
+
+            const response = await fetch(`${authService.baseURL}/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) return;
+            const user = await response.json();
+
+            const nameTarget = document.querySelector('.sidebar-header .user-details h5');
+            if (nameTarget && user?.name) {
+                nameTarget.textContent = `Welcome, ${user.name}`;
+            }
+        } catch (err) {
+            console.log('Failed to load user profile');
+        }
     }
 }
 

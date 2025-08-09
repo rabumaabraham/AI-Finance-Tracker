@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import { body, validationResult } from 'express-validator';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -61,5 +62,18 @@ router.post('/login',
     }
   }
 );
+
+// Get current user profile
+router.get('/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select('name email createdAt');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ id: req.userId, name: user.name, email: user.email, createdAt: user.createdAt });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 export default router;
