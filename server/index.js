@@ -17,8 +17,8 @@ const app = express();
 // CORS
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://finance-tracker-six-iota.vercel.app'
-];
+  process.env.FRONTEND_URL || 'https://finance-tracker-six-iota.vercel.app'
+].filter(Boolean);
 
 app.use(cors({
   origin: allowedOrigins,

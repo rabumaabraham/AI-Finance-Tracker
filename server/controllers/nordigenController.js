@@ -28,10 +28,20 @@ export const connectBank = async (req, res) => {
   try {
     const token = await getAccessToken();
 
+    // Determine frontend base URL for redirect (Vercel in prod, localhost in dev)
+    const defaultFrontendBase = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const requestOrigin = req.headers.origin;
+    let frontendBaseUrl = defaultFrontendBase;
+    // If the request Origin matches our configured base or is localhost, prefer it
+    if (requestOrigin && (requestOrigin === defaultFrontendBase || /^(http:\/\/)?(localhost|127\.0\.0\.1)/.test(requestOrigin))) {
+      frontendBaseUrl = requestOrigin;
+    }
+    const redirectUrl = `${frontendBaseUrl.replace(/\/$/, '')}/dashboard.html?status=success`;
+
     const requisitionRes = await axios.post(
       "https://bankaccountdata.gocardless.com/api/v2/requisitions/",
       {
-        redirect: "http://localhost:3000/dashboard.html?status=success",
+        redirect: redirectUrl,
         institution_id: "SANDBOXFINANCE_SFIN0000",
         reference: `ref-${Date.now()}`,
       },
