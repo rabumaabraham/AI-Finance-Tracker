@@ -674,12 +674,12 @@ body {
     }
 
     .user-details h5 {
-        font-size: 0.95rem;
+        font-size: 1rem;
         margin-bottom: 0.125rem;
     }
 
     .user-details p {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         opacity: 0.85;
     }
     .hamburger {
@@ -848,11 +848,11 @@ body {
     }
 
     .user-details h5 {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
     }
 
     .user-details p {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
     .limit-header {
         flex-direction: column;
