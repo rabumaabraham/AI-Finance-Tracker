@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import { body, validationResult } from 'express-validator';
 import { verifyToken } from '../middleware/authMiddleware.js';
+import { sendWelcomeEmail } from '../services/emailService.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -28,6 +29,15 @@ router.post('/signup',
       const hashedPassword = await bcrypt.hash(password, 10);
       user = new User({ name, email, password: hashedPassword });
       await user.save();
+
+      // Send welcome email to new user
+      try {
+        await sendWelcomeEmail(name, email);
+        console.log(`✅ Welcome email sent to new user: ${email}`);
+      } catch (emailError) {
+        console.error('⚠️ Failed to send welcome email:', emailError);
+        // Don't fail the signup if email fails
+      }
 
       // Don't return token on signup - user must login separately
       res.json({ message: 'User registered successfully' });

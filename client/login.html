@@ -18,6 +18,49 @@
     <link rel="stylesheet" href="assets/css/animate.css" />
     <link rel="stylesheet" href="assets/css/lineicons.css" />
     <link rel="stylesheet" href="assets/css/ud-styles.css" />
+    
+    <style>
+      /* Password Reset Form Styles */
+      #passwordResetForm {
+        margin-top: 1rem;
+      }
+      
+      #resetCodeSection {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e0e0e0;
+      }
+      
+      /* Error Styles */
+      .error-text {
+        color: #e53e3e;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: none;
+      }
+      
+      .form-control.input-error {
+        border-color: #e53e3e !important;
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+      }
+      
+      /* Status Message Styles */
+      .form-text {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+      }
+      
+      /* Smooth Transitions */
+      #passwordResetForm,
+      #resetCodeSection {
+        transition: all 0.3s ease;
+      }
+      
+      /* Button Spacing */
+      .ud-form-group + .ud-form-group {
+        margin-top: 1rem;
+      }
+    </style>
   </head>
   <body>
     <!-- ====== Header Start ====== -->
@@ -113,29 +156,66 @@
                 </div>
               </form>
 
-              <div class="ud-socials-connect">
-                <p>Connect With</p>
-
-                <ul>
-                  <li>
-                    <a href="javascript:void(0)" class="facebook">
-                      <i class="lni lni-facebook-filled"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)" class="twitter">
-                      <i class="lni lni-twitter-filled"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)" class="google">
-                      <i class="lni lni-google"></i>
-                    </a>
-                  </li>
-                </ul>
+              <!-- Password Reset Form -->
+              <div id="passwordResetForm" class="ud-login-form" style="display: none;">
+                <div class="ud-form-group">
+                  <input
+                    type="email"
+                    id="resetEmail"
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div class="ud-form-group">
+                  <button type="button" class="ud-main-btn w-100" onclick="requestPasswordReset()">
+                    Send Reset Code
+                  </button>
+                </div>
+                
+                <!-- Reset Code Section (initially hidden) -->
+                <div id="resetCodeSection" style="display: none;">
+                  <div class="ud-form-group">
+                    <input
+                      type="text"
+                      id="resetCode"
+                      placeholder="Enter 6-digit code"
+                      maxlength="6"
+                    />
+                  </div>
+                  <div class="ud-form-group">
+                    <input
+                      type="password"
+                      id="newPassword"
+                      placeholder="New password"
+                    />
+                  </div>
+                  <div class="ud-form-group">
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      placeholder="Confirm new password"
+                    />
+                  </div>
+                  <div class="ud-form-group">
+                    <button type="button" class="ud-main-btn w-100" onclick="confirmPasswordReset()">
+                      Reset Password
+                    </button>
+                  </div>
+                </div>
+                
+                <div class="ud-form-group">
+                  <button type="button" class="ud-main-btn ud-white-btn w-100" onclick="showLoginForm()">
+                    Back to Login
+                  </button>
+                </div>
+                
+                <!-- Status Messages -->
+                <div id="resetStatus" class="form-text" style="margin-top: 0.5rem; text-align: center;"></div>
+                <div id="resetCodeError" class="error-text" style="display: none;"></div>
+                <div id="newPasswordError" class="error-text" style="display: none;"></div>
+                <div id="confirmPasswordError" class="error-text" style="display: none;"></div>
               </div>
 
-              <a class="forget-pass" href="javascript:void(0)">
+              <a class="forget-pass" href="javascript:void(0)" onclick="showPasswordResetForm()">
                 Forget Password?
               </a>
               <p class="signup-option">
@@ -428,6 +508,130 @@
           authService.showNotification(error.message, 'error');
         } finally {
           authService.hideLoading(submitButton, originalText);
+        }
+      }
+      
+      // Password Reset Functions
+      function showPasswordResetForm() {
+        document.querySelector('.ud-login-form').style.display = 'none';
+        document.getElementById('passwordResetForm').style.display = 'block';
+        document.querySelector('.forget-pass').style.display = 'none';
+        document.querySelector('.signup-option').style.display = 'none';
+      }
+      
+      function showLoginForm() {
+        document.querySelector('.ud-login-form').style.display = 'block';
+        document.getElementById('passwordResetForm').style.display = 'none';
+        document.querySelector('.forget-pass').style.display = 'block';
+        document.querySelector('.signup-option').style.display = 'block';
+        // Reset form and clear messages
+        clearResetForm();
+      }
+      
+      function clearResetForm() {
+        document.getElementById('resetEmail').value = '';
+        document.getElementById('resetCode').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+        document.getElementById('resetStatus').textContent = '';
+        document.getElementById('resetCodeSection').style.display = 'none';
+        clearFieldErrors();
+      }
+      
+      function clearFieldErrors() {
+        ['resetCode', 'newPassword', 'confirmPassword'].forEach(id => {
+          const element = document.getElementById(id);
+          if (element) element.classList.remove('input-error');
+        });
+        ['resetCodeError', 'newPasswordError', 'confirmPasswordError'].forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.textContent = '';
+            element.style.display = 'none';
+          }
+        });
+      }
+      
+      function showFieldError(inputElement, errorElement, message) {
+        if (inputElement) inputElement.classList.add('input-error');
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.style.display = 'block';
+        }
+      }
+      
+      async function requestPasswordReset() {
+        const email = document.getElementById('resetEmail').value.trim();
+        if (!email) {
+          document.getElementById('resetStatus').textContent = 'Please enter your email address.';
+          return;
+        }
+        
+        try {
+          const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://finance-tracker-tlss.onrender.com';
+          const response = await fetch(`${base}/api/user/password/forgot`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          
+          if (response.ok) {
+            document.getElementById('resetStatus').textContent = 'Reset code sent to your email.';
+            document.getElementById('resetStatus').style.color = '#28a745';
+            document.getElementById('resetCodeSection').style.display = 'block';
+          } else {
+            document.getElementById('resetStatus').textContent = 'Failed to send reset code. Please try again.';
+            document.getElementById('resetStatus').style.color = '#dc3545';
+          }
+        } catch (error) {
+          document.getElementById('resetStatus').textContent = 'Failed to send reset code. Please try again.';
+          document.getElementById('resetStatus').style.color = '#dc3545';
+        }
+      }
+      
+      async function confirmPasswordReset() {
+        const code = document.getElementById('resetCode').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        
+        clearFieldErrors();
+        let hasError = false;
+        
+        if (!code) {
+          showFieldError(document.getElementById('resetCode'), document.getElementById('resetCodeError'), 'Enter the 6-digit code.');
+          hasError = true;
+        }
+        if (newPassword.length < 6) {
+          showFieldError(document.getElementById('newPassword'), document.getElementById('newPasswordError'), 'Password must be at least 6 characters.');
+          hasError = true;
+        }
+        if (newPassword !== confirmPassword) {
+          showFieldError(document.getElementById('confirmPassword'), document.getElementById('confirmPasswordError'), 'Passwords do not match.');
+          hasError = true;
+        }
+        
+        if (hasError) return;
+        
+        try {
+          const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://finance-tracker-tlss.onrender.com';
+          const response = await fetch(`${base}/api/user/password/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, password: newPassword })
+          });
+          
+          if (response.ok) {
+            document.getElementById('resetStatus').textContent = 'Password updated successfully! You can now login with your new password.';
+            document.getElementById('resetStatus').style.color = '#28a745';
+            setTimeout(() => {
+              showLoginForm();
+            }, 2000);
+          } else {
+            const errorData = await response.json();
+            showFieldError(document.getElementById('resetCode'), document.getElementById('resetCodeError'), errorData.message || 'Code is incorrect or expired.');
+          }
+        } catch (error) {
+          showFieldError(document.getElementById('resetCode'), document.getElementById('resetCodeError'), 'Failed to reset password. Please try again.');
         }
       }
       
