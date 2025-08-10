@@ -83,53 +83,134 @@
         <!-- Overview Section -->
         <div id="overview" class="dashboard-section">
             <div class="page-header">
-                <h1>Financial Overview</h1>
-                <p>Get a complete view of your financial health</p>
+                <h1>Financial Dashboard</h1>
+                <p>Follow these steps to get started and unlock the full potential of your AI Finance Tracker</p>
             </div>
 
-            <div class="row">
-                <div class="col-md-3 mb-4">
-                    <div class="dashboard-card text-center">
-                        <div class="card-header">
-                            <h3>Total Balance</h3>
-                            <i class="lni lni-wallet"></i>
+            <!-- Onboarding Steps -->
+            <div class="onboarding-steps">
+                <!-- Step 1: Choose Plan -->
+                <div class="step-card" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <i class="lni lni-crown step-icon"></i>
+                            <h3>Choose Your Plan</h3>
                         </div>
-                        <div class="balance-amount h2">€0.00</div>
-                        <p>Across all accounts</p>
+                        <p>Select the subscription plan that best fits your financial needs and unlock premium features.</p>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="showSection('subscription')">
+                                <i class="lni lni-arrow-right"></i>
+                                View Plans
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <i class="lni lni-checkmark-circle status-icon"></i>
+                        <span class="status-text">Available</span>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-4">
-                    <div class="dashboard-card text-center">
-                        <div class="card-header">
-                            <h3>Spending This Month</h3>
-                            <i class="lni lni-credit-cards"></i>
+                <!-- Step 2: Connect Bank -->
+                <div class="step-card" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <i class="lni lni-credit-cards step-icon"></i>
+                            <h3>Connect Your Bank</h3>
                         </div>
-                        <div class="balance-amount h2">€0.00</div>
-                        <p>Track your expenses</p>
+                        <p>Securely link your bank accounts to automatically sync transactions and get real-time insights.</p>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="showSection('banks')">
+                                <i class="lni lni-arrow-right"></i>
+                                Connect Bank
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <i class="lni lni-checkmark-circle status-icon"></i>
+                        <span class="status-text">Available</span>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-4">
-                    <div class="dashboard-card text-center">
-                        <div class="card-header">
-                            <h3>Connected Banks</h3>
-                            <i class="lni lni-bank"></i>
+                <!-- Step 3: View Analytics -->
+                <div class="step-card" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <i class="lni lni-stats-up step-icon"></i>
+                            <h3>See Your Analytics</h3>
                         </div>
-                        <div class="balance-amount h2">0</div>
-                        <p>Bank accounts linked</p>
+                        <p>Discover spending patterns, track income vs expenses, and get detailed financial insights.</p>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="showSection('analytics')">
+                                <i class="lni lni-arrow-right"></i>
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <i class="lni lni-checkmark-circle status-icon"></i>
+                        <span class="status-text">Available</span>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-4">
-                    <div class="dashboard-card text-center">
-                        <div class="card-header">
-                            <h3>AI Insights</h3>
-                            <i class="lni lni-consulting"></i>
+                <!-- Step 4: Set Budget -->
+                <div class="step-card" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <i class="lni lni-wallet step-icon"></i>
+                            <h3>Set Spending Limits</h3>
                         </div>
-                        <div class="balance-amount h2">Ready</div>
-                        <p>Personalized advice</p>
+                        <p>Create monthly spending limits for different categories and get notified when you reach them.</p>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="showSection('budget')">
+                                <i class="lni lni-arrow-right"></i>
+                                Set Budget
+                            </button>
+                        </div>
                     </div>
+                    <div class="step-status">
+                        <i class="lni lni-checkmark-circle status-icon"></i>
+                        <span class="status-text">Available</span>
+                    </div>
+                </div>
+
+                <!-- Step 5: AI Assistant -->
+                <div class="step-card" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <i class="lni lni-consulting step-icon"></i>
+                            <h3>Chat with AI Assistant</h3>
+                        </div>
+                        <p>Get personalized financial advice, ask questions about your spending, and receive smart insights.</p>
+                        <div class="step-actions">
+                            <button class="btn btn-primary" onclick="showSection('ai-chat')">
+                                <i class="lni lni-arrow-right"></i>
+                                Start Chat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="step-status">
+                        <i class="lni lni-checkmark-circle status-icon"></i>
+                        <span class="status-text">Available</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Summary -->
+            <div class="progress-summary">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3>Your Progress</h3>
+                        <span class="progress-percentage">100%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <p class="progress-text">5 of 5 steps available</p>
                 </div>
             </div>
         </div>
