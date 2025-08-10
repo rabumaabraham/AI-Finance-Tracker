@@ -11,6 +11,7 @@ import budgetRoutes from './routes/budgetRoutes.js';
 import aiChatRoutes from './routes/aiChatRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import subscriptionRoutes, { webhookRouter } from './routes/subscriptionRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 dotenv.config();
 
@@ -50,6 +51,7 @@ app.use('/api/budget', budgetRoutes);
 app.use('/api/ai-chat', aiChatRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
