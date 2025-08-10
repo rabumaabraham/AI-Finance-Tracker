@@ -5628,4 +5628,80 @@ p {
     font-size: 11px;
   }
 }
-/*# sourceMappingURL=ud-styles.css.map */
+
+/* GitHub Logo Styling */
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #24292e 0%, #2f363d 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(36, 41, 46, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.github-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #586069 0%, #24292e 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+.github-link:hover::before {
+  opacity: 1;
+}
+
+.github-link i {
+  font-size: 24px;
+  color: #ffffff;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.github-link:hover i {
+  transform: scale(1.1);
+}
+
+.github-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(36, 41, 46, 0.25);
+}
+
+.github-link:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(36, 41, 46, 0.15);
+}
+
+/* Responsive adjustments for GitHub logo */
+@media (max-width: 767px) {
+  .github-link {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .github-link i {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 575px) {
+  .github-link {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .github-link i {
+    font-size: 20px;
+  }
+}
