@@ -3,6 +3,9 @@ class DashboardManager {
     constructor() {
         this.currentSection = 'overview';
         this.init();
+        
+        // Check for Stripe returns when page loads
+        this.checkForStripeReturn();
     }
 
     init() {
@@ -11,6 +14,14 @@ class DashboardManager {
         this.loadUserProfile();
         this.handleInitialSection();
         this.loadOverviewData();
+        
+        // Additional check for Stripe returns after a short delay
+        setTimeout(() => {
+            if (window.checkForStripeReturn) {
+                console.log('⏰ Delayed Stripe return check...');
+                window.checkForStripeReturn();
+            }
+        }, 1000);
     }
 
     bindEvents() {
@@ -40,6 +51,30 @@ class DashboardManager {
     }
 
     handleInitialSection() {
+        // Check if we're returning from Stripe checkout
+        let hashParams = new URLSearchParams();
+        if (window.location.hash && window.location.hash.includes('?')) {
+            const hashPart = window.location.hash.split('?')[1];
+            hashParams = new URLSearchParams(hashPart);
+        }
+        const checkout = hashParams.get('checkout');
+        
+        console.log('🔍 Dashboard checking initial section:', {
+            hash: window.location.hash,
+            hashPart: window.location.hash.split('?')[1] || 'none',
+            checkout: checkout
+        });
+        
+        if (checkout === 'success') {
+            console.log('🎯 Stripe checkout success detected, showing subscription section...');
+            showSection('subscription');
+            return;
+        } else if (checkout === 'cancel') {
+            console.log('❌ Stripe checkout cancel detected, showing subscription section...');
+            showSection('subscription');
+            return;
+        }
+        
         // Check if we're returning from bank connection
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
@@ -98,24 +133,66 @@ class DashboardManager {
             console.log('Failed to load user profile');
         }
     }
+    
+    checkForStripeReturn() {
+        // Check if we're returning from Stripe checkout
+        let hashParams = new URLSearchParams();
+        if (window.location.hash && window.location.hash.includes('?')) {
+            const hashPart = window.location.hash.split('?')[1];
+            hashParams = new URLSearchParams(hashPart);
+        }
+        const checkout = hashParams.get('checkout');
+        
+        console.log('🔍 Dashboard checking for Stripe return:', {
+            hash: window.location.hash,
+            hashPart: window.location.hash.split('?')[1] || 'none',
+            checkout: checkout
+        });
+        
+        if (checkout === 'success' || checkout === 'cancel') {
+            console.log('🎯 Stripe return detected in dashboard, will handle in section initialization');
+            // The section initialization will handle the actual processing
+        }
+    }
 }
 
 // Show dashboard section
 async function showSection(sectionName) {
-    // Store the section preference
-    sessionStorage.setItem('lastDashboardSection', sectionName);
-    
-    // Hide all sections
+    // Hide all sections first
     document.querySelectorAll('.dashboard-section').forEach(section => {
         section.style.display = 'none';
-        section.classList.remove('active');
     });
-
-    // Show selected section
+    
+    // Show the selected section
     const selectedSection = document.getElementById(sectionName);
     if (selectedSection) {
         selectedSection.style.display = 'block';
-        selectedSection.classList.add('active');
+        
+        // Store the last section in session storage
+        sessionStorage.setItem('lastDashboardSection', sectionName);
+        
+        // Initialize the section if it hasn't been initialized yet
+        await initializeSection(sectionName);
+        
+        // Special handling for subscription section to ensure content is loaded
+        if (sectionName === 'subscription' && typeof SubscriptionManager !== 'undefined') {
+            console.log('🎯 Ensuring subscription content is loaded...');
+            // Force a re-render of the subscription section
+            if (window.__subscriptionManagerInstance) {
+                // Ensure the section is visible before rendering
+                const subscriptionSection = document.getElementById('subscription');
+                if (subscriptionSection) {
+                    subscriptionSection.style.display = 'block';
+                    console.log('📱 Subscription section made visible');
+                }
+                
+                // Small delay to ensure DOM is ready
+                setTimeout(async () => {
+                    console.log('⏰ Rendering subscription content after delay...');
+                    await window.__subscriptionManagerInstance.render();
+                }, 100);
+            }
+        }
     }
 
     // Update active menu item
@@ -127,9 +204,6 @@ async function showSection(sectionName) {
     if (activeLink) {
         activeLink.classList.add('active');
     }
-
-    // Initialize section-specific functionality
-    await initializeSection(sectionName);
 
     // Close sidebar on mobile
     if (window.innerWidth <= 768) {
@@ -147,6 +221,18 @@ async function initializeSection(sectionName) {
             break;
         case 'subscription':
             if (typeof SubscriptionManager !== 'undefined') {
+                // Check if we're returning from Stripe checkout
+                let hashParams = new URLSearchParams();
+                if (window.location.hash && window.location.hash.includes('?')) {
+                    const hashPart = window.location.hash.split('?')[1];
+                    hashParams = new URLSearchParams(hashPart);
+                }
+                const checkout = hashParams.get('checkout');
+                
+                if (checkout === 'success' || checkout === 'cancel') {
+                    console.log('🎯 Initializing subscription section with Stripe return:', checkout);
+                }
+                
                 SubscriptionManager.init();
             }
             break;

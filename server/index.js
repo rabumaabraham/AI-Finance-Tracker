@@ -10,7 +10,7 @@ import analyticsRoutes from './routes/analyticsRoutes.js';
 import budgetRoutes from './routes/budgetRoutes.js';
 import aiChatRoutes from './routes/aiChatRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import subscriptionRoutes from './routes/subscriptionRoutes.js';
+import subscriptionRoutes, { webhookRouter } from './routes/subscriptionRoutes.js';
 
 dotenv.config();
 
@@ -27,6 +27,8 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+// Stripe webhook needs raw body; mount BEFORE json middleware for that route would be better
+app.use(webhookRouter);
 
 // Health check
 app.get("/", (req, res) => res.send("Server running"));

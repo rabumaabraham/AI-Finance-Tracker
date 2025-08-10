@@ -11,5 +11,11 @@ const userSchema = new mongoose.Schema({
   accountDeletionExpires: { type: Date }
 }, { timestamps: true });
 
+// Stripe
+userSchema.add({
+  stripeCustomerId: { type: String },
+  stripeSubscriptionId: { type: String },
+});
+
 const User = mongoose.model('User', userSchema);
 export default User;
