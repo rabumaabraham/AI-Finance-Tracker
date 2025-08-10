@@ -4769,15 +4769,14 @@ p {
 
 /* ====== Money Insight Card Styles ====== */
 .money-insight-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-radius: 20px;
-  padding: 28px 28px 36px 28px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(48, 86, 211, 0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  height: 320px;
-  display: flex;
-  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -4788,73 +4787,96 @@ p {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #3056d3, #13c296, #fbbf24);
-  border-radius: 20px 20px 0 0;
+  height: 3px;
+  background: linear-gradient(135deg, #3056d3, #4f7cff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .money-insight-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  border-color: #3056d3;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(48, 86, 211, 0.1);
+}
+
+.money-insight-card:hover::before {
+  opacity: 1;
+}
+
+.insight-image {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.insight-img {
+  max-width: 80%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.money-insight-card:hover .insight-img {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .insight-header {
   display: flex;
   align-items: center;
-  margin-bottom: 24px;
+  justify-content: center;
+  margin-bottom: 20px;
   gap: 12px;
 }
 
 .insight-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #3056d3 0%, #1e40af 100%);
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3056d3 0%, #4f7cff 100%);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(48, 86, 211, 0.3);
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(48, 86, 211, 0.2);
 }
 
 .insight-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #1e293b;
   line-height: 1.2;
+  margin-bottom: 0;
 }
 
 .insight-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   margin-bottom: 20px;
 }
 
 /* Live Dashboard Styles */
 .balance-display {
   text-align: center;
-  margin-bottom: 24px;
-  padding: 0 8px;
   margin-bottom: 20px;
+  padding: 0 8px;
 }
 
 .current-balance {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
   color: #1e293b;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   line-height: 1.2;
 }
 
 .balance-change {
-  font-size: 14px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 16px;
   display: inline-block;
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
 }
 
 .balance-change.positive {
@@ -4865,17 +4887,17 @@ p {
 .quick-stats {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   padding: 0 4px;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 
 .stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .stat-row:last-child {
@@ -4889,12 +4911,12 @@ p {
 }
 
 .stat-value {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .stat-value.income {
-  color: #059669;
+  color: #16a34a;
 }
 
 .stat-value.spent {
@@ -4902,7 +4924,7 @@ p {
 }
 
 .stat-value.saved {
-  color: #3056d3;
+  color: #2563eb;
 }
 
 /* Analytics Chart Styles */
@@ -4911,7 +4933,7 @@ p {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  padding: 0 8px;
+  margin-bottom: 20px;
 }
 
 .chart-ring {
@@ -4954,7 +4976,6 @@ p {
   font-size: 10px;
   color: #64748b;
   font-weight: 500;
-  text-align: center;
 }
 
 .chart-legend {
@@ -5409,83 +5430,24 @@ p {
 @media (max-width: 767px) {
   .money-insight-card {
     margin-bottom: 16px;
-    padding: 20px 16px 28px 16px;
-    height: 280px;
+    padding: 20px 16px;
   }
   
-  /* Hide footer text on mobile for Goal Tracker card */
-  .money-insight-card:last-child .insight-footer h3,
-  .money-insight-card:last-child .insight-footer p {
-    display: none;
+  .insight-image {
+    margin-bottom: 16px;
+  }
+  
+  .insight-img {
+    max-width: 70%;
   }
   
   .insight-content {
-    margin-bottom: 16px;
-  }
-  
-  .balance-display {
-    margin-bottom: 16px;
-  }
-  
-  .quick-stats {
-    margin-bottom: 4px;
-  }
-  
-  .goal-progress-container {
-    margin-bottom: 4px;
-  }
-  
-  .goal-details {
-    margin-bottom: 4px;
-  }
-  
-  .insight-footer {
-    padding: 16px 8px 0px 8px;
-  }
-  
-  .insight-footer h3,
-  .insight-footer p {
-    padding: 0 4px;
-  }
-  
-  .insight-header {
-    margin-bottom: 20px;
-  }
-  
-  .insight-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    margin-bottom: 0;
   }
   
   .insight-title {
-    font-size: 16px;
+    font-size: 18px;
   }
-  
-  .current-balance {
-    font-size: 24px;
-  }
-  
-  .balance-change {
-    font-size: 12px;
-  }
-  
-  .stat-value {
-    font-size: 14px;
-  }
-  
-  .chart-ring {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .ring-center {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .center-text {
-    font-size: 12px;
   }
   
   .center-subtitle {
@@ -5703,5 +5665,256 @@ p {
   
   .github-link i {
     font-size: 20px;
+  }
+}
+
+/* Feature Image Styling */
+.feature-image {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.ud-feature-modern-card:hover .feature-image {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-visual-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 200px;
+}
+
+/* Responsive adjustments for feature images */
+@media (max-width: 1199px) {
+  .feature-image {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 991px) {
+  .feature-image {
+    max-width: 260px;
+  }
+  
+  .card-visual-section {
+    min-height: 180px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .feature-image {
+    max-width: 240px;
+  }
+  
+  .card-visual-section {
+    min-height: 160px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 575px) {
+  .feature-image {
+    max-width: 220px;
+  }
+  .card-visual-section {
+    min-height: 140px;
+    padding: 12px;
+  }
+}
+
+/* ====== Step Cards Styling ====== */
+.step-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #3056d3, #4f7cff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(48, 86, 211, 0.1);
+}
+
+.step-card:hover::before {
+  opacity: 1;
+}
+
+.step-image {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.step-img {
+  max-width: 75%;
+  height: auto;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.step-card:hover .step-img {
+  transform: scale(1.02);
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.12));
+}
+
+.step-content {
+  padding: 0 10px;
+}
+
+.step-number {
+  display: inline-block;
+  background: linear-gradient(135deg, #3056d3, #4f7cff);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 50%;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 12px rgba(48, 86, 211, 0.25);
+  transition: all 0.3s ease;
+}
+
+.step-card:hover .step-number {
+  transform: scale(1.1);
+  box-shadow: 0 5px 18px rgba(48, 86, 211, 0.35);
+}
+
+.step-title {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 14px;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.step-card:hover .step-title {
+  color: var(--primary-color);
+}
+
+.step-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--body-color);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Responsive adjustments for step cards */
+@media (max-width: 1199px) {
+  .step-card {
+    margin-bottom: 35px;
+    padding: 28px 18px;
+  }
+  
+  .step-title {
+    font-size: 18px;
+  }
+  
+  .step-description {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 991px) {
+  .step-card {
+    margin-bottom: 30px;
+    padding: 25px 16px;
+  }
+  
+  .step-image {
+    margin-bottom: 22px;
+  }
+  
+  .step-content {
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .step-card {
+    margin-bottom: 25px;
+    padding: 22px 14px;
+  }
+  
+  .step-number {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .step-title {
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  
+  .step-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 575px) {
+  .step-card {
+    margin-bottom: 20px;
+    padding: 20px 12px;
+  }
+  
+  .step-image {
+    margin-bottom: 20px;
+  }
+  
+  .step-content {
+    padding: 0 5px;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  
+  .step-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .step-description {
+    font-size: 12px;
   }
 }
