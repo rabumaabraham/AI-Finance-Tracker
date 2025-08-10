@@ -1,38 +1,44 @@
 /* Dashboard - Professional & Responsive */
 :root {
-  --primary: #1a365d;
-  --secondary: #2d3748;
-  --accent: #3182ce;
-  --success: #38a169;
-  --warning: #d69e2e;
-  --danger: #e53e3e;
-  --dark: #1a202c;
-  --light: #f7fafc;
+  /* Landing Page Colors - Matching ud-styles.css */
+  --font: "Inter", sans-serif;
+  --body-color: #637381;
+  --heading-color: #212b36;
+  --primary-color: #3056d3;
   --white: #ffffff;
+  
+  /* Dashboard Specific Colors - Using Landing Page Palette */
+  --primary: var(--primary-color);
+  --secondary: var(--heading-color);
+  --accent: var(--primary-color);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --dark: var(--heading-color);
+  --light: #f8fafc;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
   --gray-300: #d1d5db;
   --gray-400: #9ca3af;
-  --gray-500: #6b7280;
+  --gray-500: var(--body-color);
   --gray-600: #4b5563;
   --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
+  --gray-800: var(--heading-color);
+  --gray-900: var(--heading-color);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --transition: all 0.2s ease-in-out;
   --sidebar-width: 280px;
   --header-height: 70px;
-  --primary-color: #667eea;
-  --primary-light: #7c93f3;
+  --primary-light: #4c6ef5;
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
   --border-color: #e2e8f0;
-  --text-dark: #1f2937;
-  --text-muted: #6b7280;
+  --text-dark: var(--heading-color);
+  --text-muted: var(--body-color);
 }
 
 /* Professional Banking App Style */
@@ -56,12 +62,12 @@
   margin: 0;
   font-size: 1.75rem;
   font-weight: 600;
-  color: var(--gray-900);
+  color: var(--heading-color);
 }
 
 .dashboard-section .page-header p {
   margin: 0.5rem 0 0 0;
-  color: var(--gray-600);
+  color: var(--body-color);
 }
 
 /* Reset & Base */
@@ -71,10 +77,10 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font);
   background: var(--gray-50);
   overflow-x: hidden;
-  color: var(--gray-900);
+  color: var(--body-color);
 }
 
 /* Header */
@@ -96,7 +102,7 @@ body {
 
 .dashboard-header h2 {
   margin: 0;
-  color: var(--gray-900);
+  color: var(--heading-color);
   font-size: 1.5rem;
   font-weight: 600;
   display: flex;
@@ -304,7 +310,7 @@ body {
 
 .card-header {
     background: var(--gray-50);
-    color: var(--gray-900);
+    color: var(--heading-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -316,7 +322,7 @@ body {
 
 .card-header h3 {
     margin: 0;
-    color: var(--gray-900);
+    color: var(--heading-color);
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.025em;
@@ -335,7 +341,7 @@ body {
 .balance-amount {
     font-size: 2.25rem;
     font-weight: 700;
-    color: var(--gray-900);
+    color: var(--heading-color);
     margin: 1.5rem 0;
     line-height: 1;
     letter-spacing: -0.025em;
@@ -349,14 +355,14 @@ body {
 }
 
 .page-header h1 {
-  color: var(--dark);
+  color: var(--heading-color);
   margin: 0 0 0.5rem;
   font-size: 2rem;
   font-weight: 700;
 }
 
 .page-header p {
-  color: #666;
+  color: var(--body-color);
   margin: 0;
   font-size: 1.1rem;
 }
@@ -430,20 +436,20 @@ body {
     background: white;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    border: 2px dashed #e0e0e0;
-    color: #666;
+      border: 2px dashed var(--border-color);
+  color: var(--body-color);
 }
 
 .empty-state i {
     font-size: 3.5rem;
-    color: #ccc;
+    color: var(--gray-400);
     margin-bottom: 1.5rem;
     display: block;
 }
 
 .empty-state h4 {
     margin: 0 0 0.75rem;
-    color: var(--dark);
+    color: var(--heading-color);
     font-size: 1.375rem;
     font-weight: 700;
     letter-spacing: -0.025em;
@@ -452,14 +458,14 @@ body {
 .empty-state p {
     margin: 0;
     font-size: 1rem;
-    color: #666;
+    color: var(--body-color);
     line-height: 1.5;
 }
 
 /* Subscription pricing grid inside dashboard */
 .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1rem; padding: 1rem 0; }
-.ud-single-pricing { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; position: relative; box-shadow: var(--shadow); }
-.ud-single-pricing .ud-popular-tag { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: #fff; font-size: 12px; padding: 6px 12px; border-radius: 999px; font-weight: 600; box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3); text-transform: uppercase; letter-spacing: 0.5px; z-index: 1; display: inline-block; }
+.ud-single-pricing { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 1rem; position: relative; box-shadow: var(--shadow); }
+.ud-single-pricing .ud-popular-tag { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--danger), var(--warning)); color: var(--white); font-size: 12px; padding: 6px 12px; border-radius: 999px; font-weight: 600; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); text-transform: uppercase; letter-spacing: 0.5px; z-index: 1; display: inline-block; }
 .ud-pricing-header h3 { margin: 0 0 .25rem; }
 .ud-pricing-header .price-display { font-size: 24px; font-weight: 700; }
 .ud-pricing-body ul { list-style: none; padding-left: 0; margin: .5rem 0 1rem; }
@@ -471,7 +477,7 @@ body {
     align-items: center;
     padding: 1.75rem;
     background: white;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     margin-bottom: 1.25rem;
     transition: all 0.3s ease;
@@ -522,7 +528,7 @@ body {
 
 .bank-name {
     font-weight: 700;
-    color: var(--dark);
+    color: var(--heading-color);
     margin: 0 0 0.5rem;
     font-size: 1.25rem;
     letter-spacing: -0.025em;
@@ -661,14 +667,14 @@ body {
     margin: 0 0 0.5rem;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--heading-color);
     letter-spacing: -0.025em;
 }
 
 .status-info p {
     margin: 0;
     font-size: 0.95rem;
-    color: #666;
+    color: var(--body-color);
     font-weight: 500;
     line-height: 1.5;
 }
@@ -980,12 +986,12 @@ body {
 .mb-3 { margin-bottom: 1rem; }
 .mb-4 { margin-bottom: 1.5rem; }
 .h2 { font-size: 1.5rem; font-weight: 600; }
-.text-muted { color: #666; }
+.text-muted { color: var(--body-color); }
 
 /* Analytics Section - Professional Banking App Style */
 .analytics-controls {
     padding: 2rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
     border-radius: 12px;
     border: 1px solid rgba(48, 86, 211, 0.1);
     position: relative;
@@ -1030,7 +1036,7 @@ body {
 
 .analytics-controls .form-select {
     border-radius: 10px;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--border-color);
     padding: 1rem 1.25rem;
     transition: all 0.3s ease;
     background: white;
@@ -1213,12 +1219,12 @@ body {
     margin: 0 0 0.25rem;
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--heading-color);
 }
 
 .category-info p {
     margin: 0;
-    color: #666;
+    color: var(--body-color);
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -1286,12 +1292,12 @@ body {
     margin: 0 0 0.25rem;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--heading-color);
 }
 
 .transaction-meta {
     margin: 0;
-    color: #666;
+    color: var(--body-color);
     font-size: 0.85rem;
     font-weight: 500;
 }
@@ -1476,14 +1482,14 @@ body {
 .limit-info h4 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--heading-color);
     margin: 0 0 0.25rem 0;
     line-height: 1.3;
 }
 
 .limit-info p {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--body-color);
     margin: 0;
     font-weight: 500;
 }
@@ -1491,7 +1497,7 @@ body {
 .btn-remove {
     background: none;
     border: none;
-    color: #dc3545;
+    color: var(--danger);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 8px;
@@ -1517,7 +1523,7 @@ body {
 .progress-track {
     width: 100%;
     height: 8px;
-    background: #f0f0f0;
+    background: var(--gray-200);
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 0.5rem;
@@ -1543,7 +1549,7 @@ body {
 .progress-text {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--heading-color);
     text-align: right;
     display: block;
 }
@@ -1554,13 +1560,13 @@ body {
     justify-content: space-between;
     align-items: center;
     padding-top: 1rem;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--border-color);
 }
 
 .status-text {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--body-color);
 }
 
 .limit-card.normal .status-text {
@@ -1568,11 +1574,11 @@ body {
 }
 
 .limit-card.warning .status-text {
-    color: #FF9800;
+    color: var(--warning);
 }
 
 .limit-card.over-limit .status-text {
-    color: #F44336;
+    color: var(--danger);
 }
 
 /* Budget Alerts */
@@ -1581,8 +1587,8 @@ body {
 }
 
 .limit-alert {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-    border: 1px solid #ffeaa7;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+    border: 1px solid var(--warning);
     border-radius: 12px;
     padding: 1rem 1.25rem;
     margin-bottom: 1rem;
@@ -1594,9 +1600,9 @@ body {
 }
 
 .limit-alert.critical {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    border-color: #ffcdd2;
-    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.15);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    border-color: var(--danger);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
 }
 
 .limit-alert i {
@@ -1611,7 +1617,7 @@ body {
 .limit-alert span {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-primary);
+    color: var(--heading-color);
 }
 
 /* Empty State */
@@ -1634,13 +1640,13 @@ body {
 .empty-state h4 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--heading-color);
     margin: 0 0 0.5rem 0;
 }
 
 .empty-state p {
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--body-color);
     margin: 0 0 1.5rem 0;
 }
 
@@ -1751,7 +1757,7 @@ body {
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--heading-color);
     margin-bottom: 0.5rem;
 }
 
@@ -1806,7 +1812,7 @@ body {
 
 .btn-cancel {
     background: #f8f9fa;
-    color: var(--text-secondary);
+    color: var(--body-color);
     border: 2px solid #e0e0e0;
 }
 
@@ -1978,7 +1984,7 @@ body {
 }
 
 .notification-warning {
-    border-left-color: #ffc107;
+    border-left-color: var(--warning);
 }
 
 .notification-info {
@@ -2006,7 +2012,7 @@ body {
 }
 
 .notification-warning .notification-icon {
-    color: #ffc107;
+    color: var(--warning);
 }
 
 .notification-info .notification-icon {
@@ -2017,13 +2023,13 @@ body {
     flex: 1;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-primary);
+    color: var(--heading-color);
 }
 
 .notification-close {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--body-color);
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 4px;
@@ -2032,7 +2038,7 @@ body {
 
 .notification-close:hover {
     background: rgba(0, 0, 0, 0.1);
-    color: var(--text-primary);
+    color: var(--heading-color);
 }
 
 @keyframes slideInRight {
@@ -2351,7 +2357,7 @@ body {
 .suggestion-btn {
   background: #f8f9fa;
   border: 1px solid #e9ecef;
-  color: var(--dark);
+  color: var(--heading-color);
   padding: 8px 12px;
   border-radius: 16px;
   font-size: 0.8rem;
