@@ -178,7 +178,7 @@ ${financialContext.allCategories.map(cat => `• ${cat.category}: €${cat.amoun
     
     // Send message to OpenRouter
     const completion = await openrouter.chat.completions.create({
-      model: "openai/gpt-3.5-turbo",
+      model: "meta-llama/llama-3.1-405b-instruct:free",
       messages: [
         {
           role: "system",
