@@ -373,6 +373,20 @@ body {
     margin-bottom: 2rem;
 }
 
+.bank-connect-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .bank-connect-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
 .budget-add-content {
     text-align: center;
     margin-bottom: 2rem;
@@ -402,6 +416,196 @@ body {
     background: var(--primary);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
+}
+
+.btn-connect-real-bank {
+    background: #28a745;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow);
+    letter-spacing: -0.025em;
+}
+
+.btn-connect-real-bank:hover {
+    background: #218838;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    color: var(--white);
+}
+
+/* Bank Selection Modal */
+.bank-selection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    z-index: 1001;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--white);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--heading-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.modal-body {
+    padding: 1.5rem 2rem 2rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.bank-search {
+    margin-bottom: 1.5rem;
+}
+
+.bank-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.bank-search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.1);
+}
+
+.banks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.bank-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: var(--transition);
+    background: var(--white);
+}
+
+.bank-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(48, 86, 211, 0.1);
+}
+
+.bank-logo {
+    width: 48px;
+    height: 48px;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gray-50);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.bank-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.bank-info {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.bank-info h4 {
+    margin: 0 0 0.25rem;
+    color: var(--heading-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.bank-bic {
+    margin: 0 0 0.25rem;
+    color: var(--gray-500);
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.bank-countries {
+    margin: 0;
+    color: var(--gray-400);
+    font-size: 0.85rem;
+}
+
+.btn-select-bank {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .bank-count {

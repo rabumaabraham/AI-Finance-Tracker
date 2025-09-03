@@ -245,10 +245,16 @@
                 </div>
                 <div class="bank-connect-content">
                     <p class="text-muted mb-3">Securely connect your bank account to automatically sync transactions and balances.</p>
-                    <button class="btn btn-primary btn-connect-bank" onclick="connectBank()">
-                        <i class="lni lni-credit-cards"></i>
-                        Connect Bank Account
-                    </button>
+                    <div class="bank-connect-buttons">
+                        <button class="btn btn-primary btn-connect-bank" onclick="connectBank()">
+                            <i class="lni lni-credit-cards"></i>
+                            Connect Bank Account (Sandbox)
+                        </button>
+                        <button class="btn btn-success btn-connect-real-bank" onclick="connectRealBank()">
+                            <i class="lni lni-bank"></i>
+                            Add Real Bank Account
+                        </button>
+                    </div>
                 </div>
             </div>
 

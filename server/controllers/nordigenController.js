@@ -83,6 +83,145 @@ export const connectBank = async (req, res) => {
   }
 };
 
+// Initiate real bank connection (production)
+export const connectRealBank = async (req, res) => {
+  try {
+    const token = await getAccessToken();
+
+    // Enforce subscription limit if user is authenticated
+    try {
+      const auth = req.headers.authorization || '';
+      if (auth.startsWith('Bearer ')) {
+        const sub = await Subscription.findOne({ userId: req.userId });
+        const plan = sub?.plan || 'free';
+        if (plan === 'free') {
+          const count = await BankAccount.countDocuments({ userId: req.userId, status: 'connected' });
+          if (count >= 1) {
+            return res.status(403).json({
+              error: 'LIMIT_REACHED',
+              message: 'Free plan allows only 1 bank connection. Upgrade to connect more banks.',
+              plan: 'free',
+              limit: 1,
+              current: count
+            });
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Determine frontend base URL for redirect (Vercel in prod, localhost in dev)
+    const defaultFrontendBase = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const requestOrigin = req.headers.origin;
+    let frontendBaseUrl = defaultFrontendBase;
+    // If the request Origin matches our configured base or is localhost, prefer it
+    if (requestOrigin && (requestOrigin === defaultFrontendBase || /^(http:\/\/)?(localhost|127\.0\.0\.1)/.test(requestOrigin))) {
+      frontendBaseUrl = requestOrigin;
+    }
+    const redirectUrl = `${frontendBaseUrl.replace(/\/$/, '')}/dashboard.html?status=success`;
+
+    // For real bank connections, return available institutions for user selection
+    const institutionsRes = await axios.get(
+      "https://bankaccountdata.gocardless.com/api/v2/institutions/",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Filter out sandbox institutions for real bank connections
+    const realInstitutions = institutionsRes.data.filter(inst => 
+      !inst.id.includes('SANDBOX') && 
+      !inst.id.includes('DEMO') &&
+      inst.countries && inst.countries.length > 0
+    );
+
+    if (!realInstitutions || realInstitutions.length === 0) {
+      return res.status(400).json({ 
+        error: "No real bank institutions available",
+        message: "Unable to find real bank institutions. Please try again later."
+      });
+    }
+
+    // Return institutions for user selection
+    res.status(200).json({ 
+      institutions: realInstitutions.map(inst => ({
+        id: inst.id,
+        name: inst.name,
+        bic: inst.bic,
+        countries: inst.countries,
+        logo: inst.logo
+      }))
+    });
+  } catch (err) {
+    console.error("Error connecting real bank:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to connect real bank." });
+  }
+};
+
+// Connect to selected real bank
+export const connectSelectedBank = async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const { institutionId } = req.body;
+
+    if (!institutionId) {
+      return res.status(400).json({ error: "Institution ID is required" });
+    }
+
+    // Enforce subscription limit if user is authenticated
+    try {
+      const auth = req.headers.authorization || '';
+      if (auth.startsWith('Bearer ')) {
+        const sub = await Subscription.findOne({ userId: req.userId });
+        const plan = sub?.plan || 'free';
+        if (plan === 'free') {
+          const count = await BankAccount.countDocuments({ userId: req.userId, status: 'connected' });
+          if (count >= 1) {
+            return res.status(403).json({
+              error: 'LIMIT_REACHED',
+              message: 'Free plan allows only 1 bank connection. Upgrade to connect more banks.',
+              plan: 'free',
+              limit: 1,
+              current: count
+            });
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Determine frontend base URL for redirect
+    const defaultFrontendBase = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const requestOrigin = req.headers.origin;
+    let frontendBaseUrl = defaultFrontendBase;
+    if (requestOrigin && (requestOrigin === defaultFrontendBase || /^(http:\/\/)?(localhost|127\.0\.0\.1)/.test(requestOrigin))) {
+      frontendBaseUrl = requestOrigin;
+    }
+    const redirectUrl = `${frontendBaseUrl.replace(/\/$/, '')}/dashboard.html?status=success`;
+
+    const requisitionRes = await axios.post(
+      "https://bankaccountdata.gocardless.com/api/v2/requisitions/",
+      {
+        redirect: redirectUrl,
+        institution_id: institutionId,
+        reference: `real-ref-${Date.now()}`,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const { id: requisitionId, link } = requisitionRes.data;
+    res.status(200).json({ requisitionId, link });
+  } catch (err) {
+    console.error("Error connecting to selected bank:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to connect to selected bank." });
+  }
+};
+
 // Fetch and categorize transactions
 export const getTransactions = async (req, res) => {
   try {

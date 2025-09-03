@@ -174,6 +174,159 @@ class BankManager {
         }
     }
 
+    async connectRealBank() {
+        try {
+            (window.__notify || showNotification)('Loading available banks...', 'info');
+
+            // Check subscription limit before initiating connection
+            try {
+                const subBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                  ? 'http://localhost:5000/api/subscription'
+                  : 'https://finance-tracker-tlss.onrender.com/api/subscription';
+                const checkRes = await fetch(`${subBase}/can-connect`, {
+                    headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                });
+                if (checkRes.ok) {
+                    const data = await checkRes.json();
+                    if (!data.allowed) {
+                        const limitText = data.limit === Infinity ? 'unlimited' : data.limit;
+                        const message = `You're on the ${data.plan === 'free' ? 'Free' : data.plan === 'pro_monthly' ? 'Unlimited Monthly' : 'Unlimited Yearly'} plan. It allows ${limitText} bank connection${limitText === 1 ? '' : 's'}. Upgrade to connect more banks.`;
+                        (window.__notify || showNotification)(message, 'error');
+                        return;
+                    }
+                }
+            } catch (_) { /* ignore check failure */ }
+            
+            const response = await fetch(`${this.baseURL}/connect-real-bank`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authService.getToken()}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                // Try to extract reason
+                try {
+                    const err = await response.json();
+                    if (err && (err.error === 'LIMIT_REACHED' || err.message)) {
+                        const limitText = err.limit === Infinity ? 'unlimited' : err.limit;
+                        const planName = err.plan === 'free' ? 'Free' : err.plan === 'pro_monthly' ? 'Unlimited Monthly' : 'Unlimited Yearly';
+                        const msg = err.error === 'LIMIT_REACHED'
+                          ? `You're on the ${planName} plan. It allows ${limitText} bank connection${limitText === 1 ? '' : 's'}. Upgrade to connect more banks.`
+                          : (err.message || 'Failed to load banks');
+                        (window.__notify || showNotification)(msg, 'error');
+                        return;
+                    }
+                } catch (_) {}
+                throw new Error('Failed to load banks');
+            }
+
+            const data = await response.json();
+            
+            // Show bank selection modal
+            this.showBankSelectionModal(data.institutions);
+            
+        } catch (error) {
+            console.error('Error loading banks:', error);
+            showNotification('Failed to load banks. Please try again.', 'error');
+        }
+    }
+
+    showBankSelectionModal(institutions) {
+        // Create modal HTML
+        const modalHtml = `
+            <div id="bankSelectionModal" class="bank-selection-modal">
+                <div class="modal-overlay" onclick="this.closest('.bank-selection-modal').remove()"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Select Your Bank</h3>
+                        <button class="modal-close" onclick="this.closest('.bank-selection-modal').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="bank-search">
+                            <input type="text" id="bankSearch" placeholder="Search for your bank..." class="bank-search-input">
+                        </div>
+                        <div class="banks-list" id="banksList">
+                            ${institutions.map(bank => `
+                                <div class="bank-item" data-bank-id="${bank.id}" data-bank-name="${bank.name}">
+                                    <div class="bank-logo">
+                                        ${bank.logo ? `<img src="${bank.logo}" alt="${bank.name}" onerror="this.style.display='none'">` : ''}
+                                    </div>
+                                    <div class="bank-info">
+                                        <h4>${bank.name}</h4>
+                                        ${bank.bic ? `<p class="bank-bic">${bank.bic}</p>` : ''}
+                                        ${bank.countries ? `<p class="bank-countries">${bank.countries.join(', ')}</p>` : ''}
+                                    </div>
+                                    <button class="btn btn-primary btn-select-bank" onclick="window.bankManager.selectBank('${bank.id}', '${bank.name}')">
+                                        Select
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        // Add search functionality
+        const searchInput = document.getElementById('bankSearch');
+        const banksList = document.getElementById('banksList');
+        
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const bankItems = banksList.querySelectorAll('.bank-item');
+            
+            bankItems.forEach(item => {
+                const bankName = item.dataset.bankName.toLowerCase();
+                if (bankName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    async selectBank(institutionId, institutionName) {
+        try {
+            (window.__notify || showNotification)(`Connecting to ${institutionName}...`, 'info');
+
+            // Remove modal
+            const modal = document.getElementById('bankSelectionModal');
+            if (modal) modal.remove();
+
+            const response = await fetch(`${this.baseURL}/connect-selected-bank`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authService.getToken()}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ institutionId })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.message || 'Failed to connect to selected bank');
+            }
+
+            const data = await response.json();
+            
+            // Store requisition ID for status checking
+            localStorage.setItem('currentRequisitionId', data.requisitionId);
+            
+            // Redirect to GoCardless
+            window.location.href = data.link;
+            
+        } catch (error) {
+            console.error('Error connecting to selected bank:', error);
+            showNotification('Failed to connect to selected bank. Please try again.', 'error');
+        }
+    }
+
     async fetchTransactions(requisitionId) {
         try {
             const token = authService.getToken();
@@ -464,6 +617,12 @@ class BankManager {
 function connectBank() {
     if (window.bankManager) {
         window.bankManager.connectBank();
+    }
+}
+
+function connectRealBank() {
+    if (window.bankManager) {
+        window.bankManager.connectRealBank();
     }
 }
 

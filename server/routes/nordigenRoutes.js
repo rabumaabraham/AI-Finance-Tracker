@@ -2,6 +2,8 @@
 import express from 'express';
 import { 
   connectBank, 
+  connectRealBank,
+  connectSelectedBank,
   getTransactions, 
   getBankDetails, 
   getRequisitionStatus,
@@ -14,6 +16,8 @@ const router = express.Router();
 
 // Protected routes
 router.get('/connect-bank', verifyToken, connectBank);
+router.get('/connect-real-bank', verifyToken, connectRealBank);
+router.post('/connect-selected-bank', verifyToken, connectSelectedBank);
 
 router.get('/transactions/:requisitionId', verifyToken, getTransactions);
 router.get('/details/:requisitionId', verifyToken, getBankDetails);
