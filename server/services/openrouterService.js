@@ -34,6 +34,7 @@ export async function categorizeWithOpenRouter(transactionName) {
       ],
       max_tokens: 10, // Limit response length for category
       temperature: 0.1, // Keep it very low for consistent categorization
+      fallbacks: [] // 🚫 prevents fallback to GPT-3.5
     });
 
     // Extract the category from the response
