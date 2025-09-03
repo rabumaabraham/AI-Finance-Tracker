@@ -352,6 +352,7 @@ class BankManager {
                 
                 // Refresh analytics if available
                 if (window.analyticsManager) {
+                    await window.analyticsManager.loadConnectedBanks();
                     await window.analyticsManager.loadAnalytics();
                 }
                 

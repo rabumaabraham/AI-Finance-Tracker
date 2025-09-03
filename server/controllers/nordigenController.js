@@ -11,6 +11,50 @@ dotenv.config();
 
 let accessToken = null;
 
+// Simple rule-based categorization fallback when AI fails
+function getFallbackCategory(transactionName, amount) {
+  const name = transactionName.toLowerCase();
+  
+  // Income patterns
+  if (amount > 0) {
+    if (name.includes('salary') || name.includes('wage') || name.includes('payroll')) {
+      return 'Salary';
+    }
+    if (name.includes('refund') || name.includes('return')) {
+      return 'Refund';
+    }
+    if (name.includes('interest') || name.includes('dividend')) {
+      return 'Investment';
+    }
+    return 'Income';
+  }
+  
+  // Expense patterns
+  if (name.includes('grocery') || name.includes('supermarket') || name.includes('food') || name.includes('restaurant') || name.includes('cafe')) {
+    return 'Food';
+  }
+  if (name.includes('gas') || name.includes('fuel') || name.includes('petrol') || name.includes('transport') || name.includes('bus') || name.includes('train') || name.includes('taxi') || name.includes('uber')) {
+    return 'Transport';
+  }
+  if (name.includes('rent') || name.includes('mortgage') || name.includes('housing') || name.includes('utilities') || name.includes('electric') || name.includes('water') || name.includes('internet') || name.includes('phone')) {
+    return 'Bills';
+  }
+  if (name.includes('medical') || name.includes('doctor') || name.includes('pharmacy') || name.includes('health') || name.includes('hospital')) {
+    return 'Health';
+  }
+  if (name.includes('shopping') || name.includes('store') || name.includes('amazon') || name.includes('ebay') || name.includes('retail')) {
+    return 'Shopping';
+  }
+  if (name.includes('entertainment') || name.includes('movie') || name.includes('cinema') || name.includes('netflix') || name.includes('spotify') || name.includes('game')) {
+    return 'Entertainment';
+  }
+  if (name.includes('insurance') || name.includes('bank') || name.includes('fee') || name.includes('charge')) {
+    return 'Bills';
+  }
+  
+  return 'Other';
+}
+
 // Get GoCardless access token
 const getAccessToken = async () => {
   if (accessToken) return accessToken;
@@ -264,27 +308,74 @@ export const getTransactions = async (req, res) => {
     const bookedTransactions = transactionsRes.data.transactions?.booked || [];
 
     // Categorize and save transactions
-    const savedTransactions = await Transaction.insertMany(
-      await Promise.all(
-        bookedTransactions.map(async (tx) => {
-          const name = tx.remittanceInformationUnstructured || tx.creditorName || "Unknown";
-          const category = await categorizeWithOpenRouter(name);
+    const savedTransactions = [];
+    
+    for (const tx of bookedTransactions) {
+      try {
+        const name = tx.remittanceInformationUnstructured || tx.creditorName || "Unknown";
+        
+        // Try to categorize, but don't let it fail the entire process
+        let category = "Uncategorized";
+        try {
+          category = await categorizeWithOpenRouter(name);
+        } catch (catError) {
+          console.warn("⚠️ Categorization failed for transaction:", name, catError.message);
+          // Use simple rule-based categorization as fallback
+          category = getFallbackCategory(name, parseFloat(tx.transactionAmount.amount));
+        }
 
-          return {
-            userId: req.userId,
-            bankAccountId: bankAccount._id,
-            amount: parseFloat(tx.transactionAmount.amount),
-            category,
-            date: new Date(tx.bookingDate),
-            name,
-            transactionId: tx.internalTransactionId || `tx-${Date.now()}-${Math.random()}`,
-            type: parseFloat(tx.transactionAmount.amount) > 0 ? 'income' : 'expense'
-          };
-        })
-      )
-    );
+        const transactionData = {
+          userId: req.userId,
+          bankAccountId: bankAccount._id,
+          amount: parseFloat(tx.transactionAmount.amount),
+          category,
+          date: new Date(tx.bookingDate),
+          name,
+          transactionId: tx.internalTransactionId || `tx-${Date.now()}-${Math.random()}`,
+          type: parseFloat(tx.transactionAmount.amount) > 0 ? 'income' : 'expense'
+        };
 
-    res.status(200).json(savedTransactions);
+        // Check if transaction already exists to avoid duplicates
+        // Check by multiple fields to be more robust
+        const existingTransaction = await Transaction.findOne({
+          userId: req.userId,
+          $or: [
+            { transactionId: transactionData.transactionId },
+            { 
+              name: transactionData.name,
+              amount: transactionData.amount,
+              date: transactionData.date,
+              bankAccountId: transactionData.bankAccountId
+            }
+          ]
+        });
+
+        if (!existingTransaction) {
+          try {
+            const savedTransaction = await Transaction.create(transactionData);
+            savedTransactions.push(savedTransaction);
+          } catch (duplicateError) {
+            if (duplicateError.code === 11000) {
+              console.log('⚠️ Duplicate transaction skipped:', transactionData.name);
+              // Skip this transaction, it's already in the database
+            } else {
+              throw duplicateError; // Re-throw if it's a different error
+            }
+          }
+        } else {
+          console.log('⚠️ Duplicate transaction found and skipped:', transactionData.name);
+        }
+      } catch (txError) {
+        console.error("❌ Error processing individual transaction:", txError.message);
+        // Continue with next transaction instead of failing the entire batch
+      }
+    }
+
+    res.status(200).json({
+      transactionCount: savedTransactions.length,
+      transactions: savedTransactions,
+      message: `Successfully imported ${savedTransactions.length} new transactions`
+    });
   } catch (err) {
     console.error("Error fetching transactions:", err.response?.data || err.message);
     res.status(500).json({ error: "Failed to fetch transactions." });
