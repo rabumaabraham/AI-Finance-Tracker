@@ -21,7 +21,7 @@ export async function categorizeWithOpenRouter(transactionName) {
       // Use the model format specific to OpenRouter for OpenAI's GPT-3.5-turbo
       // If you want to use other models available on OpenRouter (e.g., Anthropic, Mistral),
       // replace "openai/gpt-3.5-turbo" with the appropriate model string from OpenRouter.
-      model: "openai/gpt-3.5-turbo",
+      model: "meta-llama/llama-3.1-405b-instruct:free",
       messages: [
         {
           role: "system",
