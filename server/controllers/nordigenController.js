@@ -269,6 +269,7 @@ export const connectSelectedBank = async (req, res) => {
 // Fetch and categorize transactions
 export const getTransactions = async (req, res) => {
   try {
+    console.log(`🚀 getTransactions called for requisitionId: ${req.params.requisitionId}, userId: ${req.userId}`);
     const token = await getAccessToken();
     const { requisitionId } = req.params;
 
@@ -278,7 +279,18 @@ export const getTransactions = async (req, res) => {
       userId: req.userId 
     });
 
+    console.log(`🏦 Bank account lookup result:`, bankAccount ? 'Found' : 'Not found');
+    if (bankAccount) {
+      console.log(`🏦 Bank account details:`, {
+        id: bankAccount._id,
+        requisitionId: bankAccount.requisitionId,
+        bankName: bankAccount.bankName,
+        status: bankAccount.status
+      });
+    }
+
     if (!bankAccount) {
+      console.log(`❌ Bank account not found for requisitionId: ${requisitionId}, userId: ${req.userId}`);
       return res.status(404).json({ error: "Bank account not found." });
     }
 
@@ -297,15 +309,90 @@ export const getTransactions = async (req, res) => {
 
     const accountId = accounts[0];
 
-    // Get transactions
-    const transactionsRes = await axios.get(
-      `https://bankaccountdata.gocardless.com/api/v2/accounts/${accountId}/transactions/`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    // Get transactions with date range parameters
+    // Real banks often need explicit date ranges to return transactions
+    const now = new Date();
+    const startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000); // Last 90 days
+    const endDate = new Date(); // Use current date, not the same as now
+    
+    console.log(`📅 Current date: ${now.toISOString()}`);
+    console.log(`📅 Start date: ${startDate.toISOString()}`);
+    console.log(`📅 End date: ${endDate.toISOString()}`);
+    
+    const dateFrom = startDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const dateTo = endDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    console.log(`📅 Fetching transactions from ${dateFrom} to ${dateTo} for account ${accountId}`);
+    
+    let transactionsRes;
+    try {
+      // Try with date range first
+      transactionsRes = await axios.get(
+        `https://bankaccountdata.gocardless.com/api/v2/accounts/${accountId}/transactions/`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            date_from: dateFrom,
+            date_to: dateTo
+          }
+        }
+      );
+    } catch (dateError) {
+      console.log(`⚠️ Date range fetch failed:`, dateError.message);
+      
+      // Check if it's a rate limit error
+      if (dateError.response?.status === 429) {
+        const retryAfter = dateError.response.data?.detail?.match(/try again in (\d+) seconds/);
+        if (retryAfter) {
+          const hours = Math.ceil(parseInt(retryAfter[1]) / 3600);
+          console.log(`🚫 Rate limit exceeded. Try again in ${hours} hours.`);
+          return res.status(429).json({ 
+            error: "Rate limit exceeded", 
+            message: `GoCardless API rate limit exceeded. Try again in ${hours} hours.`,
+            retryAfter: parseInt(retryAfter[1])
+          });
+        }
       }
-    );
+      
+      // Fallback: try without date parameters
+      console.log(`🔄 Trying without date parameters...`);
+      try {
+        transactionsRes = await axios.get(
+          `https://bankaccountdata.gocardless.com/api/v2/accounts/${accountId}/transactions/`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+      } catch (fallbackError) {
+        console.log(`❌ Fallback also failed:`, fallbackError.message);
+        throw fallbackError;
+      }
+    }
 
     const bookedTransactions = transactionsRes.data.transactions?.booked || [];
+    
+    console.log(`📊 Raw API Response:`, JSON.stringify(transactionsRes.data, null, 2));
+    console.log(`📊 Found ${bookedTransactions.length} booked transactions`);
+    
+    if (bookedTransactions.length === 0) {
+      console.log(`⚠️ No transactions found. Checking for pending transactions...`);
+      const pendingTransactions = transactionsRes.data.transactions?.pending || [];
+      console.log(`📊 Found ${pendingTransactions.length} pending transactions`);
+      
+      if (pendingTransactions.length > 0) {
+        console.log(`📊 Pending transactions:`, pendingTransactions.map(tx => ({
+          amount: tx.transactionAmount?.amount,
+          date: tx.bookingDate,
+          name: tx.remittanceInformationUnstructured || tx.creditorName
+        })));
+      }
+    } else {
+      console.log(`📊 Sample transaction:`, {
+        amount: bookedTransactions[0]?.transactionAmount?.amount,
+        date: bookedTransactions[0]?.bookingDate,
+        name: bookedTransactions[0]?.remittanceInformationUnstructured || bookedTransactions[0]?.creditorName
+      });
+    }
 
     // Categorize and save transactions
     const savedTransactions = [];
@@ -385,6 +472,7 @@ export const getTransactions = async (req, res) => {
 // Get bank account details
 export const getBankDetails = async (req, res) => {
   try {
+    console.log(`🏦 getBankDetails called for requisitionId: ${req.params.requisitionId}, userId: ${req.userId}`);
     const token = await getAccessToken();
     const { requisitionId } = req.params;
 
@@ -395,6 +483,12 @@ export const getBankDetails = async (req, res) => {
     });
 
     if (bankAccount) {
+      console.log(`🏦 Bank account already exists:`, {
+        id: bankAccount._id,
+        requisitionId: bankAccount.requisitionId,
+        bankName: bankAccount.bankName,
+        status: bankAccount.status
+      });
       // Return existing bank account data
       return res.status(200).json({
         name: bankAccount.bankName,
@@ -405,6 +499,8 @@ export const getBankDetails = async (req, res) => {
         currency: bankAccount.currency
       });
     }
+
+    console.log(`🏦 Bank account not found, creating new one for requisitionId: ${requisitionId}`);
 
     // Get requisition details
     const requisitionRes = await axios.get(
@@ -445,6 +541,12 @@ export const getBankDetails = async (req, res) => {
     });
 
     await bankAccount.save();
+    console.log(`✅ Bank account saved to database:`, {
+      id: bankAccount._id,
+      requisitionId: bankAccount.requisitionId,
+      bankName: bankAccount.bankName,
+      userId: bankAccount.userId
+    });
     
     // Format bank details for frontend
     const bankDetails = {

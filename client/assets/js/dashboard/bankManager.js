@@ -361,6 +361,11 @@ class BankManager {
                     await window.budgetManager.refreshBudgets();
                 }
                 
+            } else if (response.status === 429) {
+                const errorData = await response.json();
+                const hours = Math.ceil((errorData.retryAfter || 18293) / 3600);
+                console.error('🚫 Rate limit exceeded:', errorData);
+                showNotification(`Rate limit exceeded. Try again in ${hours} hours.`, 'error');
             } else {
                 console.error('❌ Error fetching transactions:', response.status);
                 showNotification('Failed to fetch transactions', 'error');
