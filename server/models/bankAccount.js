@@ -9,8 +9,7 @@ const bankAccountSchema = new mongoose.Schema({
   },
   requisitionId: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   bankName: {
     type: String,
@@ -44,7 +43,7 @@ const bankAccountSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Compound index to ensure one requisition per user
+// Compound index to ensure one requisition per user (but same requisition can be used by different users)
 bankAccountSchema.index({ userId: 1, requisitionId: 1 }, { unique: true });
 
 const BankAccount = mongoose.model('BankAccount', bankAccountSchema);
