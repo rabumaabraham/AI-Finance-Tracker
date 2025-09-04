@@ -1,38 +1,98 @@
-/* Mobile-friendly auth inputs */
-@media (max-width: 575.98px) {
-  .ud-login .ud-login-form .ud-form-group input[type="email"],
-  .ud-login .ud-login-form .ud-form-group input[type="password"],
-  .ud-login .ud-login-form .ud-form-group input[type="text"] {
-    height: 52px;
-    font-size: 1rem;
-    padding: 12px 16px;
-    border-radius: 10px;
-  }
-
-  .ud-login .ud-login-form .ud-form-group {
-    margin-bottom: 16px;
-  }
-
+/* Enhanced Mobile-friendly auth inputs - Professional styling */
+@media (max-width: 767px) {
   .ud-login-wrapper {
-    padding: 32px 20px;
-    border-radius: 14px;
+    padding: 40px 30px;
+    border-radius: 16px;
     max-width: 100% !important;
     width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    box-shadow: 0 8px 32px rgba(48, 86, 211, 0.08);
+  }
+
+  .ud-login .ud-login-form .ud-form-group {
+    margin-bottom: 20px;
+  }
+
+  .ud-login .ud-login-form .ud-form-group input[type="email"],
+  .ud-login .ud-login-form .ud-form-group input[type="password"],
+  .ud-login .ud-login-form .ud-form-group input[type="text"] {
+    height: 50px;
+    font-size: 16px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+  }
+
+  .ud-login .ud-login-form .ud-form-group input:focus {
+    border-color: var(--primary-color);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.1);
+    transform: translateY(-1px);
   }
 
   .ud-login .ud-login-form .ud-main-btn.w-100,
   .ud-login .ud-login-form button[type="submit"].ud-main-btn {
-    min-height: 50px;
-    font-size: 1rem;
-    border-radius: 10px;
+    min-height: 52px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 14px 24px;
+    transition: all 0.3s ease;
+  }
+
+  .ud-login .ud-login-form .ud-main-btn.w-100:hover,
+  .ud-login .ud-login-form button[type="submit"].ud-main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(48, 86, 211, 0.3);
   }
 
   /* Ensure full-width form on small screens */
   .ud-login .ud-login-form { width: 100% !important; }
   .ud-login .ud-login-form .ud-form-group input { width: 100% !important; }
   .ud-login .container { padding-left: 16px; padding-right: 16px; }
+
+  /* Enhanced spacing and typography */
+  .ud-login .forget-pass,
+  .ud-login .signup-option {
+    font-size: 15px;
+    margin-top: 20px;
+  }
+
+  .ud-login .forget-pass {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .ud-login .signup-option a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 575px) {
+  .ud-login-wrapper {
+    padding: 30px 20px;
+    margin: 0 10px;
+  }
+
+  .ud-login .ud-login-form .ud-form-group input[type="email"],
+  .ud-login .ud-login-form .ud-form-group input[type="password"],
+  .ud-login .ud-login-form .ud-form-group input[type="text"] {
+    height: 48px;
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+
+  .ud-login .ud-login-form .ud-main-btn.w-100,
+  .ud-login .ud-login-form button[type="submit"].ud-main-btn {
+    min-height: 48px;
+    font-size: 15px;
+  }
 }
 /*===========================
   COMMON css 
@@ -169,22 +229,24 @@ p {
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
-  border-radius: 5px;
-  padding: 15px 25px;
+  border-radius: 12px;
+  padding: 14px 30px;
   border: 1px solid transparent;
   color: var(--white);
   cursor: pointer;
   z-index: 5;
-  -webkit-transition: all 0.4s ease-out 0s;
-  transition: all 0.4s ease-out 0s;
+  transition: all 0.3s ease;
   background: var(--primary-color);
+  box-shadow: 0 4px 15px rgba(48, 86, 211, 0.3);
 }
 
 .ud-main-btn:hover {
   color: var(--white);
-  background: var(--heading-color);
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(48, 86, 211, 0.4);
 }
 
 @media (max-width: 767px) {
@@ -3806,8 +3868,9 @@ p {
 
 .ud-banner-content {
   text-align: center;
-  max-width: 600px;
-  margin: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .ud-banner-content h1 {
@@ -3828,8 +3891,15 @@ p {
   background: var(--white);
   text-align: center;
   padding: 60px;
-  -webkit-box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.05);
-          box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(48, 86, 211, 0.08);
+  border: 1px solid rgba(48, 86, 211, 0.08);
+  transition: all 0.3s ease;
+}
+
+.ud-login-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(48, 86, 211, 0.12);
 }
 
 .ud-login-wrapper .ud-login-logo {
@@ -3842,15 +3912,21 @@ p {
 
 .ud-login-form .ud-form-group input {
   width: 100%;
-  border: 2px solid #dddddd;
-  border-radius: 4px;
-  padding: 12px 24px;
-  background: #fcfdfe;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  background: #f8fafc;
   color: var(--body-color);
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
 .ud-login-form .ud-form-group input:focus {
   border-color: var(--primary-color);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.1);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .ud-socials-connect {
