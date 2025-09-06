@@ -17,14 +17,42 @@ dotenv.config();
 
 const app = express();
 
-// CORS
+// CORS Configuration
 const allowedOrigins = [
+  // Development origins
   'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:8080',
+  'http://localhost:8000',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
+  'http://127.0.0.1:8080',
+  'http://127.0.0.1:8000',
+  // Production origins
   process.env.FRONTEND_URL || 'https://finance-tracker-six-iota.vercel.app'
 ].filter(Boolean);
 
+// CORS middleware with environment-based configuration
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In development, allow all localhost origins
+    if (process.env.NODE_ENV !== 'production') {
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+    }
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Reject origin
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use(express.json());
