@@ -1,3 +1,4 @@
+
 class SubscriptionManagerClass {
   constructor() {
     this.baseURL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -247,68 +248,39 @@ class SubscriptionManagerClass {
         hashParams = new URLSearchParams(hashPart);
       }
       
-      const checkout = urlParams.get('checkout') || hashParams.get('checkout');
-      const section = urlParams.get('section') || hashParams.get('section');
-      
-      console.log('🔍 Checking URL params:', { 
-        search: window.location.search,
-        hash: window.location.hash,
-        hashPart: window.location.hash.split('?')[1] || 'none',
-        searchCheckout: urlParams.get('checkout'),
-        hashCheckout: hashParams.get('checkout'),
-        checkout: checkout,
-        section: section,
-        fullUrl: window.location.href 
-      });
-      
-      if (checkout === 'success') {
-        console.log('✅ Checkout success detected, calling handleCheckoutSuccess...');
-        await this.handleCheckoutSuccess();
-      } else if (checkout === 'cancel') {
-        console.log('❌ Checkout cancel detected, calling handleCheckoutCancel...');
-        this.handleCheckoutCancel();
-      } else {
-        console.log('ℹ️ No checkout parameter found');
-      }
+    const checkout = urlParams.get('checkout') || hashParams.get('checkout');
+    const section = urlParams.get('section') || hashParams.get('section');
+    
+    if (checkout === 'success') {
+      await this.handleCheckoutSuccess();
+    } else if (checkout === 'cancel') {
+      this.handleCheckoutCancel();
+    }
     } catch (error) {
-      console.error('💥 Error checking checkout params:', error);
+      console.error('Error checking checkout params:', error);
     }
     
-    // Debug: Check what elements we can find
-    console.log('🔍 Looking for subscription section elements...');
     const subscriptionSection = document.getElementById('subscription');
-    console.log('📱 Subscription section found:', !!subscriptionSection);
-    if (subscriptionSection) {
-      console.log('📱 Subscription section display:', subscriptionSection.style.display);
-      console.log('📱 Subscription section classes:', subscriptionSection.className);
-    }
-    
     const dashboardCard = document.querySelector('#subscription .dashboard-card');
-    console.log('🎴 Dashboard card found:', !!dashboardCard);
     
     if (!dashboardCard) {
-      console.error('❌ Could not find subscription dashboard card!');
+      console.error('Could not find subscription dashboard card!');
       return;
     }
     
-    console.log('🎨 Rendering subscription plans...');
     const body = document.createElement('div');
     body.innerHTML = this.getCardsHtml();
     
-    // Keep header; replace content under header
+    // Keep header; replace content under header (including loading state)
     const elementsToRemove = dashboardCard.querySelectorAll(':scope > *:not(.card-header)');
-    console.log('🗑️ Removing', elementsToRemove.length, 'elements from dashboard card');
     elementsToRemove.forEach(el => el.remove());
     
     dashboardCard.appendChild(body);
     this.attachHandlers(dashboardCard);
-    console.log('✅ Subscription plans rendered successfully');
   }
 
   async handleCheckoutSuccess() {
-    console.log('🎉 handleCheckoutSuccess called');
     const selectedPlan = localStorage.getItem('selectedPlan');
-    console.log('📋 Selected plan from localStorage:', selectedPlan);
     
     // Clean up
     localStorage.removeItem('selectedPlan');
@@ -317,22 +289,18 @@ class SubscriptionManagerClass {
     window.history.replaceState({}, document.title, cleanUrl);
     
     if (selectedPlan && selectedPlan !== 'free') {
-      console.log('🎉 Payment successful! Subscription activation via webhook in progress...');
       (window.__notify || showNotification)('🎉 Payment successful! Your subscription is being activated via webhook.', 'success');
       
       // Wait for webhook to process, then refresh data
       setTimeout(async () => {
-        console.log('⏰ Refreshing subscription data after webhook delay...');
         try {
           await this.fetchSub();
           await this.render();
-          console.log('✅ Subscription data refreshed after webhook');
         } catch (error) {
-          console.error('❌ Error refreshing subscription data:', error);
+          console.error('Error refreshing subscription data:', error);
         }
       }, 3000); // 3 second delay to allow webhook processing
     } else {
-      console.log('⚠️ No valid plan found in localStorage:', selectedPlan);
       (window.__notify || showNotification)('Payment successful!', 'success');
     }
   }
