@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-finance-client
+  namespace: ai-finance-tracker
+  labels:
+    app: ai-finance-client
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ai-finance-client
+  template:
+    metadata:
+      labels:
+        app: ai-finance-client
+        version: v1
+    spec:
+      containers:
+      - name: client
+        image: ghcr.io/your-username/ai-finance-tracker-client:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
