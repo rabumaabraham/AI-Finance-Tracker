@@ -97,7 +97,7 @@ npm run dev
 3. Set start command: `npm start`
 4. Deploy
 
-## Contributing
+## Contribution
 
 Contributions are welcome! Please follow these steps:
 
