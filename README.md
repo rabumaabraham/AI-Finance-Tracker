@@ -1,5 +1,8 @@
 # AI Finance Tracker
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![version](https://img.shields.io/badge/version-1.0-blue)
+
 An intelligent personal finance management application with AI-powered insights, real-time bank connections, and smart budgeting tools.
 
 ## Features
