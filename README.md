@@ -3,7 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![version](https://img.shields.io/badge/version-1.0-blue)
 
-AI Finance Tracker is a personal finance management application that combines modern web technologies with AI to provide intelligent insights, automated transaction categorization, and real-time banking integration.
+AI Finance Tracker is a personal finance management app that helps users stay in control of their money. It connects securely to bank account, imports transactions, and categorizes them automatically. Users can set budgets, get alerts, and view spending insights through clear analytics. An integrated AI assistant provides personalized financial advice, while Stripe handles premium subscriptions. All data is protected with secure authentication and encryption.
+
 
 ## Table of Contents
 1. [Features](#features)
@@ -11,9 +12,7 @@ AI Finance Tracker is a personal finance management application that combines mo
 3. [Tech Stack](#tech-stack)
 4. [Installation](#Installation)
 5. [API Reference](#api-reference)
-6. [Deployment](#deployment)
-7. [Contribution](#Contributing)
-8. [License](#license)
+
 
 ## Features
 
@@ -23,22 +22,34 @@ AI Finance Tracker is a personal finance management application that combines mo
 - **Analytics** - Visual spending insights and transaction categorization
 - **Stripe Subscriptions** – Manage premium features and billing
 - **Secure** - JWT authentication with password hashing
+  
 
 ##  Live Demo
 
 - Frontend: [click here](https://finance-tracker-six-iota.vercel.app)
 - Backend: [click here](https://finance-tracker-tlss.onrender.com)
+  
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|------------|
-| **Frontend** | HTML5, CSS3, JavaScript, Bootstrap |
-| **Backend** | Node.js, Express.js, MongoDB |
-| **AI** | OpenRouter API |
-| **Banking** | Nordigen API |
-| **Payments** | Stripe |
-| **Deployment** | Vercel + Render |
+### Frontend
+- **HTML5** - Semantic markup and modern web standards
+- **CSS3** - Responsive design with Bootstrap framework
+- **Vanilla JavaScript** - Interactive user interface and API integration
+- **Bootstrap** - Mobile-first responsive design system
+
+### Backend
+- **Node.js** - JavaScript runtime for server-side development
+- **Express.js** - Fast, unopinionated web framework
+- **MongoDB** - NoSQL database for flexible data storage
+- **JWT** - Secure authentication and authorization
+
+### External Services
+- **OpenRouter API** - AI-powered financial insights and chat functionality
+- **Nordigen API** - European banking integration and transaction data
+- **Stripe** - Payment processing and subscription management
+- **Gmail SMTP** - Email notifications and alerts
+  
 
 ## Installation
 
@@ -64,25 +75,34 @@ npm run dev
 - OpenRouter API (AI features)
 - Stripe (payments)
 - Gmail SMTP (notifications)
+  
 
 ## API Reference
 
 **Base URL:** `https://finance-tracker-tlss.onrender.com`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Register new user |
-| POST | `/api/auth/login` | User login |
-| GET | `/api/auth/me` | Get user profile |
-| GET | `/api/nordigen/connect-bank` | Connect bank account |
-| GET | `/api/nordigen/connected-banks` | Get connected accounts |
-| GET | `/api/nordigen/transactions/:id` | Get transactions |
-| GET | `/api/analytics/combined` | Get financial overview |
-| GET | `/api/analytics/bank/:id` | Get bank analytics |
-| GET | `/api/budgets` | Get user budgets |
-| POST | `/api/budgets` | Create budget |
-| DELETE | `/api/budgets/:id` | Delete budget |
-| POST | `/api/ai-chat` | Send message to AI |
+### Authentication Endpoints
+- **POST** `/api/auth/signup` - Register a new user account
+- **POST** `/api/auth/login` - Authenticate user and return JWT token
+- **GET** `/api/auth/me` - Get current user profile information
+
+### Banking Integration
+- **GET** `/api/nordigen/connect-bank` - Initiate bank account connection process
+- **GET** `/api/nordigen/connected-banks` - Retrieve all connected bank accounts
+- **GET** `/api/nordigen/transactions/:id` - Fetch transactions for specific bank account
+
+### Analytics & Insights
+- **GET** `/api/analytics/combined` - Get comprehensive financial overview
+- **GET** `/api/analytics/bank/:id` - Retrieve analytics for specific bank account
+
+### Budget Management
+- **GET** `/api/budgets` - Fetch all user budgets
+- **POST** `/api/budgets` - Create a new budget with spending limits
+- **DELETE** `/api/budgets/:id` - Remove a specific budget
+
+### AI Assistant
+- **POST** `/api/ai-chat` - Send message to AI for financial advice and insights
+  
 
 ## Deployment
 
@@ -97,6 +117,7 @@ npm run dev
 3. Set start command: `npm start`
 4. Deploy
 
+
 ## Contribution
 
 Contributions are welcome! Please follow these steps:
@@ -106,10 +127,12 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes: `git commit -m 'Add example feature'`
 4. Push to the branch: `git push origin feature/example-feature`
 5. Open a Pull Request
+   
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
+
 
 ## Support
 
