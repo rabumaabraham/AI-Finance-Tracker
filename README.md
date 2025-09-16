@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![version](https://img.shields.io/badge/version-1.0-blue)
 
-AI Finance Tracker is a personal finance management app that helps users stay in control of their money. It connects securely to bank account, imports transactions, and categorizes them automatically. Users can set budgets, get alerts, and view spending insights through clear analytics. An integrated AI assistant provides personalized financial advice, while Stripe handles premium subscriptions. All data is protected with secure authentication and encryption.
+AI Finance Tracker is a full-stack personal finance management app that helps users take control of their finances with intelligent automation and secure integrations. It connects to European banks through Nordigen, automatically fetches transactions, and uses AI to categorize spending in real time. Users can set budgets, receive instant alerts, and analyze top spending categories through clear visual reports. The built-in AI assistant offers personalized financial guidance, while premium features and billing are managed securely via Stripe. Access is fully protected with JWT authentication and password hashing, ensuring both functionality and security.
 
 
 ## Table of Contents
