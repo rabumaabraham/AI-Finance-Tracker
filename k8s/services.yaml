@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-finance-server-service
+  namespace: ai-finance-tracker
+  labels:
+    app: ai-finance-server
+spec:
+  selector:
+    app: ai-finance-server
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-finance-client-service
+  namespace: ai-finance-tracker
+  labels:
+    app: ai-finance-client
+spec:
+  selector:
+    app: ai-finance-client
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
