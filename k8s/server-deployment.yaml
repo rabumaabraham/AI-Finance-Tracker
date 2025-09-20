@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-finance-server
+  namespace: ai-finance-tracker
+  labels:
+    app: ai-finance-server
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ai-finance-server
+  template:
+    metadata:
+      labels:
+        app: ai-finance-server
+        version: v1
+    spec:
+      containers:
+      - name: server
+        image: ghcr.io/your-username/ai-finance-tracker-server:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "5000"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: mongo-uri
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: jwt-secret
+        - name: NORDIGEN_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: nordigen-secret-id
+        - name: NORDIGEN_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: nordigen-secret-key
+        - name: NORDIGEN_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: nordigen-access-token
+        - name: OPENROUTER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: openrouter-api-key
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: stripe-secret-key
+        - name: STRIPE_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: stripe-webhook-secret
+        - name: STRIPE_PRICE_PRO_MONTHLY
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: stripe-price-pro-monthly
+        - name: STRIPE_PRICE_PRO_YEARLY
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: stripe-price-pro-yearly
+        - name: EMAIL_USER
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: email-user
+        - name: EMAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-finance-secrets
+              key: email-password
+        - name: FRONTEND_URL
+          value: "https://your-domain.com"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /test
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /test
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
