@@ -1,13 +1,13 @@
 /* Enhanced Mobile-friendly auth inputs - Professional styling */
 @media (max-width: 767px) {
   .ud-login-wrapper {
-    padding: 40px 30px;
-    border-radius: 16px;
+    padding: 30px 20px;
+    border-radius: 12px;
     max-width: 100% !important;
     width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    box-shadow: 0 8px 32px rgba(48, 86, 211, 0.08);
+    box-shadow: 0 8px 30px rgba(48, 86, 211, 0.08);
   }
 
   .ud-login .ud-login-form .ud-form-group {
@@ -19,10 +19,11 @@
   .ud-login .ud-login-form .ud-form-group input[type="text"] {
     height: 50px;
     font-size: 16px;
-    padding: 14px 18px;
+    padding: 12px 16px;
     border-radius: 12px;
     border: 2px solid #e2e8f0;
-    background: #f8fafc;
+    background: var(--white);
+    color: var(--heading-color);
     transition: all 0.3s ease;
   }
 
@@ -35,11 +36,11 @@
 
   .ud-login .ud-login-form .ud-main-btn.w-100,
   .ud-login .ud-login-form button[type="submit"].ud-main-btn {
-    min-height: 52px;
+    min-height: 50px;
     font-size: 16px;
     font-weight: 600;
     border-radius: 12px;
-    padding: 14px 24px;
+    padding: 12px 20px;
     transition: all 0.3s ease;
   }
 
@@ -76,8 +77,8 @@
 
 @media (max-width: 575px) {
   .ud-login-wrapper {
-    padding: 30px 20px;
-    margin: 0 10px;
+    padding: 24px 16px;
+    margin: 0 8px;
   }
 
   .ud-login .ud-login-form .ud-form-group input[type="email"],
@@ -85,7 +86,7 @@
   .ud-login .ud-login-form .ud-form-group input[type="text"] {
     height: 48px;
     font-size: 15px;
-    padding: 12px 16px;
+    padding: 10px 14px;
   }
 
   .ud-login .ud-login-form .ud-main-btn.w-100,
@@ -3933,7 +3934,7 @@ p {
 .ud-login {
   padding-top: 80px;
   padding-bottom: 80px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: #f8fafc;
   min-height: 100vh;
 }
 
@@ -3942,28 +3943,16 @@ p {
   margin: auto;
   background: var(--white);
   text-align: center;
-  padding: 60px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(48, 86, 211, 0.08);
-  border: 1px solid rgba(48, 86, 211, 0.1);
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(48, 86, 211, 0.08);
+  border: 1px solid rgba(48, 86, 211, 0.08);
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.ud-login-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #3056d3, #1e40af, #3056d3);
 }
 
 .ud-login-wrapper:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15), 0 16px 48px rgba(48, 86, 211, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(48, 86, 211, 0.15);
 }
 
 .ud-login-wrapper .ud-login-logo {
@@ -3979,9 +3968,9 @@ p {
   width: 100%;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  padding: 18px 20px;
-  background: #f8fafc;
-  color: #1e293b;
+  padding: 14px 20px;
+  background: var(--white);
+  color: var(--heading-color);
   font-size: 16px;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -3990,13 +3979,13 @@ p {
 .ud-login-form .ud-form-group input:focus {
   border-color: var(--primary-color);
   background: var(--white);
-  box-shadow: 0 0 0 4px rgba(48, 86, 211, 0.1);
+  box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.1);
   transform: translateY(-1px);
   outline: none;
 }
 
 .ud-login-form .ud-form-group input::placeholder {
-  color: #64748b;
+  color: #9ca3af;
   font-weight: 400;
 }
 

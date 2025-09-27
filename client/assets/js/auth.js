@@ -105,32 +105,24 @@ class AuthService {
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `bank-notification bank-notification-${type === 'error' ? 'error' : 'success'}`;
-        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 380px; max-width: 420px; padding: 24px; border-radius: 8px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); transform: translateX(100%); transition: all 0.3s ease; font-family: "Inter", sans-serif;';
+        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 350px; padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); transform: translateX(100%); transition: all 0.3s ease; font-family: "Inter", sans-serif;';
         
         // Set background and text colors based on type
         if (type === 'error') {
             notification.style.background = '#ffffff';
-            notification.style.border = '1px solid #dc2626';
+            notification.style.border = '1px solid #ef4444';
             notification.style.color = '#374151';
         } else {
             notification.style.background = '#ffffff';
-            notification.style.border = '1px solid #059669';
+            notification.style.border = '1px solid #10b981';
             notification.style.color = '#374151';
         }
         
-        // Add professional message structure
-        const title = type === 'error' ? 'Authentication Failed' : 'Authentication Complete';
-        const iconColor = type === 'error' ? '#dc2626' : '#059669';
-        
+        // Simple message without icons or titles
         notification.innerHTML = `
-            <div style="display: flex; align-items: flex-start; gap: 16px;">
-                <div style="width: 20px; height: 20px; border-radius: 50%; background: ${iconColor}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
-                    <div style="width: 8px; height: 8px; border-radius: 50%; background: white;"></div>
-                </div>
-                <div style="flex: 1;">
-                    <div style="font-size: 14px; line-height: 1.5; color: #6b7280;">${message}</div>
-                </div>
-                <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #9ca3af; padding: 4px; line-height: 1;">×</button>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="font-size: 14px; font-weight: 500; color: #374151;">${message}</div>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #9ca3af; padding: 0; margin-left: 12px;">×</button>
             </div>
         `;
 
@@ -142,7 +134,7 @@ class AuthService {
             notification.style.transform = 'translateX(0)';
         }, 100);
 
-        // Auto remove after 4 seconds
+        // Auto remove after 3 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.style.transform = 'translateX(100%)';
@@ -152,7 +144,7 @@ class AuthService {
                     }
                 }, 300);
             }
-        }, 4000);
+        }, 3000);
     }
 
     // Show loading state
