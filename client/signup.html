@@ -270,13 +270,13 @@
             password 
           });
           
-                     // Show success message
-           authService.showNotification('Account created successfully! Please login to continue.', 'success');
-           
-           // Redirect to login page after a short delay
-           setTimeout(() => {
-             window.location.href = 'login.html';
-           }, 1500);
+          // Show success message
+          authService.showNotification('Account created. Please sign in.', 'success');
+          
+          // Redirect to login page after a short delay
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
           
         } catch (error) {
           authService.showNotification(error.message, 'error');

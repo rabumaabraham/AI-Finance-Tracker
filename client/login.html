@@ -347,12 +347,12 @@
           await authService.login({ email, password });
           
           // Show success message
-          authService.showNotification('Login successful! Redirecting to dashboard...', 'success');
+          authService.showNotification('Signed in. Redirecting...', 'success');
           
           // Redirect to dashboard after a short delay
           setTimeout(() => {
             window.location.href = 'dashboard.html';
-          }, 1500);
+          }, 2000);
           
         } catch (error) {
           authService.showNotification(error.message, 'error');
@@ -426,12 +426,14 @@
           });
           
           if (response.ok) {
-            document.getElementById('resetStatus').textContent = 'Reset code sent to your email.';
-            document.getElementById('resetStatus').style.color = '#28a745';
+            document.getElementById('resetStatus').textContent = 'Security code sent to your registered email address.';
+            document.getElementById('resetStatus').style.color = '#166534';
+            document.getElementById('resetStatus').style.fontWeight = '500';
             document.getElementById('resetCodeSection').style.display = 'block';
           } else {
-            document.getElementById('resetStatus').textContent = 'Failed to send reset code. Please try again.';
-            document.getElementById('resetStatus').style.color = '#dc3545';
+            document.getElementById('resetStatus').textContent = 'Unable to send security code. Please verify your email address and try again.';
+            document.getElementById('resetStatus').style.color = '#991b1b';
+            document.getElementById('resetStatus').style.fontWeight = '500';
           }
         } catch (error) {
           document.getElementById('resetStatus').textContent = 'Failed to send reset code. Please try again.';
@@ -471,8 +473,9 @@
           });
           
           if (response.ok) {
-            document.getElementById('resetStatus').textContent = 'Password updated successfully! You can now login with your new password.';
-            document.getElementById('resetStatus').style.color = '#28a745';
+            document.getElementById('resetStatus').textContent = 'Password updated successfully! You can now sign in with your new password.';
+            document.getElementById('resetStatus').style.color = '#166534';
+            document.getElementById('resetStatus').style.fontWeight = '500';
             setTimeout(() => {
               showLoginForm();
             }, 2000);

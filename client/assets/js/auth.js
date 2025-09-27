@@ -104,29 +104,72 @@ class AuthService {
     showNotification(message, type = 'success') {
         // Create notification element
         const notification = document.createElement('div');
-        notification.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed`;
-        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.className = `bank-notification bank-notification-${type === 'error' ? 'error' : 'success'}`;
+        notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 380px; max-width: 420px; padding: 24px; border-radius: 8px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); transform: translateX(100%); transition: all 0.3s ease; font-family: "Inter", sans-serif;';
+        
+        // Set background and text colors based on type
+        if (type === 'error') {
+            notification.style.background = '#ffffff';
+            notification.style.border = '1px solid #dc2626';
+            notification.style.color = '#374151';
+        } else {
+            notification.style.background = '#ffffff';
+            notification.style.border = '1px solid #059669';
+            notification.style.color = '#374151';
+        }
+        
+        // Add professional message structure
+        const title = type === 'error' ? 'Authentication Failed' : 'Authentication Complete';
+        const iconColor = type === 'error' ? '#dc2626' : '#059669';
+        
         notification.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: ${iconColor}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background: white;"></div>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-size: 14px; line-height: 1.5; color: #6b7280;">${message}</div>
+                </div>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #9ca3af; padding: 4px; line-height: 1;">×</button>
+            </div>
         `;
 
         // Add to page
         document.body.appendChild(notification);
 
-        // Auto remove after 5 seconds
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Auto remove after 4 seconds
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.remove();
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
             }
-        }, 5000);
+        }, 4000);
     }
 
     // Show loading state
     showLoading(button) {
         const originalText = button.innerHTML;
-        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+        button.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; gap: 8px;"><div style="width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite;"></div>Processing...</div>';
         button.disabled = true;
+        button.style.opacity = '0.8';
+        
+        // Add CSS animation if not already present
+        if (!document.getElementById('loading-animation')) {
+            const style = document.createElement('style');
+            style.id = 'loading-animation';
+            style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+            document.head.appendChild(style);
+        }
+        
         return originalText;
     }
 
@@ -134,6 +177,7 @@ class AuthService {
     hideLoading(button, originalText) {
         button.innerHTML = originalText;
         button.disabled = false;
+        button.style.opacity = '1';
     }
 }
 
