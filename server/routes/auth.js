@@ -30,19 +30,24 @@ router.post('/signup',
       user = new User({ name, email, password: hashedPassword });
       await user.save();
 
-      // Send welcome email to new user
-      try {
-        await sendWelcomeEmail(name, email);
-        console.log(`✅ Welcome email sent to new user: ${email}`);
-      } catch (emailError) {
-        console.error('⚠️ Failed to send welcome email:', emailError);
-        // Don't fail the signup if email fails
-      }
+      // Send welcome email to new user (asynchronously - don't block response)
+      sendWelcomeEmail(name, email)
+        .then(() => {
+          console.log(`✅ Welcome email sent to new user: ${email}`);
+        })
+        .catch((emailError) => {
+          console.error('⚠️ Failed to send welcome email:', emailError);
+          // Email failure doesn't affect signup success
+        });
 
-      // Don't return token on signup - user must login separately
+      // Return success immediately - don't wait for email
       res.json({ message: 'User registered successfully' });
     } catch (err) {
-      res.status(500).json({ message: 'Server error' });
+      console.error('Signup error:', err);
+      res.status(500).json({ 
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+      });
     }
   }
 );

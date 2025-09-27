@@ -14,7 +14,15 @@ const createTransporter = () => {
         secure: false,
         tls: {
             rejectUnauthorized: false
-        }
+        },
+        // Add timeout configuration for production reliability
+        connectionTimeout: 10000, // 10 seconds
+        greetingTimeout: 5000,    // 5 seconds
+        socketTimeout: 15000,     // 15 seconds
+        // Pool connections for better performance
+        pool: true,
+        maxConnections: 5,
+        maxMessages: 100
     });
 };
 
@@ -408,11 +416,25 @@ export const sendBudgetAlerts = async (alerts) => {
 // Send welcome email for new user signups
 export const sendWelcomeEmail = async (userName, email) => {
     try {
+        // Validate email configuration
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+            console.error('❌ Email configuration missing - EMAIL_USER or EMAIL_PASSWORD not set');
+            return false;
+        }
+
         // Create email content
         const emailContent = createWelcomeEmail(userName, email);
         
-        // Create transporter
+        // Create transporter with timeout
         const transporter = createTransporter();
+        
+        // Verify connection first (with timeout)
+        await Promise.race([
+            transporter.verify(),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Email service connection timeout')), 10000)
+            )
+        ]);
         
         // Send email
         const mailOptions = {
@@ -422,13 +444,18 @@ export const sendWelcomeEmail = async (userName, email) => {
             html: emailContent.html
         };
 
-        const result = await transporter.sendMail(mailOptions);
+        const result = await Promise.race([
+            transporter.sendMail(mailOptions),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Email sending timeout')), 15000)
+            )
+        ]);
         
         console.log(`✅ Welcome email sent successfully to ${email}`);
         return true;
         
     } catch (error) {
-        console.error('❌ Error sending welcome email:', error);
+        console.error('❌ Error sending welcome email:', error.message || error);
         return false;
     }
 };
