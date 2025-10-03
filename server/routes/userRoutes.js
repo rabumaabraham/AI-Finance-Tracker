@@ -40,7 +40,7 @@ router.post('/password/forgot', async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(200).json({ message: 'If that email exists, a reset link has been sent' });
+    if (!user) return res.status(200).json({ message: 'Password reset request received' });
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     user.passwordResetToken = code;
@@ -104,7 +104,7 @@ router.post('/password/forgot', async (req, res) => {
     console.log(`📧 Resend email ID: ${result.data.id}`);
 
     const isProd = process.env.NODE_ENV === 'production';
-    res.json(isProd ? { message: 'Reset code sent' } : { message: 'Reset code sent', code });
+    res.json(isProd ? { message: 'Password reset code sent to your email' } : { message: 'Password reset code sent to your email', code });
     
   } catch (error) {
     console.error('❌ Error sending password reset email:', error.message || error);
