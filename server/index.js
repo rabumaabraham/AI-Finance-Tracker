@@ -94,7 +94,7 @@ app.get("/test-resend", async (req, res) => {
         
         // Test sending a simple email
         const result = await resend.emails.send({
-            from: 'AI Finance Tracker <noreply@resend.dev>',
+            from: 'AI Finance Tracker <noreply@seenoai.com>',
             to: [process.env.EMAIL_USER || 'test@example.com'],
             subject: '🧪 Resend Test Email',
             html: '<h1>Resend is working!</h1><p>This is a test email from your AI Finance Tracker.</p>'

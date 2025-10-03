@@ -361,7 +361,7 @@ export const sendBudgetAlertEmail = async (userId, category, spent, limit, perce
         // Send email using Resend
         console.log('📤 Sending budget alert via Resend API...');
         const result = await resend.emails.send({
-            from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
+            from: 'AI Finance Tracker <noreply@seenoai.com>', // Use your verified domain
             to: [user.email],
             subject: emailContent.subject,
             html: emailContent.html
@@ -417,7 +417,7 @@ export const sendWelcomeEmail = async (userName, email) => {
         // Send email using Resend
         console.log('📤 Sending email via Resend API...');
         const result = await resend.emails.send({
-            from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
+            from: 'AI Finance Tracker <noreply@seenoai.com>', // Use your verified domain
             to: [email],
             subject: emailContent.subject,
             html: emailContent.html
