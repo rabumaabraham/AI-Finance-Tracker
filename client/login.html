@@ -426,12 +426,18 @@
           });
           
           if (response.ok) {
-            document.getElementById('resetStatus').textContent = 'Security code sent to your registered email address.';
+            const data = await response.json();
+            document.getElementById('resetStatus').textContent = data.message;
             document.getElementById('resetStatus').style.color = '#166534';
             document.getElementById('resetStatus').style.fontWeight = '500';
-            document.getElementById('resetCodeSection').style.display = 'block';
+            
+            // Only show code section if email was actually sent (contains "sent to your email")
+            if (data.message.includes('sent to your email')) {
+              document.getElementById('resetCodeSection').style.display = 'block';
+            }
           } else {
-            document.getElementById('resetStatus').textContent = 'Unable to send security code. Please verify your email address and try again.';
+            const data = await response.json();
+            document.getElementById('resetStatus').textContent = data.message || 'Unable to send security code. Please verify your email address and try again.';
             document.getElementById('resetStatus').style.color = '#991b1b';
             document.getElementById('resetStatus').style.fontWeight = '500';
           }

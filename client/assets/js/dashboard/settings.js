@@ -97,7 +97,13 @@ class SettingsManager {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
-      if (this.resetStatusEl) this.resetStatusEl.textContent = res.ok ? 'Reset code sent to your email.' : 'Failed to send reset code.';
+      if (res.ok) {
+        const data = await res.json();
+        if (this.resetStatusEl) this.resetStatusEl.textContent = data.message;
+      } else {
+        const data = await res.json();
+        if (this.resetStatusEl) this.resetStatusEl.textContent = data.message || 'Failed to send reset code.';
+      }
     } catch (e) {
       if (this.resetStatusEl) this.resetStatusEl.textContent = 'Failed to send reset code.';
     }
