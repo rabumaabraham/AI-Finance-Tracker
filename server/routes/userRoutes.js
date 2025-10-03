@@ -59,10 +59,10 @@ router.post('/password/forgot', async (req, res) => {
       subject: 'Your password reset code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #3056d3 0%, #4f46e5 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="margin: 0; font-size: 2rem;">🔐 Password Reset</h1>
-            <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
-          </div>
+            <div style="background: linear-gradient(135deg, #3056d3 0%, #4f46e5 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+              <h1 style="margin: 0; font-size: 2rem;">Password Reset</h1>
+              <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
+            </div>
           
           <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
             <h2 style="color: #3056d3; margin-bottom: 20px;">Hello ${user.name},</h2>
@@ -75,7 +75,7 @@ router.post('/password/forgot', async (req, res) => {
             </div>
             
             <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <p style="margin: 0; color: #856404; font-weight: 600;">⏰ This code expires in 10 minutes</p>
+              <p style="margin: 0; color: #856404; font-weight: 600;">This code expires in 10 minutes</p>
             </div>
             
             <p style="color: #666; font-size: 0.9rem; margin-top: 25px;">
@@ -151,10 +151,10 @@ router.post('/account/delete/request', verifyToken, async (req, res) => {
       subject: 'Your account deletion code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="margin: 0; font-size: 2rem;">🗑️ Account Deletion</h1>
-            <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
-          </div>
+            <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+              <h1 style="margin: 0; font-size: 2rem;">Account Deletion</h1>
+              <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
+            </div>
           
           <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
             <h2 style="color: #dc3545; margin-bottom: 20px;">Hello ${user.name},</h2>
@@ -167,11 +167,11 @@ router.post('/account/delete/request', verifyToken, async (req, res) => {
             </div>
             
             <div style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <p style="margin: 0; color: #721c24; font-weight: 600;">⚠️ This action cannot be undone. All your data will be permanently deleted.</p>
+              <p style="margin: 0; color: #721c24; font-weight: 600;">This action cannot be undone. All your data will be permanently deleted.</p>
             </div>
             
             <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <p style="margin: 0; color: #856404; font-weight: 600;">⏰ This code expires in 10 minutes</p>
+              <p style="margin: 0; color: #856404; font-weight: 600;">This code expires in 10 minutes</p>
             </div>
             
             <p style="color: #666; font-size: 0.9rem; margin-top: 25px;">

@@ -15,8 +15,8 @@ const createResendClient = () => {
 const createBudgetAlertEmail = (userName, category, spent, limit, percentage) => {
     const isExceeded = percentage >= 100;
     const subject = isExceeded 
-        ? `🚨 Budget Limit Exceeded: ${category}` 
-        : `⚠️ Budget Limit Warning: ${category}`;
+        ? `Budget Limit Exceeded: ${category}` 
+        : `Budget Limit Warning: ${category}`;
     
     const statusText = isExceeded ? 'EXCEEDED' : 'WARNING';
     const color = isExceeded ? '#dc3545' : '#ffc107';
@@ -47,7 +47,7 @@ const createBudgetAlertEmail = (userName, category, spent, limit, percentage) =>
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>💰 Personal Finance Tracker</h1>
+                        <h1>Personal Finance Tracker</h1>
                         <p>Budget Alert Notification</p>
                     </div>
                     
@@ -100,7 +100,7 @@ const createBudgetAlertEmail = (userName, category, spent, limit, percentage) =>
 // Welcome email template for new user signups
 const createWelcomeEmail = (userName, email) => {
     return {
-        subject: '🎉 Welcome to AI Finance Tracker - Your Account is Ready!',
+        subject: 'Welcome to AI Finance Tracker - Your Account is Ready',
         html: `
             <!DOCTYPE html>
             <html>
@@ -264,40 +264,40 @@ const createWelcomeEmail = (userName, email) => {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>🎉 Welcome to AI Finance Tracker!</h1>
+                        <h1>Welcome to AI Finance Tracker</h1>
                         <p>Your personal finance management journey starts now</p>
                     </div>
                     
                     <div class="content">
                         <div class="welcome-message">
-                            <h2>Hello ${userName}! 👋</h2>
+                            <h2>Hello ${userName},</h2>
                             <p>Thank you for joining AI Finance Tracker! We're excited to help you take control of your finances with intelligent insights and powerful tools.</p>
                         </div>
                         
                         <div class="features">
-                            <h3>🚀 What You Can Do Now</h3>
+                            <h3>What You Can Do Now</h3>
                             <div class="feature-grid">
                                 <div class="feature-item">
-                                    <div class="feature-icon">🏦</div>
+                                    <div class="feature-icon">•</div>
                                     <div class="feature-text">Connect Bank Accounts</div>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-icon">📊</div>
+                                    <div class="feature-icon">•</div>
                                     <div class="feature-text">Track Spending Analytics</div>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-icon">💰</div>
+                                    <div class="feature-icon">•</div>
                                     <div class="feature-text">Set Budget Limits</div>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-icon">🤖</div>
+                                    <div class="feature-icon">•</div>
                                     <div class="feature-text">Chat with AI Assistant</div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="security-note">
-                            <p>🔒 Your account is secure and your data is protected with industry-standard encryption.</p>
+                            <p>Your account is secure and your data is protected with industry-standard encryption.</p>
                         </div>
                         
                         <div class="cta-section">
