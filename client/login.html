@@ -428,14 +428,12 @@
           if (response.ok) {
             const data = await response.json();
             document.getElementById('resetStatus').textContent = data.message;
+            document.getElementById('resetStatus').style.color = '#166534'; // Always green
             document.getElementById('resetStatus').style.fontWeight = '500';
             
-            // Check if email was actually sent or just processed
-            if (data.message.includes('sent to your email')) {
-              document.getElementById('resetStatus').style.color = '#166534'; // Green for success
+            // Only show code section if email was actually sent (user exists)
+            if (data.message.includes('sent to your email') && data.code) {
               document.getElementById('resetCodeSection').style.display = 'block';
-            } else {
-              document.getElementById('resetStatus').style.color = '#dc3545'; // Red for processed but not sent
             }
           } else {
             const data = await response.json();

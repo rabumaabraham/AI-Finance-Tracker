@@ -101,12 +101,7 @@ class SettingsManager {
         const data = await res.json();
         if (this.resetStatusEl) {
           this.resetStatusEl.textContent = data.message;
-          // Set color based on message content
-          if (data.message.includes('sent to your email')) {
-            this.resetStatusEl.style.color = '#166534'; // Green for success
-          } else {
-            this.resetStatusEl.style.color = '#dc3545'; // Red for processed but not sent
-          }
+          this.resetStatusEl.style.color = '#166534'; // Always green
         }
       } else {
         const data = await res.json();
