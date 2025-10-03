@@ -74,12 +74,19 @@ app.get("/test", (req, res) => {
 // Resend email test endpoint
 app.get("/test-resend", async (req, res) => {
     try {
+        console.log('🧪 Testing Resend configuration...');
+        console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'Set' : 'Not set');
+        
         const { Resend } = await import('resend');
         
         if (!process.env.RESEND_API_KEY) {
             return res.status(500).json({
                 error: 'RESEND_API_KEY not configured',
-                message: 'Please set RESEND_API_KEY environment variable'
+                message: 'Please set RESEND_API_KEY environment variable',
+                debug: {
+                    resendApiKey: process.env.RESEND_API_KEY ? 'Set' : 'Not set',
+                    emailUser: process.env.EMAIL_USER ? 'Set' : 'Not set'
+                }
             });
         }
         
@@ -102,6 +109,7 @@ app.get("/test-resend", async (req, res) => {
         });
         
     } catch (error) {
+        console.error('❌ Resend test error:', error);
         res.status(500).json({
             error: 'Resend test failed',
             message: error.message,

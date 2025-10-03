@@ -394,6 +394,8 @@ export const sendBudgetAlertEmail = async (userId, category, spent, limit, perce
 export const sendWelcomeEmail = async (userName, email) => {
     try {
         console.log(`📧 Attempting to send welcome email to ${email}`);
+        console.log('🔧 Using Resend API (not SMTP)');
+        console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'Set' : 'Not set');
 
         // Create email content
         const emailContent = createWelcomeEmail(userName, email);
