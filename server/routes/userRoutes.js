@@ -40,7 +40,7 @@ router.post('/password/forgot', async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(200).json({ message: 'Password reset request received' });
+    if (!user) return res.status(200).json({ message: 'Password reset request processed' });
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     user.passwordResetToken = code;
