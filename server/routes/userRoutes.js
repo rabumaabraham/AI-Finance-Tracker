@@ -3,16 +3,16 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 const router = express.Router();
 
-const createTransporter = () => nodemailer.createTransport({
-  service: 'gmail',
-  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASSWORD },
-  secure: false,
-  tls: { rejectUnauthorized: false }
-});
+const createResendClient = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is required');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
 // Get current user profile
 router.get('/me', verifyToken, async (req, res) => {
@@ -37,25 +37,79 @@ router.put('/me', verifyToken, async (req, res) => {
 
 // Request password reset: email a 6-digit code
 router.post('/password/forgot', async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(200).json({ message: 'If that email exists, a reset link has been sent' });
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(200).json({ message: 'If that email exists, a reset link has been sent' });
 
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  user.passwordResetToken = code;
-  user.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 10); // 10 min
-  await user.save();
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    user.passwordResetToken = code;
+    user.passwordResetExpires = new Date(Date.now() + 1000 * 60 * 10); // 10 min
+    await user.save();
 
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: `Finance Tracker <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: 'Your password reset code',
-    html: `<p>Use this code to reset your password:</p><h2 style="letter-spacing:3px;">${code}</h2><p>This code expires in 10 minutes.</p>`
-  });
+    console.log(`📧 Sending password reset code to ${email}`);
 
-  const isProd = process.env.NODE_ENV === 'production';
-  res.json(isProd ? { message: 'Reset code sent' } : { message: 'Reset code sent', code });
+    // Create Resend client
+    const resend = createResendClient();
+    
+    // Send password reset email using Resend
+    const result = await resend.emails.send({
+      from: 'AI Finance Tracker <noreply@seenoai.com>',
+      to: [user.email],
+      subject: 'Your password reset code',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #3056d3 0%, #4f46e5 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 2rem;">🔐 Password Reset</h1>
+            <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
+            <h2 style="color: #3056d3; margin-bottom: 20px;">Hello ${user.name},</h2>
+            
+            <p style="font-size: 1.1rem; margin-bottom: 25px;">You requested a password reset for your AI Finance Tracker account.</p>
+            
+            <div style="background: white; border: 2px solid #3056d3; border-radius: 10px; padding: 25px; text-align: center; margin: 25px 0;">
+              <p style="margin: 0 0 15px; font-weight: 600; color: #333;">Your reset code is:</p>
+              <h1 style="margin: 0; font-size: 3rem; letter-spacing: 8px; color: #3056d3; font-family: 'Courier New', monospace;">${code}</h1>
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 0; color: #856404; font-weight: 600;">⏰ This code expires in 10 minutes</p>
+            </div>
+            
+            <p style="color: #666; font-size: 0.9rem; margin-top: 25px;">
+              If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
+            </p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 0.8rem;">
+            <p>© 2024 AI Finance Tracker. All rights reserved.</p>
+          </div>
+        </div>
+      `
+    });
+
+    console.log('📧 Resend API response:', JSON.stringify(result, null, 2));
+    
+    if (result.error) {
+      throw new Error(`Resend API error: ${result.error.message || result.error}`);
+    }
+    
+    if (!result.data || !result.data.id) {
+      throw new Error('Resend API returned no email ID - email may not have been sent');
+    }
+
+    console.log(`✅ Password reset code sent successfully to ${email}`);
+    console.log(`📧 Resend email ID: ${result.data.id}`);
+
+    const isProd = process.env.NODE_ENV === 'production';
+    res.json(isProd ? { message: 'Reset code sent' } : { message: 'Reset code sent', code });
+    
+  } catch (error) {
+    console.error('❌ Error sending password reset email:', error.message || error);
+    res.status(500).json({ message: 'Failed to send reset code. Please try again.' });
+  }
 });
 
 // Reset password with code
@@ -77,23 +131,81 @@ router.post('/password/verify', async (req, res) => {
 
 // Request account deletion (email confirmation)
 router.post('/account/delete/request', verifyToken, async (req, res) => {
-  const user = await User.findById(req.userId);
-  if (!user) return res.status(404).json({ message: 'User not found' });
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  user.accountDeletionToken = code;
-  user.accountDeletionExpires = new Date(Date.now() + 1000 * 60 * 10); // 10 min
-  await user.save();
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    user.accountDeletionToken = code;
+    user.accountDeletionExpires = new Date(Date.now() + 1000 * 60 * 10); // 10 min
+    await user.save();
 
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: `Finance Tracker <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: 'Your account deletion code',
-    html: `<p>Use this code to confirm account deletion:</p><h2 style="letter-spacing:3px;">${code}</h2><p>This code expires in 10 minutes.</p>`
-  });
+    console.log(`📧 Sending account deletion code to ${user.email}`);
 
-  const isProdDel = process.env.NODE_ENV === 'production';
-  res.json(isProdDel ? { message: 'Deletion code sent' } : { message: 'Deletion code sent', code });
+    // Create Resend client
+    const resend = createResendClient();
+    
+    // Send account deletion email using Resend
+    const result = await resend.emails.send({
+      from: 'AI Finance Tracker <noreply@seenoai.com>',
+      to: [user.email],
+      subject: 'Your account deletion code',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+            <h1 style="margin: 0; font-size: 2rem;">🗑️ Account Deletion</h1>
+            <p style="margin: 10px 0 0; opacity: 0.9;">AI Finance Tracker</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
+            <h2 style="color: #dc3545; margin-bottom: 20px;">Hello ${user.name},</h2>
+            
+            <p style="font-size: 1.1rem; margin-bottom: 25px;">You requested to delete your AI Finance Tracker account.</p>
+            
+            <div style="background: white; border: 2px solid #dc3545; border-radius: 10px; padding: 25px; text-align: center; margin: 25px 0;">
+              <p style="margin: 0 0 15px; font-weight: 600; color: #333;">Your deletion code is:</p>
+              <h1 style="margin: 0; font-size: 3rem; letter-spacing: 8px; color: #dc3545; font-family: 'Courier New', monospace;">${code}</h1>
+            </div>
+            
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 0; color: #721c24; font-weight: 600;">⚠️ This action cannot be undone. All your data will be permanently deleted.</p>
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 0; color: #856404; font-weight: 600;">⏰ This code expires in 10 minutes</p>
+            </div>
+            
+            <p style="color: #666; font-size: 0.9rem; margin-top: 25px;">
+              If you didn't request this account deletion, please ignore this email. Your account will remain active.
+            </p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 0.8rem;">
+            <p>© 2024 AI Finance Tracker. All rights reserved.</p>
+          </div>
+        </div>
+      `
+    });
+
+    console.log('📧 Resend API response:', JSON.stringify(result, null, 2));
+    
+    if (result.error) {
+      throw new Error(`Resend API error: ${result.error.message || result.error}`);
+    }
+    
+    if (!result.data || !result.data.id) {
+      throw new Error('Resend API returned no email ID - email may not have been sent');
+    }
+
+    console.log(`✅ Account deletion code sent successfully to ${user.email}`);
+    console.log(`📧 Resend email ID: ${result.data.id}`);
+
+    const isProdDel = process.env.NODE_ENV === 'production';
+    res.json(isProdDel ? { message: 'Deletion code sent' } : { message: 'Deletion code sent', code });
+    
+  } catch (error) {
+    console.error('❌ Error sending account deletion email:', error.message || error);
+    res.status(500).json({ message: 'Failed to send deletion code. Please try again.' });
+  }
 });
 
 // Confirm account deletion
