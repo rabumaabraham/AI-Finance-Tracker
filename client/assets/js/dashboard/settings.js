@@ -99,10 +99,21 @@ class SettingsManager {
       });
       if (res.ok) {
         const data = await res.json();
-        if (this.resetStatusEl) this.resetStatusEl.textContent = data.message;
+        if (this.resetStatusEl) {
+          this.resetStatusEl.textContent = data.message;
+          // Set color based on message content
+          if (data.message.includes('sent to your email')) {
+            this.resetStatusEl.style.color = '#166534'; // Green for success
+          } else {
+            this.resetStatusEl.style.color = '#dc3545'; // Red for processed but not sent
+          }
+        }
       } else {
         const data = await res.json();
-        if (this.resetStatusEl) this.resetStatusEl.textContent = data.message || 'Failed to send reset code.';
+        if (this.resetStatusEl) {
+          this.resetStatusEl.textContent = data.message || 'Failed to send reset code.';
+          this.resetStatusEl.style.color = '#dc3545';
+        }
       }
     } catch (e) {
       if (this.resetStatusEl) this.resetStatusEl.textContent = 'Failed to send reset code.';
