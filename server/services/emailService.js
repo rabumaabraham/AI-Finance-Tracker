@@ -359,6 +359,7 @@ export const sendBudgetAlertEmail = async (userId, category, spent, limit, perce
         const resend = createResendClient();
         
         // Send email using Resend
+        console.log('📤 Sending budget alert via Resend API...');
         const result = await resend.emails.send({
             from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
             to: [user.email],
@@ -366,11 +367,21 @@ export const sendBudgetAlertEmail = async (userId, category, spent, limit, perce
             html: emailContent.html
         });
         
+        console.log('📧 Resend API response:', JSON.stringify(result, null, 2));
+        
+        if (result.error) {
+            throw new Error(`Resend API error: ${result.error.message || result.error}`);
+        }
+        
+        if (!result.data || !result.data.id) {
+            throw new Error('Resend API returned no email ID - email may not have been sent');
+        }
+        
         // Record the notification
         await EmailNotification.recordNotification(userId, category, percentage, type);
         
         console.log(`✅ Budget alert email sent to ${user.email} for ${category}: ${percentage.toFixed(0)}% (${type})`);
-        console.log(`📧 Resend email ID: ${result.data?.id}`);
+        console.log(`📧 Resend email ID: ${result.data.id}`);
         return true;
         
     } catch (error) {
@@ -404,6 +415,7 @@ export const sendWelcomeEmail = async (userName, email) => {
         const resend = createResendClient();
         
         // Send email using Resend
+        console.log('📤 Sending email via Resend API...');
         const result = await resend.emails.send({
             from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
             to: [email],
@@ -411,8 +423,18 @@ export const sendWelcomeEmail = async (userName, email) => {
             html: emailContent.html
         });
         
+        console.log('📧 Resend API response:', JSON.stringify(result, null, 2));
+        
+        if (result.error) {
+            throw new Error(`Resend API error: ${result.error.message || result.error}`);
+        }
+        
+        if (!result.data || !result.data.id) {
+            throw new Error('Resend API returned no email ID - email may not have been sent');
+        }
+        
         console.log(`✅ Welcome email sent successfully to ${email}`);
-        console.log(`📧 Resend email ID: ${result.data?.id}`);
+        console.log(`📧 Resend email ID: ${result.data.id}`);
         return true;
         
     } catch (error) {
