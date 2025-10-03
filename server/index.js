@@ -60,7 +60,7 @@ app.use(express.json());
 app.use(webhookRouter);
 
 // Health check
-app.get("/", (req, res) => res.send("Server running"));
+app.get("/", (req, res) => res.send("Server running - Resend Email Service v2.0"));
 
 // Test endpoint for debugging
 app.get("/test", (req, res) => {
