@@ -138,6 +138,14 @@ router.post('/account/delete/request', verifyToken, async (req, res) => {
     user.accountDeletionToken = code;
     user.accountDeletionExpires = new Date(Date.now() + 1000 * 60 * 10); // 10 min
     await user.save();
+    
+    console.log('🔍 Account deletion code generated:', { 
+      userId: user._id, 
+      email: user.email, 
+      code, 
+      expiresAt: user.accountDeletionExpires,
+      timestamp: new Date().toISOString()
+    });
 
     console.log(`📧 Sending account deletion code to ${user.email}`);
 
@@ -210,12 +218,45 @@ router.post('/account/delete/request', verifyToken, async (req, res) => {
 
 // Confirm account deletion
 router.post('/account/delete/confirm', async (req, res) => {
-  const { code } = req.body;
-  const user = await User.findOne({ accountDeletionToken: code, accountDeletionExpires: { $gt: new Date() } });
-  if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
+  try {
+    const { code } = req.body;
+    console.log('🔍 Account deletion confirmation attempt:', { code, timestamp: new Date().toISOString() });
+    
+    if (!code) {
+      console.log('❌ No code provided');
+      return res.status(400).json({ message: 'Code is required' });
+    }
 
-  await User.findByIdAndDelete(user._id);
-  res.json({ message: 'Account deleted successfully' });
+    // Find user with matching deletion token
+    const user = await User.findOne({ 
+      accountDeletionToken: code, 
+      accountDeletionExpires: { $gt: new Date() } 
+    });
+    
+    console.log('🔍 User lookup result:', { 
+      found: !!user, 
+      userId: user?._id,
+      storedToken: user?.accountDeletionToken,
+      providedCode: code,
+      tokenMatch: user?.accountDeletionToken === code,
+      expiresAt: user?.accountDeletionExpires,
+      isExpired: user?.accountDeletionExpires ? user.accountDeletionExpires <= new Date() : 'no expiry'
+    });
+    
+    if (!user) {
+      console.log('❌ No user found with matching token or token expired');
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    console.log('✅ Valid deletion code, proceeding with account deletion');
+    await User.findByIdAndDelete(user._id);
+    console.log('✅ Account deleted successfully');
+    res.json({ message: 'Account deleted successfully' });
+    
+  } catch (error) {
+    console.error('❌ Error in account deletion confirmation:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 export default router;
