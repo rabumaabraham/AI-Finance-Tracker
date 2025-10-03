@@ -80,6 +80,12 @@ export const getCombinedAnalytics = async (req, res) => {
     );
 
     console.log(`📊 Combined Analytics - User ${req.userId}: ${validTransactions.length} valid transactions`);
+    
+    // Debug: Log transaction details
+    console.log('🔍 Transaction details:');
+    validTransactions.forEach((tx, index) => {
+      console.log(`  ${index + 1}. ${tx.name} - €${tx.amount} - Type: ${tx.type} - Category: ${tx.category} - Date: ${tx.date}`);
+    });
 
     // Calculate analytics
     const analytics = {
@@ -97,10 +103,14 @@ export const getCombinedAnalytics = async (req, res) => {
     validTransactions.forEach(tx => {
       const amount = Math.abs(tx.amount);
       
+      console.log(`🔍 Processing: ${tx.name} - Amount: ${tx.amount} - Type: ${tx.type} - Abs Amount: ${amount}`);
+      
       if (tx.type === 'income') {
         analytics.totalIncome += amount;
+        console.log(`  ✅ Added to income: ${amount}, Total income now: ${analytics.totalIncome}`);
       } else {
         analytics.totalExpenses += amount;
+        console.log(`  ✅ Added to expenses: ${amount}, Total expenses now: ${analytics.totalExpenses}`);
       }
 
       // Category breakdown
@@ -119,6 +129,13 @@ export const getCombinedAnalytics = async (req, res) => {
     });
 
     analytics.netAmount = analytics.totalIncome - analytics.totalExpenses;
+
+    // Debug: Log final analytics summary
+    console.log('📊 Final Analytics Summary:');
+    console.log(`  Total Income: €${analytics.totalIncome}`);
+    console.log(`  Total Expenses: €${analytics.totalExpenses}`);
+    console.log(`  Net Amount: €${analytics.netAmount}`);
+    console.log(`  Transaction Count: ${analytics.transactionCount}`);
 
     // Get top 5 categories
     analytics.topCategories = Object.entries(analytics.categoryBreakdown)

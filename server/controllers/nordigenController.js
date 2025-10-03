@@ -31,7 +31,7 @@ function getFallbackCategory(transactionName, amount) {
   
   // Expense patterns
   if (name.includes('grocery') || name.includes('supermarket') || name.includes('food') || name.includes('restaurant') || name.includes('cafe')) {
-    return 'Food';
+    return 'Groceries';
   }
   if (name.includes('gas') || name.includes('fuel') || name.includes('petrol') || name.includes('transport') || name.includes('bus') || name.includes('train') || name.includes('taxi') || name.includes('uber')) {
     return 'Transport';
