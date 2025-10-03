@@ -79,7 +79,19 @@ export const getCombinedAnalytics = async (req, res) => {
       tx.bankAccountId && tx.bankAccountId.status === 'connected'
     );
 
-    console.log(`📊 Combined Analytics - User ${req.userId}: ${validTransactions.length} valid transactions`);
+    console.log(`📊 Raw transactions found: ${transactions.length}`);
+    console.log(`📊 Valid transactions (connected banks): ${validTransactions.length}`);
+    
+    // Debug: Show which transactions were filtered out
+    const filteredOut = transactions.filter(tx => 
+      !tx.bankAccountId || tx.bankAccountId.status !== 'connected'
+    );
+    if (filteredOut.length > 0) {
+      console.log(`🔍 Filtered out ${filteredOut.length} transactions:`);
+      filteredOut.forEach(tx => {
+        console.log(`  - ${tx.name} - Bank Status: ${tx.bankAccountId?.status || 'No bank account'}`);
+      });
+    }
     
     // Debug: Log transaction details
     console.log('🔍 Transaction details:');

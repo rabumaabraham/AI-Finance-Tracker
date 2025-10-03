@@ -30,7 +30,7 @@ function getFallbackCategory(transactionName, amount) {
   }
   
   // Expense patterns
-  if (name.includes('grocery') || name.includes('supermarket') || name.includes('food') || name.includes('restaurant') || name.includes('cafe')) {
+  if (name.includes('grocery') || name.includes('supermarket') || name.includes('migros') || name.includes('aldi') || name.includes('food') || name.includes('restaurant') || name.includes('cafe')) {
     return 'Groceries';
   }
   if (name.includes('gas') || name.includes('fuel') || name.includes('petrol') || name.includes('transport') || name.includes('bus') || name.includes('train') || name.includes('taxi') || name.includes('uber')) {
@@ -421,6 +421,8 @@ export const getTransactions = async (req, res) => {
           transactionId: tx.internalTransactionId || `tx-${Date.now()}-${Math.random()}`,
           type: parseFloat(tx.transactionAmount.amount) > 0 ? 'income' : 'expense'
         };
+
+        console.log(`🔍 Processing transaction: ${name} - Amount: ${transactionData.amount} - Type: ${transactionData.type} - Category: ${category}`);
 
         // Check if transaction already exists to avoid duplicates
         // Check by multiple fields to be more robust
