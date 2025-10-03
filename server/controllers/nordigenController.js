@@ -401,14 +401,34 @@ export const getTransactions = async (req, res) => {
       try {
         const name = tx.remittanceInformationUnstructured || tx.creditorName || "Unknown";
         
-        // Try to categorize, but don't let it fail the entire process
+        // Try to categorize, but prioritize fallback for specific patterns
         let category = "Uncategorized";
-        try {
-          category = await categorizeWithOpenRouter(name);
-        } catch (catError) {
-          console.warn("⚠️ Categorization failed for transaction:", name, catError.message);
-          // Use simple rule-based categorization as fallback
-          category = getFallbackCategory(name, parseFloat(tx.transactionAmount.amount));
+        
+        // Check for specific patterns first (highest priority)
+        const lowerName = name.toLowerCase();
+        
+        if (lowerName.includes('migros') || lowerName.includes('aldi') || 
+            lowerName.includes('supermarket') || lowerName.includes('grocery') || 
+            lowerName.includes('coop') || lowerName.includes('food')) {
+          category = 'Groceries';
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🏪 Grocery store detected: ${name} -> Groceries`);
+          }
+        } else {
+          // Use AI categorization for other transactions
+          try {
+            category = await categorizeWithOpenRouter(name);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`🤖 AI categorized: ${name} -> ${category}`);
+            }
+          } catch (catError) {
+            console.warn("⚠️ Categorization failed for transaction:", name, catError.message);
+            // Use simple rule-based categorization as fallback
+            category = getFallbackCategory(name, parseFloat(tx.transactionAmount.amount));
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`🔧 Fallback categorized: ${name} -> ${category}`);
+            }
+          }
         }
 
         const transactionData = {
@@ -422,7 +442,9 @@ export const getTransactions = async (req, res) => {
           type: parseFloat(tx.transactionAmount.amount) > 0 ? 'income' : 'expense'
         };
 
-        console.log(`🔍 Processing transaction: ${name} - Amount: ${transactionData.amount} - Type: ${transactionData.type} - Category: ${category}`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`🔍 Processing transaction: ${name} - Amount: ${transactionData.amount} - Type: ${transactionData.type} - Category: ${category}`);
+        }
 
         // Check if transaction already exists to avoid duplicates
         // Check by multiple fields to be more robust
@@ -443,16 +465,24 @@ export const getTransactions = async (req, res) => {
           try {
             const savedTransaction = await Transaction.create(transactionData);
             savedTransactions.push(savedTransaction);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`✅ Transaction saved: ${name} - €${transactionData.amount} - Type: ${transactionData.type} - Category: ${category}`);
+            }
           } catch (duplicateError) {
             if (duplicateError.code === 11000) {
-              console.log('⚠️ Duplicate transaction skipped:', transactionData.name);
+              if (process.env.NODE_ENV === 'development') {
+                console.log(`⚠️ Duplicate transaction skipped: ${name} - €${transactionData.amount} - Type: ${transactionData.type}`);
+              }
               // Skip this transaction, it's already in the database
             } else {
+              console.error(`❌ Failed to save transaction ${name}:`, duplicateError.message);
               throw duplicateError; // Re-throw if it's a different error
             }
           }
         } else {
-          console.log('⚠️ Duplicate transaction found and skipped:', transactionData.name);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`⏭️ Transaction already exists: ${name} - €${transactionData.amount} - Type: ${transactionData.type}`);
+          }
         }
       } catch (txError) {
         console.error("❌ Error processing individual transaction:", txError.message);

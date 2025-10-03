@@ -79,25 +79,10 @@ export const getCombinedAnalytics = async (req, res) => {
       tx.bankAccountId && tx.bankAccountId.status === 'connected'
     );
 
-    console.log(`📊 Raw transactions found: ${transactions.length}`);
-    console.log(`📊 Valid transactions (connected banks): ${validTransactions.length}`);
-    
-    // Debug: Show which transactions were filtered out
-    const filteredOut = transactions.filter(tx => 
-      !tx.bankAccountId || tx.bankAccountId.status !== 'connected'
-    );
-    if (filteredOut.length > 0) {
-      console.log(`🔍 Filtered out ${filteredOut.length} transactions:`);
-      filteredOut.forEach(tx => {
-        console.log(`  - ${tx.name} - Bank Status: ${tx.bankAccountId?.status || 'No bank account'}`);
-      });
+    // Debug: Log transaction processing
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📊 Processing ${validTransactions.length} transactions for analytics`);
     }
-    
-    // Debug: Log transaction details
-    console.log('🔍 Transaction details:');
-    validTransactions.forEach((tx, index) => {
-      console.log(`  ${index + 1}. ${tx.name} - €${tx.amount} - Type: ${tx.type} - Category: ${tx.category} - Date: ${tx.date}`);
-    });
 
     // Calculate analytics
     const analytics = {
@@ -115,14 +100,10 @@ export const getCombinedAnalytics = async (req, res) => {
     validTransactions.forEach(tx => {
       const amount = Math.abs(tx.amount);
       
-      console.log(`🔍 Processing: ${tx.name} - Amount: ${tx.amount} - Type: ${tx.type} - Abs Amount: ${amount}`);
-      
       if (tx.type === 'income') {
         analytics.totalIncome += amount;
-        console.log(`  ✅ Added to income: ${amount}, Total income now: ${analytics.totalIncome}`);
       } else {
         analytics.totalExpenses += amount;
-        console.log(`  ✅ Added to expenses: ${amount}, Total expenses now: ${analytics.totalExpenses}`);
       }
 
       // Category breakdown
@@ -142,12 +123,10 @@ export const getCombinedAnalytics = async (req, res) => {
 
     analytics.netAmount = analytics.totalIncome - analytics.totalExpenses;
 
-    // Debug: Log final analytics summary
-    console.log('📊 Final Analytics Summary:');
-    console.log(`  Total Income: €${analytics.totalIncome}`);
-    console.log(`  Total Expenses: €${analytics.totalExpenses}`);
-    console.log(`  Net Amount: €${analytics.netAmount}`);
-    console.log(`  Transaction Count: ${analytics.transactionCount}`);
+    // Debug: Log final analytics summary (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📊 Analytics: Income: €${analytics.totalIncome}, Expenses: €${analytics.totalExpenses}, Net: €${analytics.netAmount}, Count: ${analytics.transactionCount}`);
+    }
 
     // Get top 5 categories
     analytics.topCategories = Object.entries(analytics.categoryBreakdown)
