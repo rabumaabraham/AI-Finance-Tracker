@@ -110,7 +110,7 @@ const createWelcomeEmail = (userName, email) => {
                 <title>Welcome to AI Finance Tracker</title>
                 <style>
                     body { 
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                        font-family: Arial, sans-serif; 
                         line-height: 1.6; 
                         color: #333; 
                         margin: 0; 
@@ -121,143 +121,50 @@ const createWelcomeEmail = (userName, email) => {
                         max-width: 600px; 
                         margin: 0 auto; 
                         background: white; 
-                        box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
-                        border-radius: 16px; 
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+                        border-radius: 8px; 
                         overflow: hidden; 
                     }
                     .header { 
-                        background: linear-gradient(135deg, #3056d3 0%, #4f46e5 100%); 
+                        background: #3056d3; 
                         color: white; 
-                        padding: 40px 30px; 
+                        padding: 30px; 
                         text-align: center; 
                     }
                     .header h1 { 
                         margin: 0; 
-                        font-size: 2.2rem; 
-                        font-weight: 700; 
-                        letter-spacing: -0.025em; 
-                    }
-                    .header p { 
-                        margin: 10px 0 0; 
-                        font-size: 1.1rem; 
-                        opacity: 0.9; 
+                        font-size: 1.8rem; 
                     }
                     .content { 
-                        padding: 40px 30px; 
-                        background: white; 
+                        padding: 30px; 
                     }
                     .welcome-message { 
                         text-align: center; 
-                        margin-bottom: 30px; 
+                        margin-bottom: 25px; 
                     }
                     .welcome-message h2 { 
                         color: #3056d3; 
                         margin-bottom: 15px; 
-                        font-size: 1.8rem; 
-                    }
-                    .welcome-message p { 
-                        font-size: 1.1rem; 
-                        color: #666; 
-                        margin-bottom: 20px; 
-                    }
-                    .features { 
-                        background: #f8f9fa; 
-                        padding: 25px; 
-                        border-radius: 12px; 
-                        margin: 25px 0; 
-                    }
-                    .features h3 { 
-                        color: #3056d3; 
-                        margin-bottom: 20px; 
-                        text-align: center; 
-                        font-size: 1.3rem; 
-                    }
-                    .feature-grid { 
-                        display: grid; 
-                        grid-template-columns: 1fr 1fr; 
-                        gap: 20px; 
-                    }
-                    .feature-item { 
-                        display: flex; 
-                        align-items: center; 
-                        gap: 12px; 
-                        padding: 15px; 
-                        background: white; 
-                        border-radius: 8px; 
-                        border-left: 4px solid #3056d3; 
-                    }
-                    .feature-icon { 
-                        width: 40px; 
-                        height: 40px; 
-                        background: #3056d3; 
-                        border-radius: 50%; 
-                        display: flex; 
-                        align-items: center; 
-                        justify-content: center; 
-                        color: white; 
-                        font-size: 1.2rem; 
-                    }
-                    .feature-text { 
-                        font-weight: 600; 
-                        color: #333; 
                     }
                     .cta-section { 
                         text-align: center; 
-                        margin: 35px 0; 
+                        margin: 25px 0; 
                     }
                     .cta-button { 
                         display: inline-block; 
-                        background: linear-gradient(135deg, #3056d3 0%, #4f46e5 100%); 
+                        background: #3056d3; 
                         color: white; 
-                        padding: 16px 32px; 
+                        padding: 12px 24px; 
                         text-decoration: none; 
-                        border-radius: 12px; 
-                        font-weight: 700; 
-                        font-size: 1.1rem; 
-                        box-shadow: 0 8px 25px rgba(48, 86, 211, 0.3); 
-                        transition: all 0.3s ease; 
-                    }
-                    .cta-button:hover { 
-                        transform: translateY(-2px); 
-                        box-shadow: 0 12px 35px rgba(48, 86, 211, 0.4); 
+                        border-radius: 5px; 
+                        font-weight: 600; 
                     }
                     .footer { 
                         background: #f8f9fa; 
-                        padding: 25px 30px; 
+                        padding: 20px; 
                         text-align: center; 
                         color: #666; 
                         font-size: 0.9rem; 
-                    }
-                    .footer a { 
-                        color: #3056d3; 
-                        text-decoration: none; 
-                    }
-                    .footer a:hover { 
-                        text-decoration: underline; 
-                    }
-                    .security-note { 
-                        background: #e8f5e9; 
-                        border: 1px solid #c8e6c9; 
-                        padding: 15px; 
-                        border-radius: 8px; 
-                        margin: 20px 0; 
-                        text-align: center; 
-                    }
-                    .security-note p { 
-                        margin: 0; 
-                        color: #2e7d32; 
-                        font-weight: 600; 
-                    }
-                    @media (max-width: 600px) {
-                        .feature-grid { 
-                            grid-template-columns: 1fr; 
-                        }
-                        .header h1 { 
-                            font-size: 1.8rem; 
-                        }
-                        .content { 
-                            padding: 25px 20px; 
-                        }
                     }
                 </style>
             </head>
@@ -265,56 +172,23 @@ const createWelcomeEmail = (userName, email) => {
                 <div class="container">
                     <div class="header">
                         <h1>Welcome to AI Finance Tracker</h1>
-                        <p>Your personal finance management journey starts now</p>
                     </div>
                     
                     <div class="content">
                         <div class="welcome-message">
                             <h2>Hello ${userName},</h2>
-                            <p>Thank you for joining AI Finance Tracker! We're excited to help you take control of your finances with intelligent insights and powerful tools.</p>
-                        </div>
-                        
-                        <div class="features">
-                            <h3>What You Can Do Now</h3>
-                            <div class="feature-grid">
-                                <div class="feature-item">
-                                    <div class="feature-icon">•</div>
-                                    <div class="feature-text">Connect Bank Accounts</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">•</div>
-                                    <div class="feature-text">Track Spending Analytics</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">•</div>
-                                    <div class="feature-text">Set Budget Limits</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">•</div>
-                                    <div class="feature-text">Chat with AI Assistant</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="security-note">
-                            <p>Your account is secure and your data is protected with industry-standard encryption.</p>
+                            <p>Thank you for joining AI Finance Tracker! Your account is ready.</p>
                         </div>
                         
                         <div class="cta-section">
                             <a href="${process.env.FRONTEND_URL || 'https://finance-tracker-six-iota.vercel.app'}/dashboard.html" class="cta-button">
-                                Get Started with Dashboard
+                                Go to Dashboard
                             </a>
                         </div>
-                        
-                        <p style="text-align: center; color: #666; margin-top: 25px;">
-                            If you have any questions, our support team is here to help!
-                        </p>
                     </div>
                     
                     <div class="footer">
-                        <p>© 2024 AI Finance Tracker. All rights reserved.</p>
-                        <p>This email was sent to <strong>${email}</strong> because you signed up for our service.</p>
-                        <p>If you didn't create this account, please <a href="mailto:support@aifinancetracker.com">contact us immediately</a>.</p>
+                        <p>© 2024 AI Finance Tracker</p>
                     </div>
                 </div>
             </body>
