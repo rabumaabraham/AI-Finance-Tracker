@@ -1,29 +1,14 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import User from '../models/user.js';
 import EmailNotification from '../models/emailNotification.js';
 
-// Create transporter for Gmail SMTP
-const createTransporter = () => {
-    return nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
-        },
-        // Add these options for better compatibility
-        secure: false,
-        tls: {
-            rejectUnauthorized: false
-        },
-        // Add timeout configuration for production reliability
-        connectionTimeout: 10000, // 10 seconds
-        greetingTimeout: 5000,    // 5 seconds
-        socketTimeout: 15000,     // 15 seconds
-        // Pool connections for better performance
-        pool: true,
-        maxConnections: 5,
-        maxMessages: 100
-    });
+// Create Resend client
+const createResendClient = () => {
+    if (!process.env.RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY environment variable is required');
+    }
+    
+    return new Resend(process.env.RESEND_API_KEY);
 };
 
 // Email templates
@@ -338,7 +323,7 @@ const createWelcomeEmail = (userName, email) => {
     };
 };
 
-// Send budget alert email
+// Send budget alert email using Resend
 export const sendBudgetAlertEmail = async (userId, category, spent, limit, percentage) => {
     try {
         // Get user details
@@ -365,30 +350,81 @@ export const sendBudgetAlertEmail = async (userId, category, spent, limit, perce
             return false;
         }
 
+        console.log(`📧 Attempting to send budget alert to ${user.email} for ${category}`);
+
         // Create email content
         const emailContent = createBudgetAlertEmail(user.name, category, spent, limit, percentage);
         
-        // Create transporter
-        const transporter = createTransporter();
+        // Create Resend client
+        const resend = createResendClient();
         
-        // Send email
-        const mailOptions = {
-            from: `"Personal Finance Tracker" <${process.env.EMAIL_USER}>`,
-            to: user.email,
+        // Send email using Resend
+        const result = await resend.emails.send({
+            from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
+            to: [user.email],
             subject: emailContent.subject,
             html: emailContent.html
-        };
-
-        const result = await transporter.sendMail(mailOptions);
+        });
         
         // Record the notification
         await EmailNotification.recordNotification(userId, category, percentage, type);
         
         console.log(`✅ Budget alert email sent to ${user.email} for ${category}: ${percentage.toFixed(0)}% (${type})`);
+        console.log(`📧 Resend email ID: ${result.data?.id}`);
         return true;
         
     } catch (error) {
-        console.error('❌ Error sending budget alert email:', error);
+        console.error('❌ Error sending budget alert email:', error.message || error);
+        
+        // Log additional context for debugging
+        console.error('📋 Budget alert context:', {
+            userId,
+            category,
+            percentage,
+            environment: process.env.NODE_ENV,
+            platform: process.env.RENDER ? 'Render' : 'Unknown',
+            timestamp: new Date().toISOString()
+        });
+        
+        return false;
+    }
+};
+
+// Send welcome email using Resend
+export const sendWelcomeEmail = async (userName, email) => {
+    try {
+        console.log(`📧 Attempting to send welcome email to ${email}`);
+
+        // Create email content
+        const emailContent = createWelcomeEmail(userName, email);
+        
+        // Create Resend client
+        const resend = createResendClient();
+        
+        // Send email using Resend
+        const result = await resend.emails.send({
+            from: 'AI Finance Tracker <noreply@resend.dev>', // You can change this to your domain
+            to: [email],
+            subject: emailContent.subject,
+            html: emailContent.html
+        });
+        
+        console.log(`✅ Welcome email sent successfully to ${email}`);
+        console.log(`📧 Resend email ID: ${result.data?.id}`);
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Error sending welcome email:', error.message || error);
+        
+        // Log additional context for debugging
+        console.error('📋 Email context:', {
+            email,
+            userName,
+            environment: process.env.NODE_ENV,
+            platform: process.env.RENDER ? 'Render' : 'Unknown',
+            timestamp: new Date().toISOString()
+        });
+        
         return false;
     }
 };
@@ -411,51 +447,4 @@ export const sendBudgetAlerts = async (alerts) => {
     
     console.log(`📧 Budget alert emails: ${successful} sent, ${failed} failed`);
     return { successful, failed };
-};
-
-// Send welcome email for new user signups
-export const sendWelcomeEmail = async (userName, email) => {
-    try {
-        // Validate email configuration
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-            console.error('❌ Email configuration missing - EMAIL_USER or EMAIL_PASSWORD not set');
-            return false;
-        }
-
-        // Create email content
-        const emailContent = createWelcomeEmail(userName, email);
-        
-        // Create transporter with timeout
-        const transporter = createTransporter();
-        
-        // Verify connection first (with timeout)
-        await Promise.race([
-            transporter.verify(),
-            new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Email service connection timeout')), 10000)
-            )
-        ]);
-        
-        // Send email
-        const mailOptions = {
-            from: `"AI Finance Tracker" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: emailContent.subject,
-            html: emailContent.html
-        };
-
-        const result = await Promise.race([
-            transporter.sendMail(mailOptions),
-            new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Email sending timeout')), 15000)
-            )
-        ]);
-        
-        console.log(`✅ Welcome email sent successfully to ${email}`);
-        return true;
-        
-    } catch (error) {
-        console.error('❌ Error sending welcome email:', error.message || error);
-        return false;
-    }
 };

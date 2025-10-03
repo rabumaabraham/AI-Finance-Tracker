@@ -7,7 +7,13 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": ["finance", "ai", "banking", "budget", "tracker"],
+  "keywords": [
+    "finance",
+    "ai",
+    "banking",
+    "budget",
+    "tracker"
+  ],
   "author": "AI Finance Tracker",
   "license": "MIT",
   "description": "AI-powered personal finance tracker with bank integration and intelligent budgeting",
@@ -25,6 +31,7 @@
     "node-fetch": "^2.7.0",
     "nodemailer": "^7.0.5",
     "openai": "^5.11.0",
+    "resend": "^6.1.2",
     "stripe": "^18.4.0"
   }
 }

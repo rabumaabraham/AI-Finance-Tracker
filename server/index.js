@@ -71,6 +71,45 @@ app.get("/test", (req, res) => {
     });
 });
 
+// Resend email test endpoint
+app.get("/test-resend", async (req, res) => {
+    try {
+        const { Resend } = await import('resend');
+        
+        if (!process.env.RESEND_API_KEY) {
+            return res.status(500).json({
+                error: 'RESEND_API_KEY not configured',
+                message: 'Please set RESEND_API_KEY environment variable'
+            });
+        }
+        
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        
+        // Test sending a simple email
+        const result = await resend.emails.send({
+            from: 'AI Finance Tracker <noreply@resend.dev>',
+            to: [process.env.EMAIL_USER || 'test@example.com'],
+            subject: '🧪 Resend Test Email',
+            html: '<h1>Resend is working!</h1><p>This is a test email from your AI Finance Tracker.</p>'
+        });
+        
+        res.json({
+            message: 'Resend email test successful',
+            timestamp: new Date().toISOString(),
+            platform: 'Render',
+            emailId: result.data?.id,
+            success: true
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            error: 'Resend test failed',
+            message: error.message,
+            success: false
+        });
+    }
+});
+
 // API Routes
 app.use('/api/bank', nordigenRoutes);
 app.use('/api/auth', authRoutes);
