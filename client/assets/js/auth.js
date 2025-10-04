@@ -25,6 +25,22 @@ class AuthService {
         localStorage.removeItem('token');
     }
 
+    // Clear stale bank connection data
+    clearStaleBankData() {
+        // Clear any pending bank connection requisition IDs
+        localStorage.removeItem('currentRequisitionId');
+        
+        // Clear any processed connection flags
+        const keys = Object.keys(sessionStorage);
+        keys.forEach(key => {
+            if (key.startsWith('processed_')) {
+                sessionStorage.removeItem(key);
+            }
+        });
+        
+        console.log('🧹 Cleared stale bank connection data');
+    }
+
     // Check if user is authenticated
     isAuthenticated() {
         return !!this.getToken();
@@ -85,6 +101,10 @@ class AuthService {
 
             // Store token
             this.setToken(data.token);
+            
+            // Clear any stale bank connection data on fresh login
+            this.clearStaleBankData();
+            
             return data;
         } catch (error) {
             if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -97,6 +117,7 @@ class AuthService {
     // Logout user
     logout() {
         this.removeToken();
+        this.clearStaleBankData();
         window.location.href = 'login.html';
     }
 

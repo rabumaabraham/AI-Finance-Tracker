@@ -82,6 +82,7 @@ class DashboardManager {
         const code = urlParams.get('code');
         const requisition = urlParams.get('requisition');
         
+        // Only show banks section if we have actual GoCardless return parameters
         if (status === 'success' || ref || code || requisition) {
             // Show banks section immediately for bank connection
             console.log('🔄 Bank connection detected, showing banks section...');

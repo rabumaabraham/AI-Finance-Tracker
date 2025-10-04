@@ -430,6 +430,7 @@ class BankManager {
     async checkBankConnectionStatus() {
         const requisitionId = localStorage.getItem('currentRequisitionId');
         
+        // Only process if we have a requisition ID AND URL parameters indicating a return from GoCardless
         if (requisitionId) {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -440,6 +441,13 @@ class BankManager {
                 
                 console.log('🔍 URL parameters:', { status, ref, code, requisition });
                 console.log('🆔 Stored requisitionId:', requisitionId);
+                
+                // Only process if we have actual GoCardless return parameters
+                // This prevents automatic connection on fresh login/signup
+                if (!ref && !code && !requisition && status !== 'success' && status !== 'completed' && status !== 'error' && status !== 'failed') {
+                    console.log('⚠️ No GoCardless return parameters found, skipping automatic connection');
+                    return;
+                }
                 
                 // Check if we've already processed this connection
                 const processedKey = `processed_${requisitionId}`;

@@ -285,9 +285,10 @@
         }
       }
       
-      // Clear any existing tokens to ensure fresh signup process
+      // Clear any existing tokens and bank data to ensure fresh signup process
       // This prevents automatic redirects to dashboard from other pages
       authService.removeToken();
+      authService.clearStaleBankData();
       
       // Note: Removed automatic redirect to dashboard to allow users to sign up even when logged in
       // Users can manually navigate to dashboard if they want to skip signup
